@@ -34,13 +34,13 @@ int add_flight(manager *system, char *id, char *origin, char *destination,
 		return -7;
 	
 	/* check if plane capacity is met in range [10,100] */
-	if(nr_passengers < 10 || nr_passengers > 100)
+	if(nr_passengers < MIN_FLIGHT_CAPACITY || nr_passengers > MAX_FLIGHT_CAPACITY)
 		return -8;
 	
 	new_flight = create_flight(id, origin, destination, 
 			flight_date, flight_time, duration, nr_passengers);
 	
-	insert_flight(system->flights, system->sorted_flights, new_flight, system->nr_flights);
+	insert_flight(system->flights, system->sorted_departure_flights, new_flight, system->nr_flights);
 
 	++system->nr_flights;
 
@@ -89,7 +89,7 @@ int is_taken_flight_id(manager *system, char *id, date date)
 	
 	/* check if any flight has the same id and, if so, check if they have the same date */
 	for(i = 0; i < system->nr_flights; ++i)
-		if(!strcmp(system->flights[i].id, id) && same_day(system->flights[i].date, date))
+		if(!strcmp(system->flights[i].id, id) && same_day(system->flights[i].date_departure, date))
 			return 1;
 
 	return 0;
@@ -105,14 +105,14 @@ void list_all_flights(manager *system)
 	printf("\nnow sorted \n");
 
 	for(i = 0; i < system->nr_flights; ++i)
-		print_flight(system->sorted_flights[i]);
+		print_flight(system->sorted_departure_flights[i]);
 }
 
 void print_flight(flight flight)
 {
 	printf(PRINT_FLIGHT_STR, flight.id, flight.origin, flight.destination,
-			flight.date.day, flight.date.month, flight.date.year,
-			flight.time.hour, flight.time.minute);
+			flight.date_departure.day, flight.date_departure.month, flight.date_departure.year,
+			flight.time_departure.hour, flight.time_departure.minute);
 }
 
 flight create_flight(char *id, char *origin, char *destination,
@@ -123,10 +123,9 @@ flight create_flight(char *id, char *origin, char *destination,
 	strcpy(new_flight.id, id);
 	strcpy(new_flight.origin, origin);
 	strcpy(new_flight.destination, destination);
-	new_flight.date = flight_date;
-	new_flight.time = flight_time;
-	new_flight.duration = duration;
 	new_flight.nr_passengers = nr_passengers;
+	
+	calculate_arrival_time_and_date(&new_flight, duration);
 
 	return new_flight;
 }
@@ -139,4 +138,13 @@ int compare_flight_departure(flight f1, flight f2)
 		return 0;
 	
 	return !date_compare(f1.date_departure, f2.date_departure) ? time_compare(f1.time_departure, f2.time_departure) : date_compare(f1.date_departure, f2.date_departure);	
+}
+
+void calculate_arrival_time_and_date(flight *new_flight, time duration); 
+{
+	int result_value;
+
+	new_flight->arrival_time = add_time(new_flight->departure_date, new_flight->departure_time, duration);
+	
+	return;
 }
