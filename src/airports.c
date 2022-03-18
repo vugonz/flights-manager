@@ -1,36 +1,28 @@
-/*  File: airports.c 
- *	Author: Gonçalo Azevedo ist193075
- */
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <ctype.h>
-#include <string.h>
+/*	File: airports.c Author: Gonçalo Azevedo ist193075 */ 
 #include "header.h"
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
 
 int add_airport(manager *system, char *id, char *country, char *city)
 {
-	int i;
-	int len = strlen(id);
-	airport new_airport = {0};
-		
+	airport new_airport;
+	
+	/* max airport limit reached */
 	if(system->nr_airports > MAX_AIRPORTS)
 		return -1;
 
-	/* check if all letters are uppercase in id string */
-	for(i = 0; i < len; ++i)
-		if(!isupper(id[i]))
-			return -2;
-	
-	/* check for airport with same id string */
-	for(i = 0; i < system->nr_airports; ++i)
-		if(!strcmp(system->airports[i].id, id))
-			return -3;
-	
-	strcpy(new_airport.id, id);
-	strcpy(new_airport.country, country);
-	strcpy(new_airport.city, city);
-	
+	/* check if airport id is valid */
+	if(!is_valid_airport_id(id))
+		return -2;
+
+	/* check if airport exists */
+	if(exists_airport_id(system, id))
+		return -3;
+
+	/* create new airport */
+	new_airport = create_airport(id, country, city);
+	/* insert new airport in sorted order in list */
 	insert_airport(system->airports, new_airport, system->nr_airports);
 
 	++system->nr_airports;
@@ -38,13 +30,51 @@ int add_airport(manager *system, char *id, char *country, char *city)
 	return 0;
 }
 
+
+airport create_airport(char *id, char *country, char *city)
+{
+	airport new_airport = {0};
+	
+	strcpy(new_airport.id, id);
+	strcpy(new_airport.country, country);
+	strcpy(new_airport.city, city);
+
+	return new_airport;
+}
+
+
+int is_valid_airport_id(char *id)
+{
+	int i;
+	int len = strlen(id);
+
+	for(i = 0; i < len; ++i)
+		if(!isupper(id[i]))
+			return 0;
+
+	return 1;
+}
+
+
+int exists_airport_id(manager *system, char *id)
+{
+	int i;
+
+	for(i = 0; i < system->nr_airports; ++i)
+		if(!strcmp(system->airports[i].id, id))
+			return 1;
+
+	return 0;
+}
+
+
 void insert_airport(airport *l, airport new_airport, int size)
 {
 	int i;
 	
 	l[size] = new_airport;
 
-	/* insert new element in sorted position by id */
+	/* insert new element in sorted position by id (insertion sort adaptation) */
 	for(i = size - 1; i >= 0; --i) {	
 		if(strcmp(new_airport.id, l[i].id) > 0) {
 			l[i+1] = new_airport;
@@ -59,10 +89,6 @@ void insert_airport(airport *l, airport new_airport, int size)
 	
 }
 
-void print_airport(airport airport)
-{
-	printf(PRINT_AIRPORT, airport.id, airport.city, airport.country);
-}
 
 void list_airports(manager *system)
 {
@@ -72,30 +98,28 @@ void list_airports(manager *system)
 		print_airport(system->airports[i]);
 }
 
+
 void list_airports_by_id(manager *system)
 {
 	char id[AIRPORT_LENGTH_ID];
 	char c;
 	
+	/* print all airport's by id in stdin until no more ids are available */
 	do { 	
 		scanf(AIRPORT_IDS_PARSE, id, &c); 
-		if(!is_valid_airport_id(system, id))
+		if(!exists_airport_id(system, id))
 			printf(LIST_AIRPORTS_ERR, id);
 		else
 			print_airport(*get_airport_by_id(system, id));
-	} while( c != '\n');
+	} while(c != '\n');
 }
 
-int is_valid_airport_id(manager *system, char *id)
+
+void print_airport(airport airport)
 {
-	int i;
-
-	for(i = 0; i < system->nr_airports; ++i)
-		if(!strcmp(system->airports[i].id, id))
-			return 1;
-
-	return 0;
+	printf(AIRPORT_PRINT_STR, airport.id, airport.city, airport.country);
 }
+
 
 airport *get_airport_by_id(manager *system, char *id)
 {
