@@ -40,6 +40,10 @@ int add_flight(manager *system, char *id, char *origin, char *destination,
 	new_flight = create_flight(id, origin, destination, 
 			flight_date, flight_time, duration, nr_passengers);
 	
+	insert_flight(system->flights, new_flight, nr_flights);
+
+	++system->nr_flights;
+
 	print_flight(new_flight);
 
 	return 0;
@@ -74,21 +78,20 @@ void list_all_flights(manager *system)
 {
 	int i;
 
-	for(i = 0; i < system->nr_flights; ++i)
-		print_flight(system->flights[i]);
+	for(i = 0; i < system->nr_flights; ++i) print_flight(system->flights[i]);
 }
 
 void print_flight(flight flight)
 {
 	printf(PRINT_FLIGHT_STR, flight.id, flight.origin, flight.destination,
-			flight.date.day, flight.date.month, flight.date.day,
+			flight.date.day, flight.date.month, flight.date.year,
 			flight.time.hour, flight.time.minute);
 }
 
 flight create_flight(char *id, char *origin, char *destination,
 		date flight_date, time flight_time, time duration, int nr_passengers)
 {
-	flight new_flight;
+	flight new_flight = {0};
 
 	strcpy(new_flight.id, id);
 	strcpy(new_flight.origin, origin);

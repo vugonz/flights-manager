@@ -32,7 +32,7 @@
 #define FLIGHT_LENGTH_ID 7
 #define FLIGHT_COMPONENTS_PARSE "%s %s %s" 
 #define NR_PASSENGERS_PARSE "%hd"
-#define PRINT_FLIGHT_STR "%s %s %s %hd-%hd-%hd %hd:%hd\n"
+#define PRINT_FLIGHT_STR "%s %s %s %02d-%02d-%d %02hd:%02hd\n"
 /* flight output messages */
 #define ADD_FLIGHT_ERR_1 "too many flights\n"
 #define ADD_FLIGHT_ERR_2 "invalid flight code\n"
@@ -115,6 +115,7 @@ int add_flight(manager *system, char *id, char *origin, char *destination,
 int is_valid_flight_id(char *id);
 int is_taken_flight_id(manager *system, char *id, date date);
 int exists_flight_id(manager *system, char *id);
+void insert_flight(flight *l, flight new_flight, int size);
 void list_all_flights(manager *system);
 void print_flight(flight flight);
 

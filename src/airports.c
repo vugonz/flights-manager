@@ -56,7 +56,6 @@ int is_valid_airport_id(char *id)
 	return 1;
 }
 
-
 int exists_airport_id(manager *system, char *id)
 {
 	int i;
