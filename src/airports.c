@@ -83,9 +83,9 @@ void insert_airport(airport *l, airport new_airport, int size)
 		} else
 			l[i+1] = l[i];
 
-		/* if ever reached with i = 0 means new element is the first one */
+		/* if ever reached with i = 0 then new element belongs in the first position */
 		if(i == 0)
-			l[0] = new_airport;
+			l[i] = new_airport;
 	}
 	
 }

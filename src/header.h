@@ -1,6 +1,4 @@
-/*	File: header.h
- *	Author: Gonçalo Azevedo ist193075
- */ 
+/*	File: header.h Author: Gonçalo Azevedo ist193075 */ 
 
 #ifndef HEADER
 #define HEADER
@@ -30,6 +28,7 @@
 /* flight constants & parse strings */
 #define MAX_FLIGHTS 30000
 #define FLIGHT_LENGTH_ID 7
+#define FLIGHT_MAX_HOUR_DURATION 12
 #define FLIGHT_COMPONENTS_PARSE "%s %s %s" 
 #define NR_PASSENGERS_PARSE "%hd"
 #define PRINT_FLIGHT_STR "%s %s %s %02d-%02d-%d %02hd:%02hd\n"
@@ -45,6 +44,15 @@
 /* time and date parse strings */
 #define DATE_COMPONENTS_PARSE "%hd-%hd-%hd" 
 #define TIME_COMPONENTS_PARSE "%hd:%hd"
+
+/* date.c constants and macros */
+
+/* time.c constants and macros */
+#define MAX_MINUTES 60
+#define SUM_MINUTES(a, b) a.minute + b.minute
+#define SUM_HOURS(a, b) a.hour + b.hour
+#define DIFF_MINUTES(a, b) a.minute - b.minute
+#define DIFF_HOURS(a, b) a.hour - b.hour
 
 /* structures */
 typedef struct {
@@ -69,9 +77,10 @@ typedef struct {
 	short nr_passengers;
 	char destination[AIRPORT_LENGTH_ID];
 	char origin[AIRPORT_LENGTH_ID];
-	date date;
-	time time;
-	time duration;
+	date date_departure;
+	date date_arrival;
+	time time_departure;
+	time time_arrival;
 } flight;
 
 /* global structure */
@@ -79,8 +88,10 @@ typedef struct {
 	short nr_airports;
 	short nr_flights;
 	date date;
-	flight flights[MAX_FLIGHTS];
 	airport airports[MAX_AIRPORTS];
+	flight flights[MAX_FLIGHTS];			/* list of system's flights, also the list of flights sorted by creation */
+	flight sorted_departure_flights[MAX_FLIGHTS];		/* list of system's flights sorted by date */
+	flight sorted_arrival_flights[MAX_FLIGHTS];
 } manager;
 
 /* proj1.c functions */
@@ -115,7 +126,8 @@ int add_flight(manager *system, char *id, char *origin, char *destination,
 int is_valid_flight_id(char *id);
 int is_taken_flight_id(manager *system, char *id, date date);
 int exists_flight_id(manager *system, char *id);
-void insert_flight(flight *l, flight new_flight, int size);
+int compare_flight_departure(flight f1, flight f2);
+void insert_flight(flight *l, flight *sorted_l, flight new_flight, int size);
 void list_all_flights(manager *system);
 void print_flight(flight flight);
 
@@ -130,6 +142,9 @@ int same_year(date d1, date d2);
 
 /* time.c functions */
 time create_time(short hour, short minute);
+int time_compare(time t1, time t2);
 int is_valid_duration(time duration);
+int same_time(time t1, time t2);
+int same_hour(time t1, time t2);
 
 #endif
