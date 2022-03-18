@@ -16,6 +16,9 @@ int main()
 	return 0;
 }
 
+/*
+ * handle functions
+ */
 int command_handler(manager *system)
 {
 	char c = getchar();
@@ -37,6 +40,7 @@ int command_handler(manager *system)
 		case 'c':
 			break;
 		case 't':
+			handle_forward_date(system);
 			break;
 		default:
 			break;
@@ -55,14 +59,15 @@ void handle_add_airport(manager *system)
 
 	result_value = add_airport(system, id, country, city);
 
-	if(result_value == -1)
+	if(result_value == -1) {
 		printf(ADD_AIRPORT_ERR_1);
-	else if(result_value == -2)
+	} else if(result_value == -2) {
 		printf(ADD_AIRPORT_ERR_2);
-	else if(result_value == -3)
+	} else if(result_value == -3) {
 		printf(ADD_AIRPORT_ERR_3);
-	else
+	} else {
 		printf(ADD_AIRPORT_SUCCESS, id);
+	}
 }
 
 void handle_list_airports(manager *system)
@@ -97,43 +102,75 @@ void handle_add_flight(manager *system)
 	time flight_duration;
 	int result_value;
 	
-	/* parse input string and asign buffer structures */
+	/* parse input and initialize corresponding buffer structures */
+	/* parse flight id, origin and destionation airports ids*/
 	scanf(FLIGHT_COMPONENTS_PARSE, id, origin, destination); 
-
+	
+	/* parse flight date components */
 	scanf(DATE_COMPONENTS_PARSE, &day, &month, &year);
 	flight_date = create_date(day, month, year);
-
+	
+	/* parse flight departure time components */
 	scanf(TIME_COMPONENTS_PARSE, &hour, &minute);
 	flight_time = create_time(hour, minute);
-
+	
+	/* parse flight duration time components */
 	scanf(TIME_COMPONENTS_PARSE, &hour, &minute);
 	flight_duration = create_time(hour, minute);
-
+	
+	/* parse flight capacity */
 	scanf(NR_PASSENGERS_PARSE, &nr_passengers);
 
 	result_value = add_flight(system, id, origin, destination, flight_date, flight_time, flight_duration, nr_passengers);
 	
-	if(result_value == -1)
+	if(result_value == -1) {
 		printf(ADD_FLIGHT_ERR_1);
-	else if(result_value == -2)
+	} else if(result_value == -2) {
 		printf(ADD_FLIGHT_ERR_2);
-	else if(result_value == -3)
+	} else if(result_value == -3) {
 		printf(ADD_FLIGHT_ERR_3);
-	else if(result_value == -4 || result_value == -5)
+	} else if(result_value == -4 || result_value == -5) {
+		/* same error, -4 for origin airport invalid id and -5 for destination airport invalid id */
 		printf(ADD_FLIGHT_ERR_4N5, result_value == -4 ? origin : destination);
-	else if(result_value == -6)
+	} else if(result_value == -6) {
 		printf(ADD_FLIGHT_ERR_6);
-	else if(result_value == -7)
+	} else if(result_value == -7) {
 		printf(ADD_FLIGHT_ERR_7);
-	else if(result_value == -8)
+	} else if(result_value == -8) {
 		printf(ADD_FLIGHT_ERR_8);
+	}
 }
 
+void handle_forward_date(manager *system)
+{
+	date new_date;
+	int result_value;
+
+	scanf(DATE_COMPONENTS_PARSE, &day, &month, &year);
+	new_date = create_date(day, month, year);
+	
+	result_value = forward_date(system, date);
+
+	if(result_value == -1)
+		printf(FORWARD_DATE_ERR);
+}
+
+/* 
+ * global structure functions
+ */
 manager *initialize()
 {
 	manager *system = calloc(1, sizeof *system);
 
-	system->date = create_date(1, 1, 2022);
+	system->date = create_date(DAY_0, MONTH_0, YEAR_0);
 	
 	return system;
+}
+
+int forward_date(manager *system, date)
+{
+	if(is_valid_date(system->date, date);
+		system->date = date;
+	
+	return -1;
 }

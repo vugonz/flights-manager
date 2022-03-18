@@ -1,5 +1,4 @@
 #include "header.h"
-#include <stdio.h>
 
 time create_time(short hour, short minute)
 {
