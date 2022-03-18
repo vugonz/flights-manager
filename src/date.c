@@ -18,7 +18,7 @@ int is_valid_date(date d1, date d2)
 }
 
 /* returns negative if d2 is a date set before d1, zero if d2 and d1 are the same date and positive if d2 is set after d1, similar to strcmp */
-int	date_compare(date d1, date d2)
+int date_compare(date d1, date d2)
 {
 	return same_day(d1, d2) ? 0 : same_month(d1, d2) ? d2.day - d1.day : same_year(d1, d2) ? d2.month - d1.month : d2.year - d1.year; 	
 }
