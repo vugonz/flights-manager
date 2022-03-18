@@ -46,6 +46,13 @@
 #define TIME_COMPONENTS_PARSE "%hd:%hd"
 
 /* date.c constants and macros */
+#define SUM_DAYS(a, b) a.day + b.day
+#define SUM_MONTHS(a, b) a.month + b.month
+#define SUM_YEARS(a, b) a.year + b.year
+#define DIFF_DAYS(a, b) a.day - b.day
+#define DIFF_MONTHS(a, b) a.month - b.month
+#define DIFF_YEARS(a, b) a.year - b.year
+
 
 /* time.c constants and macros */
 #define MAX_MINUTES 60

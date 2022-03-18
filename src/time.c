@@ -15,10 +15,12 @@ int time_compare(time t1, time t2)
 {
 	return same_time(t1, t2) ? 0 : same_hour(t1, t2) ? DIFF_MINUTES(t2, t1) : DIFF_HOURS(t2, t1); 
 }
+
 int is_valid_duration(time duration)
 {
-	return duration.hour < FLIGHT_MAX_HOUR_DURATION ? 1 : !duration.minute ? 1 : 0;
+	return duration < MAX_FLIGHT_HOUR_DURATION ? 1 : duration == MAX_FLIGHT_DURATION && !duration.time ? 1 : 0; 
 }
+
 
 /* returns time that is a result of adding t1 and t2 */
 time add_time(time t1, time t2)
