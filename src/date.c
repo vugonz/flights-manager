@@ -29,13 +29,12 @@ int dates_year_apart(date d1, date d2)
 	if(DIFF_YEARS(d2, d1) > 1) {
 		return 1;
 	} else if(DIFF_YEARS(d2,d1) == 1) {
-		if(DIFF_MONTHS(d2, d1) { 
+		if(DIFF_MONTHS(d2, d1) > 0) { 
 			return 1;
 		} else if(DIFF_MONTHS(d2, d1) == 0)
 			if(DIFF_DAYS(d2, d1) > 0)
 				return 1;
 	}
-	
 	return 0;
 }
 

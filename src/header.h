@@ -56,7 +56,7 @@
 #define DIFF_DAYS(a, b) a.day - b.day
 #define DIFF_MONTHS(a, b) a.month - b.month
 #define DIFF_YEARS(a, b) a.year - b.year
-#define DAYS_IN_MONTH(n) n == 2 ? 28 : (n == 4 || n == 6 || n = 9 || n = 11) ? 30 : 31;
+#define DAYS_IN_MONTH(n) (n == 2 ? 28 : (n == 4 || n == 6 || n == 9 || n == 11) ? 30 : 31)
 #define INC(a) a + 1
 
 /* time.c constants and macros */
@@ -147,6 +147,7 @@ int compare_flight_departure(flight f1, flight f2);
 void insert_flight(flight *l, flight *sorted_l, flight new_flight, int size);
 void list_all_flights(manager *system);
 void print_flight(flight flight);
+void calculate_arrivals(flight *flight, date d,time t, time duration);
 
 /*
  * date.c functions
