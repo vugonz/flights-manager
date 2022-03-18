@@ -65,18 +65,18 @@ void handle_add_airport(manager *system)
 		printf(ADD_AIRPORT_ERR_2);
 	} else if(result_value == -3) {
 		printf(ADD_AIRPORT_ERR_3);
-	} else {
+	} else 
 		printf(ADD_AIRPORT_SUCCESS, id);
-	}
+	
 }
 
 void handle_list_airports(manager *system)
 {
 	char c = getchar();
 	
-	if(c == '\n') 
+	if(c == '\n') { 
 		list_airports(system);
-	else 
+	} else 
 		list_airports_by_id(system);
 }
 
@@ -84,9 +84,9 @@ void handle_v_command(manager *system)
 {
 	char c = getchar();
 
-	if(c == '\n')
+	if(c == '\n') {
 		list_all_flights(system);
-	else
+	} else
 		handle_add_flight(system);
 }
 

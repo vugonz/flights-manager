@@ -78,7 +78,7 @@ void insert_airport(airport *l, airport new_airport, int size)
 
 	/* inserts new element in sorted position of the list by id (insertion sort) */
 	for(i = size - 1; i >= 0; --i) {	
-		if(strcmp(new_airport.id, l[i].id) > 0) {
+		if(strcmp(new_airport.id, l[i].id) > 0) 
 			l[i+1] = new_airport;
 			break;
 		} else
@@ -111,9 +111,9 @@ void list_airports_by_id(manager *system)
 		scanf(AIRPORT_IDS_PARSE, id, &c); 
 		if(!exists_airport_id(system, id)) {
 			printf(LIST_AIRPORTS_ERR, id);
-		} else {
+		} else 
 			print_airport(*get_airport_by_id(system, id));
-		}
+		
 	} while(c != '\n');
 }
 
