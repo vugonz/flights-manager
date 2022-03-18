@@ -67,7 +67,6 @@ void handle_add_airport(manager *system)
 		printf(ADD_AIRPORT_ERR_3);
 	} else 
 		printf(ADD_AIRPORT_SUCCESS, id);
-	
 }
 
 void handle_list_airports(manager *system)
@@ -136,9 +135,8 @@ void handle_add_flight(manager *system)
 		printf(ADD_FLIGHT_ERR_6);
 	} else if(result_value == -7) {
 		printf(ADD_FLIGHT_ERR_7);
-	} else if(result_value == -8) {
+	} else if(result_value == -8)
 		printf(ADD_FLIGHT_ERR_8);
-	}
 }
 
 void handle_forward_date(manager *system)
@@ -169,8 +167,10 @@ manager *initialize()
 
 int forward_date(manager *system, date)
 {
-	if(is_valid_date(system->date, date);
-		system->date = date;
-	
-	return -1;
+	if(!is_valid_date(system->date, date);
+		return -1;	
+
+	system->date = date;
+
+	return 0;
 }
