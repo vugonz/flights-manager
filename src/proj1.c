@@ -142,12 +142,13 @@ void handle_add_flight(manager *system)
 void handle_forward_date(manager *system)
 {
 	date new_date;
+	short day, month, year;
 	int result_value;
 
 	scanf(DATE_COMPONENTS_PARSE, &day, &month, &year);
 	new_date = create_date(day, month, year);
 	
-	result_value = forward_date(system, date);
+	result_value = forward_date(system, new_date);
 
 	if(result_value == -1)
 		printf(FORWARD_DATE_ERR);
@@ -165,12 +166,12 @@ manager *initialize()
 	return system;
 }
 
-int forward_date(manager *system, date)
+int forward_date(manager *system, date new_date)
 {
-	if(!is_valid_date(system->date, date);
-		return -1;	
+	if(!is_valid_date(system->date, new_date))
+		return -1;
 
-	system->date = date;
+	system->date = new_date;
 
 	return 0;
 }

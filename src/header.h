@@ -9,6 +9,8 @@
 #define DAY_0 1
 #define MONTH_0 1
 #define YEAR_0 2022
+/* global output messages */
+#define FORWARD_DATE_ERR "invalid date"
 
 /* airport constants & parse strings */
 #define MAX_AIRPORTS 40
@@ -88,7 +90,7 @@ void handle_add_airport(manager *system);
 void handle_list_airports(manager *system);
 void handle_v_command(manager *system);
 void handle_add_flight(manager *system);
-void handle_forward_time(manager *system);
+void handle_forward_date(manager *system);
 /* initializes global structure that stores all of current session's useful information */
 manager *initialize();
 /* forwards global date to date given as argument */

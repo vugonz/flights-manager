@@ -78,12 +78,12 @@ void insert_airport(airport *l, airport new_airport, int size)
 
 	/* inserts new element in sorted position of the list by id (insertion sort) */
 	for(i = size - 1; i >= 0; --i) {	
-		if(strcmp(new_airport.id, l[i].id) > 0) 
+		if(strcmp(new_airport.id, l[i].id) > 0) {
 			l[i+1] = new_airport;
 			break;
 		} else
 			l[i+1] = l[i];
-	
+
 		/* if ever reached with i = 0 means new element is the first one */
 		if(i == 0)
 			l[0] = new_airport;
