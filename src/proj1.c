@@ -125,6 +125,8 @@ void handle_add_flight(manager *system)
 		printf(ADD_FLIGHT_ERR_6);
 	else if(result_value == -7)
 		printf(ADD_FLIGHT_ERR_7);
+	else if(result_value == -8)
+		printf(ADD_FLIGHT_ERR_8);
 }
 
 manager *initialize()

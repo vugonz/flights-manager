@@ -26,8 +26,8 @@
 #define PRINT_FLIGHT_STR "%s %s %s %hd-%hd-%hd %hd:%hd\n"
 
 #define ADD_FLIGHT_ERR_1 "too many flights\n"
-#define ADD_FLIGHT_ERR_2 "flight already exists\n"
-#define ADD_FLIGHT_ERR_3 "invalid flight code\n"
+#define ADD_FLIGHT_ERR_2 "invalid flight code\n"
+#define ADD_FLIGHT_ERR_3 "flight already exists\n"
 #define ADD_FLIGHT_ERR_4N5 "%s: no such airport ID\n"
 #define ADD_FLIGHT_ERR_6 "invalid date\n" 
 #define ADD_FLIGHT_ERR_7 "invalid duration\n"
@@ -93,9 +93,10 @@ airport *get_airport_by_id(manager *system, char *id);
 /* flights.c functions */
 int add_flight(manager *system, char *id, char *origin, char *destination, 
 		date flight_date, time flight_time, time flight_duration, int nr_passengers);
-int is_valid_flight_id(char *id)
+int is_valid_flight_id(char *id);
 int is_taken_flight_id(manager *system, char *id, date date);
 int exists_flight_id(manager *system, char *id);
+void print_flight(flight flight);
 void list_all_flights(manager *system);
 flight create_flight(char *id, char *origin, char *destination,
 		date flight_date, time flight_time, time flight_duration, int nr_passengers);

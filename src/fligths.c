@@ -18,7 +18,7 @@ int add_flight(manager *system, char *id, char *origin, char *destination,
 		return -2;
 	
 	/* check if flight id is taken for the day */
-	if(is_taken_flight_id(system, id, date))
+	if(is_taken_flight_id(system, id, flight_date))
 		return -3;
 
 	if(!exists_airport_id(system, origin))
@@ -39,6 +39,8 @@ int add_flight(manager *system, char *id, char *origin, char *destination,
 	
 	new_flight = create_flight(id, origin, destination, 
 			flight_date, flight_time, duration, nr_passengers);
+	
+	print_flight(new_flight);
 
 	return 0;
 }
@@ -73,12 +75,12 @@ void list_all_flights(manager *system)
 	int i;
 
 	for(i = 0; i < system->nr_flights; ++i)
-		printf_flight(system->flights[i]);
+		print_flight(system->flights[i]);
 }
 
 void print_flight(flight flight)
 {
-	printf(FLIGHT_PRINT_STR, flight.id, flight.origin, flight.destination,
+	printf(PRINT_FLIGHT_STR, flight.id, flight.origin, flight.destination,
 			flight.date.day, flight.date.month, flight.date.day,
 			flight.time.hour, flight.time.minute);
 }
