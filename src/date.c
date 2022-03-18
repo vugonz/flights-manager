@@ -28,11 +28,9 @@ int dates_year_apart(date d1, date d2)
 {
 	if(d2.year - d1.year > 1) {
 		return 1;
-	
 	} else if(d2.year - d1.year == 1) {
 		if(d2.month > d1.month) { 
 			return 1;
-		
 		} else if(d2.month == d1.month)
 			if(d2.day > d1.day)
 				return 1;
