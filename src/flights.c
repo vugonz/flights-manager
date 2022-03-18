@@ -78,7 +78,8 @@ void list_all_flights(manager *system)
 {
 	int i;
 
-	for(i = 0; i < system->nr_flights; ++i) print_flight(system->flights[i]);
+	for(i = 0; i < system->nr_flights; ++i)
+		print_flight(system->flights[i]);
 }
 
 void print_flight(flight flight)
