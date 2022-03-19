@@ -9,7 +9,7 @@ int add_airport(manager *system, char *id, char *country, char *city)
 	airport new_airport;
 	
 	/* check if max amount of airports is reached */
-	if(system->nr_airports > MAX_AIRPORTS)
+	if(system->nr_airports >= MAX_AIRPORTS)
 		return -1;
 
 	/* check if airport id is valid */
@@ -26,7 +26,7 @@ int add_airport(manager *system, char *id, char *country, char *city)
 	insert_airport(system->airports, new_airport, system->nr_airports);
 
 	++system->nr_airports;
-
+	
 	return 0;
 }
 

@@ -162,15 +162,20 @@ int compare_flight_schedules(date d1, time t1, date d2, time t2)
 /* adds time to the given time and date instant */
 void calculate_arrivals(flight *flight, date d, time t, time t_inc)
 {
+	/* calculate new hours and minutes, adjust minute overflow */
 	t.hour = SUM_MINUTES(t, t_inc) >= MAX_MINUTES ? INC(SUM_HOURS(t, t_inc)) : SUM_HOURS(t, t_inc);
 	t.minute = SUM_MINUTES(t, t_inc) >= MAX_MINUTES ? SUM_MINUTES(t, t_inc) - MAX_MINUTES : SUM_MINUTES(t, t_inc);
 	
-	/* adjust date if addition goes to the next day */
+	/* if there is hour overflow, update date and adjust hour*/
 	if(t.hour >= MAX_HOURS) {
+		/* not a very standard approach, as used in minute calculation, a bit of a dirty hack */
 		t.hour -= MAX_HOURS;
-		d.day = (INC(d.day) > DAYS_IN_MONTH(d.month)) ? d.day - DAYS_IN_MONTH(d.month) : INC(d.day);
-		d.month = (INC(d.month) > MAX_MONTHS) ? d.month - MAX_MONTHS : d.month;
-		d.year = (d.month > MAX_MONTHS) ? INC(d.year) : d.year;
+		d.day = (INC(d.day) > DAYS_IN_MONTH(d.month)) ? INC(d.day) - DAYS_IN_MONTH(d.month) : INC(d.day);
+		d.month = d.day - 1 == 0 ? INC(d.month) : d.month;
+		if(d.month > MAX_MONTHS) {
+			d.month -= MAX_MONTHS;
+			d.year++;
+		}
 	}
 
 	flight->date_arrival = create_date(d.day, d.month, d.year);

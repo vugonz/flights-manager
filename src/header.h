@@ -8,7 +8,7 @@
 #define MONTH_0 1
 #define YEAR_0 2022
 /* global output messages */
-#define FORWARD_DATE_ERR "invalid date"
+#define FORWARD_DATE_ERR "invalid date\n"
 
 /* airport constants & parse strings */
 #define MAX_AIRPORTS 40
@@ -34,8 +34,8 @@
 #define FLIGHT_MAX_HOUR_DURATION 12
 #define FLIGHT_COMPONENTS_PARSE "%s %s %s" 
 #define NR_PASSENGERS_PARSE "%hd"
-#define PRINT_FLIGHT_STR "%s %s %s %02d-%02d-%d %02hd:%02hd"
-#define PRINT_FLIGHT_IN_AIRPORT_STR "%s %s %02d-%02d-%d %02hd:%02hd"
+#define PRINT_FLIGHT_STR "%s %s %s %02d-%02d-%d %02hd:%02hd\n"
+#define PRINT_FLIGHT_IN_AIRPORT_STR "%s %s %02d-%02d-%d %02hd:%02hd\n"
 
 /* flight output messages */
 #define ADD_FLIGHT_ERR_1 "too many flights\n"
@@ -50,7 +50,7 @@
 /* time and date parse strings */
 #define DATE_COMPONENTS_PARSE "%hd-%hd-%hd" 
 #define TIME_COMPONENTS_PARSE "%hd:%hd"
-#define PRINT_DATE_STR "%02d-%02d-%d"
+#define PRINT_DATE_STR "%02d-%02d-%d\n"
 
 /* date.c constants and macros */
 #define MAX_MONTHS 12
