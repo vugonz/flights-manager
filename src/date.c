@@ -1,4 +1,5 @@
 #include "header.h"
+#include <stdio.h>
 
 date create_date(short day, short month, short year)
 {
@@ -54,3 +55,7 @@ int same_year(date d1, date d2)
 	return !(DIFF_YEARS(d1, d2)) ? 1 : 0;
 }
 
+void print_date(date d)
+{
+	printf("%02d-%02d-%d ", d.day, d.month, d.year);
+}

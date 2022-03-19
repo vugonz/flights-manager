@@ -17,10 +17,10 @@
 #define AIRPORT_LENGTH_CITY 61
 #define MIN_FLIGHT_CAPACITY 10
 #define MAX_FLIGHT_CAPACITY 100
-#define AIRPORT_COMPONENTS_PARSE "%s %s %[a-zA-Z \t]"
+#define AIRPORT_COMPONENTS_PARSE "%s %s %[a-zA-Z- \t]"
 #define AIRPORT_IDS_PARSE "%s%c"
 /* airport output messages */
-#define AIRPORT_PRINT_STR "%s %s %s\n"
+#define AIRPORT_PRINT_STR "%s %s %s %d\n"
 #define ADD_AIRPORT_ERR_1 "too many airports\n"
 #define ADD_AIRPORT_ERR_2 "invalid airport ID\n"
 #define ADD_AIRPORT_ERR_3 "duplicate airport\n"
@@ -47,6 +47,8 @@
 /* time and date parse strings */
 #define DATE_COMPONENTS_PARSE "%hd-%hd-%hd" 
 #define TIME_COMPONENTS_PARSE "%hd:%hd"
+#define PRINT_DATE_STR "%02d-%02d-%d"
+#define PRINT_TIME_STR "%02hd:%02hd"
 
 /* date.c constants and macros */
 #define MAX_MONTHS 12
@@ -83,6 +85,7 @@ typedef struct {
 	char id[AIRPORT_LENGTH_ID];
 	char country[AIRPORT_LENGTH_COUNTRY];
 	char city[AIRPORT_LENGTH_CITY];
+	int nr_flights;
 } airport;
 
 typedef struct {
@@ -114,6 +117,8 @@ void handle_add_airport(manager *system);
 void handle_list_airports(manager *system);
 void handle_v_command(manager *system);
 void handle_add_flight(manager *system);
+void handle_list_arrival(manager *system);
+void handle_list_departure(manager *system);
 void handle_forward_date(manager *system);
 /* initializes global structure that stores all of current session's useful information */
 manager *initialize();
@@ -147,11 +152,9 @@ int compare_flight_departure(flight f1, flight f2);
 int compare_flight_arrival(flight f1, flight f2);
 void insert_flight(manager *system, flight new_flight);
 void insert_sorted_flight(flight *l, flight new_flight, int size, int (*cmp_fn) (flight f1, flight f2)); 
-void list_all_flights(manager *system);
+void list_flights(manager *system);
 void print_flight(flight flight);
 void calculate_arrivals(flight *flight, date d,time t, time duration);
-void print_sorted_arrival(flight flight);
-void print_sorted_departure(flight flight);
 
 /*
  * date.c functions
@@ -176,4 +179,13 @@ void add_time(date *d, time *t, time t_inc);
 int same_time(time t1, time t2);
 int same_hour(time t1, time t2);
 
+
+
+int list_flights_by_airport_arrival(manager *system, char *airport);
+int list_flights_by_airport_departure(manager *system, char *airport);
+void print_flight_departure(flight flight);
+void print_flight_arrival(flight flight);
+
+void print_time(time);
+void print_date(date);
 #endif

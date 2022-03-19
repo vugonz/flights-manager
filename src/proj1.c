@@ -37,6 +37,7 @@ int command_handler(manager *system)
 			break;
 		case 'p':
 			handle_list_departure(system);
+			break;
 		case 'c':
 			handle_list_arrival(system);
 			break;
@@ -85,7 +86,7 @@ void handle_v_command(manager *system)
 	char c = getchar();
 
 	if(c == '\n') {
-		list_all_flights(system);
+		list_flights(system);
 	} else
 		handle_add_flight(system);
 }
@@ -163,9 +164,26 @@ void handle_list_departure(manager *system)
 	/* get airport id */
 	scanf("%s", airport_id);
 	
-	result_value = list_flights_by_airport(manager *system, airport id, 0)
-	
+	result_value = list_flights_by_airport_departure(system, airport_id);
+
+	if(result_value == -1)
+		printf(LIST_AIRPORTS_ERR, airport_id);
 }
+
+void handle_list_arrival(manager *system)
+{
+	char airport_id[AIRPORT_LENGTH_ID];
+	int result_value;
+	
+	/* get airport id */
+	scanf("%s", airport_id);
+	
+	result_value = list_flights_by_airport_arrival(system, airport_id);
+
+	if(result_value == -1)
+		printf(LIST_AIRPORTS_ERR, airport_id);
+}
+
 /* 
  * global structure functions
  */
@@ -184,6 +202,8 @@ int forward_date(manager *system, date new_date)
 		return -1;
 
 	system->date = new_date;
+	
+	print_date(new_date);
 
 	return 0;
 }

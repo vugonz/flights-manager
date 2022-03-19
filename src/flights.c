@@ -41,6 +41,8 @@ int add_flight(manager *system, char *id, char *origin, char *destination,
 			date_departure, time_departure, duration, nr_passengers);
 
 	insert_flight(system, new_flight);
+	
+	get_airport_by_id(system, origin)->nr_flights++;
 
 	++system->nr_flights;
 
@@ -171,8 +173,45 @@ void calculate_arrivals(flight *flight, date d, time t, time t_inc)
 	return;
 }
 
-int list_flights_by_airport(manager *system, char airport_id, int op)
+int list_flights_by_airport_departure(manager *system, char *airport_id)
 {
-	if(!exists_airport_id(system, airport_id;	
+	int i;
 
+	if(!exists_airport_id(system, airport_id))
+		return -1;
+	
+	for(i = 0; i < system->nr_flights; ++i)
+		if(!strcmp(system->sorted_departure_flights[i].origin, airport_id))
+			print_flight_arrival(system->sorted_departure_flights[i]);
+
+	return 0;
 }
+
+void print_flight_departure(flight flight)
+{
+	printf("%s %s", flight.id, flight.destination);
+	print_date(flight.date_departure);
+	print_time(flight.time_departure);
+}
+
+int list_flights_by_airport_arrival(manager *system, char *airport_id)
+{
+	int i;
+
+	if(!exists_airport_id(system, airport_id))
+		return -1;
+	
+	for(i = 0; i < system->nr_flights; ++i)
+		if(!strcmp(system->sorted_arrival_flights[i].destination, airport_id))
+			print_flight_arrival(system->sorted_arrival_flights[i]);
+
+	return 0;
+}
+
+void print_flight_arrival(flight flight)
+{
+	printf("%s %s ", flight.id, flight.origin);
+	print_date(flight.date_arrival);
+	print_time(flight.time_arrival);
+}
+

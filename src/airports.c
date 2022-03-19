@@ -119,7 +119,7 @@ void list_airports_by_id(manager *system)
 /* prints the formatted information of given airport structure, similar to python's __str__ method  */
 void print_airport(airport airport)
 {
-	printf(AIRPORT_PRINT_STR, airport.id, airport.city, airport.country);
+	printf(AIRPORT_PRINT_STR, airport.id, airport.city, airport.country, airport.nr_flights);
 }
 
 /* returns pointer to airport structure with given id */
