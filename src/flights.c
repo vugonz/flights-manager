@@ -162,13 +162,21 @@ int compare_flight_schedules(date d1, time t1, date d2, time t2)
 /* adds time to the given time and date instant */
 void calculate_arrivals(flight *flight, date d, time t, time t_inc)
 {
-	/* calculate new hours and minutes, adjust minute overflow */
+	 /* this piece of code might be considered dirty. in order to avoid deep nested and excess if statements or long
+	  * ternary operations with auxiliary functions (like in time.c and date.c) the approach is less logical
+	  * and different for both structures, althought it was not necessary since they behave similarly, i believe
+	  * it to be more aesthetically pleasing and not a big deal since this is an "under the rug" function
+	  
+	
+	 calculate new hours and minutes, adjust minute overflow 
+	
 	t.hour = SUM_MINUTES(t, t_inc) >= MAX_MINUTES ? INC(SUM_HOURS(t, t_inc)) : SUM_HOURS(t, t_inc);
 	t.minute = SUM_MINUTES(t, t_inc) >= MAX_MINUTES ? SUM_MINUTES(t, t_inc) - MAX_MINUTES : SUM_MINUTES(t, t_inc);
-	
-	/* if there is hour overflow, update date and adjust hour*/
+		
+	 approach from bottom to top 
+	 if there is hour overflow, update date and adjust hour
 	if(t.hour >= MAX_HOURS) {
-		/* not a very standard approach, as used in minute calculation, a bit of a dirty hack */
+		 a less logical approach to the method of calculating minute overflow, a bit dirtier but more compact 
 		t.hour -= MAX_HOURS;
 		d.day = (INC(d.day) > DAYS_IN_MONTH(d.month)) ? INC(d.day) - DAYS_IN_MONTH(d.month) : INC(d.day);
 		d.month = d.day - 1 == 0 ? INC(d.month) : d.month;
@@ -177,7 +185,24 @@ void calculate_arrivals(flight *flight, date d, time t, time t_inc)
 			d.year++;
 		}
 	}
+	*/
+	if(SUM_MINUTES(t, t_inc) >= MAX_MINUTES) {
+		t.hour++;
+		t.minute -= MAX_MINUTES;
+	}
 
+	if(t.hour >= MAX_HOURS) { 
+		t.hour -= MAX_HOURS;
+		d.day++;
+	}
+	if(d.day > DAYS_IN_MONTH(d.month)) {
+		d.day -= DAYS_IN_MONTH(d.month);
+		d.month++;
+	}
+	if(d.month > MAX_MONTHS){
+		d.month -= MAX_MONTHS;
+		d.year++;
+	}
 	flight->date_arrival = create_date(d.day, d.month, d.year);
 	flight->time_arrival = create_time(t.hour, t.minute);
 
