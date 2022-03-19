@@ -144,10 +144,14 @@ int is_valid_flight_id(char *id);
 int is_taken_flight_id(manager *system, char *id, date date);
 int exists_flight_id(manager *system, char *id);
 int compare_flight_departure(flight f1, flight f2);
-void insert_flight(flight *l, flight *sorted_l, flight new_flight, int size);
+int compare_flight_arrival(flight f1, flight f2);
+void insert_flight(manager *system, flight new_flight);
+void insert_sorted_flight(flight *l, flight new_flight, int size, int (*cmp_fn) (flight f1, flight f2)); 
 void list_all_flights(manager *system);
 void print_flight(flight flight);
 void calculate_arrivals(flight *flight, date d,time t, time duration);
+void print_sorted_arrival(flight flight);
+void print_sorted_departure(flight flight);
 
 /*
  * date.c functions

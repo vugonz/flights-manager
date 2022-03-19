@@ -19,7 +19,7 @@ int time_compare(time t1, time t2)
 /* returns 1 if given duration is valid for a flight and 0 if not */
 int is_valid_duration(time duration)
 {
-	return duration.hour < FLIGHT_MAX_HOUR_DURATION ? 1 : duration.hour == FLIGHT_MAX_HOUR_DURATION && !duration.minute ? 1 : 0; 
+	return duration.hour < FLIGHT_MAX_HOUR_DURATION ? 1 : duration.hour == FLIGHT_MAX_HOUR_DURATION && duration.minute == 0? 1 : 0; 
 }
 
 /*
