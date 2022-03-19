@@ -21,9 +21,9 @@ int main()
  */
 int command_handler(manager *system)
 {
-	char c = getchar();
+	char command = getchar();
 
-	switch(c) {
+	switch(command) {
 		case 'q':
 			return 0;
 		case 'a':
@@ -36,10 +36,10 @@ int command_handler(manager *system)
 			handle_v_command(system);
 			break;
 		case 'p':
-			handle_list_departure(system);
+			handle_list_flight_by_airport(system, command);
 			break;
 		case 'c':
-			handle_list_arrival(system);
+			handle_list_flight_by_airport(system, command);
 			break;
 		case 't':
 			handle_forward_date(system);
@@ -156,7 +156,7 @@ void handle_forward_date(manager *system)
 		printf(FORWARD_DATE_ERR);
 }
 
-void handle_list_departure(manager *system)
+void handle_list_flight_by_airport(manager *system, char command)
 {
 	char airport_id[AIRPORT_LENGTH_ID];
 	int result_value;
@@ -164,21 +164,7 @@ void handle_list_departure(manager *system)
 	/* get airport id */
 	scanf("%s", airport_id);
 	
-	result_value = list_flights_by_airport_departure(system, airport_id);
-
-	if(result_value == -1)
-		printf(LIST_AIRPORTS_ERR, airport_id);
-}
-
-void handle_list_arrival(manager *system)
-{
-	char airport_id[AIRPORT_LENGTH_ID];
-	int result_value;
-	
-	/* get airport id */
-	scanf("%s", airport_id);
-	
-	result_value = list_flights_by_airport_arrival(system, airport_id);
+	result_value = list_flights_by_airport(system, airport_id, command);
 
 	if(result_value == -1)
 		printf(LIST_AIRPORTS_ERR, airport_id);

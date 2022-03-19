@@ -57,5 +57,5 @@ int same_year(date d1, date d2)
 
 void print_date(date d)
 {
-	printf("%02d-%02d-%d ", d.day, d.month, d.year);
+	printf(PRINT_DATE_STR, d.day, d.month, d.year);
 }

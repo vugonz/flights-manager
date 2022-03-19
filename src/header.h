@@ -28,12 +28,15 @@
 #define LIST_AIRPORTS_ERR "%s: no such airport ID\n"
 
 /* flight constants & parse strings */
+#define DEPARTURE 'p'
 #define MAX_FLIGHTS 30000
 #define FLIGHT_LENGTH_ID 7
 #define FLIGHT_MAX_HOUR_DURATION 12
 #define FLIGHT_COMPONENTS_PARSE "%s %s %s" 
 #define NR_PASSENGERS_PARSE "%hd"
-#define PRINT_FLIGHT_STR "%s %s %s %02d-%02d-%d %02hd:%02hd\n"
+#define PRINT_FLIGHT_STR "%s %s %s %02d-%02d-%d %02hd:%02hd"
+#define PRINT_FLIGHT_IN_AIRPORT_STR "%s %s %02d-%02d-%d %02hd:%02hd"
+
 /* flight output messages */
 #define ADD_FLIGHT_ERR_1 "too many flights\n"
 #define ADD_FLIGHT_ERR_2 "invalid flight code\n"
@@ -48,7 +51,6 @@
 #define DATE_COMPONENTS_PARSE "%hd-%hd-%hd" 
 #define TIME_COMPONENTS_PARSE "%hd:%hd"
 #define PRINT_DATE_STR "%02d-%02d-%d"
-#define PRINT_TIME_STR "%02hd:%02hd"
 
 /* date.c constants and macros */
 #define MAX_MONTHS 12
@@ -117,12 +119,10 @@ void handle_add_airport(manager *system);
 void handle_list_airports(manager *system);
 void handle_v_command(manager *system);
 void handle_add_flight(manager *system);
-void handle_list_arrival(manager *system);
-void handle_list_departure(manager *system);
+void handle_list_flight_by_airport(manager *system, char command);
 void handle_forward_date(manager *system);
 /* initializes global structure that stores all of current session's useful information */
 manager *initialize();
-/* forwards global date to date given as argument */
 int forward_date(manager *system, date);
 
 /*
@@ -155,6 +155,11 @@ void insert_sorted_flight(flight *l, flight new_flight, int size, int (*cmp_fn) 
 void list_flights(manager *system);
 void print_flight(flight flight);
 void calculate_arrivals(flight *flight, date d,time t, time duration);
+int list_flights_by_airport(manager *system, char *ariport, char command);
+void list_airport_flights_by_departure(flight *l, char *airport, int size);  
+void list_airport_flights_by_arrival(flight *l, char *airport, int size);  
+void print_flight_in_airport(char *id, char *airport, date d, time t);
+int compare_flight_schedules(date d1, time t1, date d2, time t2);
 
 /*
  * date.c functions

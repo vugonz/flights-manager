@@ -39,7 +39,3 @@ int same_time(time t1, time t2)
 	return !(DIFF_MINUTES(t1,t2)) && same_hour(t1, t2) ? 1 : 0;
 }
 
-void print_time(time t1)
-{
-	printf("%02hd:%02hd", t1.minute, t1.hour);
-}
