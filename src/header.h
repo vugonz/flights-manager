@@ -145,21 +145,27 @@ flight create_flight(char *id, char *origin, char *destination,
 		date flight_date, time flight_time, time flight_duration, int nr_passengers);
 int add_flight(manager *system, char *id, char *origin, char *destination, 
 		date flight_date, time flight_time, time flight_duration, int nr_passengers);
+
 int is_valid_flight_id(char *id);
 int is_taken_flight_id(manager *system, char *id, date date);
 int exists_flight_id(manager *system, char *id);
+
 int compare_flight_departure(flight f1, flight f2);
 int compare_flight_arrival(flight f1, flight f2);
+
 void insert_flight(manager *system, flight new_flight);
 void insert_sorted_flight(flight *l, flight new_flight, int size, int (*cmp_fn) (flight f1, flight f2)); 
-void list_flights(manager *system);
+
 void print_flight(flight flight);
+
 void calculate_arrivals(flight *flight, date d,time t, time duration);
+int compare_flight_schedules(date d1, time t1, date d2, time t2);
+
+void list_flights(manager *system);
 int list_flights_by_airport(manager *system, char *ariport, char command);
 void list_airport_flights_by_departure(flight *l, char *airport, int size);  
 void list_airport_flights_by_arrival(flight *l, char *airport, int size);  
 void print_flight_in_airport(char *id, char *airport, date d, time t);
-int compare_flight_schedules(date d1, time t1, date d2, time t2);
 
 /*
  * date.c functions
@@ -184,13 +190,6 @@ void add_time(date *d, time *t, time t_inc);
 int same_time(time t1, time t2);
 int same_hour(time t1, time t2);
 
-
-
-int list_flights_by_airport_arrival(manager *system, char *airport);
-int list_flights_by_airport_departure(manager *system, char *airport);
-void print_flight_departure(flight flight);
-void print_flight_arrival(flight flight);
-
-void print_time(time);
 void print_date(date);
+
 #endif
