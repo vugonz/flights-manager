@@ -163,21 +163,21 @@ int compare_flight_schedules(date d1, time t1, date d2, time t2)
 void calculate_arrivals(flight *flight, date d, time t, time t_inc)
 {
 	if((t.minute = SUM_MINUTES(t, t_inc)) >= MAX_MINUTES) {
-		t.hour++;
 		t.minute -= MAX_MINUTES;
+		t.hour++;
 	}
 
 	if((t.hour = SUM_HOURS(t, t_inc)) >= MAX_HOURS) { 
-		d.day++;
 		t.hour -= MAX_HOURS;
+		d.day++;
 	}
 	if(d.day > DAYS_IN_MONTH(d.month)) {
-		d.month++;
 		d.day -= DAYS_IN_MONTH(d.month);
+		d.month++;
 	}
-	if(d.month > MAX_MONTHS) {
-		d.year++;
+	if(d.month > MAX_MONTHS){
 		d.month -= MAX_MONTHS;
+		d.year++;
 	}
 
 	flight->date_arrival = create_date(d.day, d.month, d.year);
