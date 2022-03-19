@@ -100,20 +100,12 @@ int is_taken_flight_id(manager *system, char *id, date date)
 	return 0;
 }
 
-void list_all_flights(manager *system)
+void list_flights(manager *system)
 {
 	int i;
 
 	for(i = 0; i < system->nr_flights; ++i)
 		print_flight(system->flights[i]);
-	
-	printf("\ndeparture sorted \n");
-	for(i = 0; i < system->nr_flights; ++i)
-		print_sorted_departure(system->sorted_departure_flights[i]);
-	
-	printf("\narrival sorted \n");
-	for(i = 0; i < system->nr_flights; ++i)
-		print_sorted_arrival(system->sorted_arrival_flights[i]);
 }
 
 void print_flight(flight flight)
@@ -179,13 +171,8 @@ void calculate_arrivals(flight *flight, date d, time t, time t_inc)
 	return;
 }
 
-
-void print_sorted_departure(flight flight)
+int list_flights_by_airport(manager *system, char airport_id, int op)
 {
-	printf("%s %02hd-%02hd-%02hd %02hd:%02hd\n", flight.id, flight.date_departure.day, flight.date_departure.month, flight.date_departure.year, flight.time_departure.hour, flight.time_departure.minute);
-}
+	if(!exists_airport_id(system, airport_id;	
 
-void print_sorted_arrival(flight flight)
-{
-	printf("%s %02hd-%02hd-%02hd %02hd:%02hd\n", flight.id, flight.date_arrival.day, flight.date_arrival.month, flight.date_arrival.year, flight.time_arrival.hour, flight.time_arrival.minute);
 }
