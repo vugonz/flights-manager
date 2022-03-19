@@ -174,7 +174,7 @@ void calculate_arrivals(flight *flight, date d, time t, time t_inc)
 	}
 
 	flight->date_arrival = create_date(d.day, d.month, d.year);
-	flight->time_arrival = create_time(t.minute, t.hour);
+	flight->time_arrival = create_time(t.hour, t.minute);
 
 	return;
 }
