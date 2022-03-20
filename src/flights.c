@@ -206,6 +206,17 @@ void print_flight_in_airport(char *id, char *airport, date d, time t)
 	printf(PRINT_FLIGHT_IN_AIRPORT_STR, id, airport, d.day, d.month, d.year, t.hour, t.minute);
 }
 
+/* wrapper function */
+/* compares the schedule of a day (d1 and t1) with schedule of another day (d2 and t2) */
+int compare_flight_schedules(date d1, time t1, date d2, time t2)
+{
+	/* same departure instant */
+	if(!date_compare(d1, d2) && !time_compare(t1, t2))
+		return 0;
+	
+	return !date_compare(d1, d2) ? time_compare(t1, t2) : date_compare(d1, d2);
+}
+
 /* returns negative if f2 departs before f1, 0 if flights depart at the same instant and positive if f2 departs after f1 */
 int compare_flight_departure(flight f1, flight f2)
 {
@@ -220,13 +231,3 @@ int compare_flight_arrival(flight f1, flight f2)
 	return compare_flight_schedules(f1.date_arrival, f1.time_arrival, f2.date_arrival, f2.time_arrival);
 }
 
-/* returns negative if the instant of date d2 and time t2 are set before the instant of date d1 and time t1 */ 
-/* wrapper function */
-int compare_flight_schedules(date d1, time t1, date d2, time t2)
-{
-	/* same departure instant */
-	if(!date_compare(d1, d2) && !time_compare(t1, t2))
-		return 0;
-	
-	return !date_compare(d1, d2) ? time_compare(t1, t2) : date_compare(d1, d2);
-}

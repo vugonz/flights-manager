@@ -31,16 +31,6 @@ int add_airport(manager *system, char *id, char *country, char *city)
 }
 
 
-airport create_airport(char *id, char *country, char *city)
-{
-	airport new_airport = {0};
-	
-	strcpy(new_airport.id, id);
-	strcpy(new_airport.country, country);
-	strcpy(new_airport.city, city);
-
-	return new_airport;
-}
 
 
 int is_valid_airport_id(char *id)
@@ -117,9 +107,15 @@ void list_airports_by_id(manager *system)
 }
 
 /* prints the formatted information of given airport structure, similar to python's __str__ method  */
-void print_airport(airport airport)
+airport create_airport(char *id, char *country, char *city)
 {
-	printf(AIRPORT_PRINT_STR, airport.id, airport.city, airport.country, airport.nr_flights);
+	airport new_airport = {0};
+	
+	strcpy(new_airport.id, id);
+	strcpy(new_airport.country, country);
+	strcpy(new_airport.city, city);
+
+	return new_airport;
 }
 
 /* returns pointer to airport structure with given id */
@@ -132,4 +128,9 @@ airport *get_airport_by_id(manager *system, char *id)
 			return &system->airports[i];
 
 	return 0;
+}
+
+void print_airport(airport airport)
+{
+	printf(AIRPORT_PRINT_STR, airport.id, airport.city, airport.country, airport.nr_flights);
 }
