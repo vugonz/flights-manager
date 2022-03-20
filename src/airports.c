@@ -109,7 +109,7 @@ void list_airports_by_id(manager *system)
 /* prints the formatted information of given airport structure, similar to python's __str__ method  */
 airport create_airport(char *id, char *country, char *city)
 {
-	airport new_airport = {0};
+	airport new_airport;
 	
 	strcpy(new_airport.id, id);
 	strcpy(new_airport.country, country);

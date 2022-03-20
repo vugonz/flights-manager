@@ -3,7 +3,7 @@
 
 date create_date(short day, short month, short year)
 {
-	date new_date = {0};
+	date new_date;
 
 	new_date.day = day;
 	new_date.month = month;

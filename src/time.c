@@ -3,7 +3,7 @@
 
 time create_time(short hour, short minute)
 {
-	time new_time = {0};
+	time new_time;
 
 	new_time.hour = hour;
 	new_time.minute = minute;
@@ -14,13 +14,15 @@ time create_time(short hour, short minute)
 /* returns negative is t2 is a time set before t1, 0 if t1 and t2 are the sime time and positive if t2 is a time set after t1 */
 int time_compare(time t1, time t2)
 {
-	return same_time(t1, t2) ? 0 : same_hour(t1, t2) ? DIFF_MINUTES(t2, t1) : DIFF_HOURS(t2, t1); 
+	return same_time(t1, t2) ? 0 :
+		same_hour(t1, t2) ? DIFF_MINUTES(t2, t1) : DIFF_HOURS(t2, t1); 
 }
 
 /* returns 1 if given duration is valid for a flight and 0 if not */
 int is_valid_duration(time duration)
 {
-	return duration.hour < FLIGHT_MAX_HOUR_DURATION ? 1 : duration.hour == FLIGHT_MAX_HOUR_DURATION && duration.minute == 0? 1 : 0; 
+	return duration.hour < FLIGHT_MAX_HOUR_DURATION ? 1 :
+		duration.hour == FLIGHT_MAX_HOUR_DURATION && !duration.minute ? 1 : 0; 
 }
 
 /*
