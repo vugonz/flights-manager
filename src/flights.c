@@ -49,7 +49,31 @@ int add_flight(manager *system, char *id, char *origin, char *destination,
 	return 0;
 }
 
-/* inserts flight in list sorted by creation and lists sorted by departure and arrival schedules */
+/* checks if given id is valid for a flight */
+int is_valid_flight_id(char *id)
+{
+	char c1, c2;
+	int n;
+
+	if(sscanf(id, "%c%c%d", &c1, &c2, &n) == 3) 
+		return isupper(c1) && isupper(c2) && n >= 0 ? 1 : 0;
+	
+	return 0;
+}
+
+/* checks if flight id is taken for the given date */
+int is_taken_flight_id(manager *system, char *id, date date)
+{
+	int i;
+	
+	/* check if any flight has the same id and, if so, check if they have the same date */
+	for(i = 0; i < system->nr_flights; ++i)
+		if(!strcmp(system->flights[i].id, id) && !date_compare(system->flights[i].date_departure, date))
+			return 1;
+
+	return 0;
+}
+
 void insert_flight(manager *system, flight new_flight)
 {
 	/* list will always be sorted by creation date as long as new elements are appended in end */
@@ -80,31 +104,6 @@ void insert_sorted_flight(flight *l, flight new_flight, int size, int (*cmp_func
 	}
 }
 
-/* checks if given id is valid for a flight */
-int is_valid_flight_id(char *id)
-{
-	char c1, c2;
-	int n;
-
-	if(sscanf(id, "%c%c%d", &c1, &c2, &n) == 3) 
-		return isupper(c1) && isupper(c2) && n >= 0 ? 1 : 0;
-	
-	return 0;
-}
-
-/* checks if flight id is taken for the given date */
-int is_taken_flight_id(manager *system, char *id, date date)
-{
-	int i;
-	
-	/* check if any flight has the same id and, if so, check if they have the same date */
-	for(i = 0; i < system->nr_flights; ++i)
-		if(!strcmp(system->flights[i].id, id) && !date_compare(system->flights[i].date_departure, date))
-			return 1;
-
-	return 0;
-}
-
 /* lists flights sorted by creation */
 void list_flights(manager *system)
 {
@@ -112,84 +111,6 @@ void list_flights(manager *system)
 
 	for(i = 0; i < system->nr_flights; ++i)
 		print_flight(system->flights[i]);
-}
-
-/* prints flight in format required by the 'v' command */
-void print_flight(flight flight)
-{
-	printf(PRINT_FLIGHT_STR, flight.id, flight.origin, flight.destination,
-			flight.date_departure.day, flight.date_departure.month, flight.date_departure.year,
-			flight.time_departure.hour, flight.time_departure.minute);
-}
-
-/* creates a new flight structure with given components */
-flight create_flight(char *id, char *origin, char *destination,
-		date date_departure, time time_departure, time duration, int nr_passengers)
-{
-	flight new_flight;
-	
-	strcpy(new_flight.id, id);
-	strcpy(new_flight.origin, origin);
-	strcpy(new_flight.destination, destination);
-	new_flight.nr_passengers = nr_passengers;
-	new_flight.date_departure = date_departure;
-	new_flight.time_departure = time_departure;
-	
-	calculate_arrivals(&new_flight, new_flight.date_departure, new_flight.time_departure, duration);
-
-	return new_flight;
-}
-
-/* returns negative if f2 departs before f1, 0 if flights depart at the same instant and positive if f2 departs after f1 */
-int compare_flight_departure(flight f1, flight f2)
-{
-	/* same departure instant */
-	return compare_flight_schedules(f1.date_departure, f1.time_departure, f2.date_departure, f2.time_departure);
-}
-
-/* returns negative if f2 arrives before f1, 0 if flights arrive at the same instant and positive if f2 arrives after f1 */
-int compare_flight_arrival(flight f1, flight f2)
-{
-	/* same departure instant */
-	return compare_flight_schedules(f1.date_arrival, f1.time_arrival, f2.date_arrival, f2.time_arrival);
-}
-
-/* returns negative if the instant of date d2 and time t2 are set before the instant of date d1 and time t1 */ 
-/* wrapper function */
-int compare_flight_schedules(date d1, time t1, date d2, time t2)
-{
-	/* same departure instant */
-	if(!date_compare(d1, d2) && !time_compare(t1, t2))
-		return 0;
-	
-	return !date_compare(d1, d2) ? time_compare(t1, t2) : date_compare(d1, d2);
-}
-
-/* adds time to the given time and date instant */
-void calculate_arrivals(flight *flight, date d, time t, time t_inc)
-{
-	if((t.minute = SUM_MINUTES(t, t_inc)) >= MAX_MINUTES) {
-		t.minute -= MAX_MINUTES;
-		t.hour++;
-	}
-
-	if((t.hour = SUM_HOURS(t, t_inc)) >= MAX_HOURS) { 
-		t.hour -= MAX_HOURS;
-		d.day++;
-	}
-	if(d.day > DAYS_IN_MONTH(d.month)) {
-		d.day -= DAYS_IN_MONTH(d.month);
-		d.month++;
-	}
-	if(d.month > MAX_MONTHS){
-		d.month -= MAX_MONTHS;
-		d.year++;
-	}
-
-	flight->date_arrival = create_date(d.day, d.month, d.year);
-	flight->time_arrival = create_time(t.hour, t.minute);
-
-	return;
 }
 
 int list_flights_by_airport(manager *system, char *airport_id, char command)
@@ -225,8 +146,87 @@ void list_airport_flights_by_arrival(flight *l, char *airport_id, int size)
 			print_flight_in_airport(l[i].id, l[i].origin, l[i].date_arrival, l[i].time_arrival);
 }
 
+
+/* creates a new flight structure with given components */
+flight create_flight(char *id, char *origin, char *destination,
+		date date_departure, time time_departure, time duration, int nr_passengers)
+{
+	flight new_flight;
+	
+	strcpy(new_flight.id, id);
+	strcpy(new_flight.origin, origin);
+	strcpy(new_flight.destination, destination);
+	new_flight.nr_passengers = nr_passengers;
+	new_flight.date_departure = date_departure;
+	new_flight.time_departure = time_departure;
+	
+	calculate_arrivals(&new_flight, new_flight.date_departure, new_flight.time_departure, duration);
+
+	return new_flight;
+}
+
+/* adds time to the given time and date instant */
+void calculate_arrivals(flight *flight, date d, time t, time t_inc)
+{
+	if((t.minute = SUM_MINUTES(t, t_inc)) >= MAX_MINUTES) {
+		t.minute -= MAX_MINUTES;
+		t.hour++;
+	}
+
+	if((t.hour = SUM_HOURS(t, t_inc)) >= MAX_HOURS) { 
+		t.hour -= MAX_HOURS;
+		d.day++;
+	}
+	if(d.day > DAYS_IN_MONTH(d.month)) {
+		d.day -= DAYS_IN_MONTH(d.month);
+		d.month++;
+	}
+	if(d.month > MAX_MONTHS){
+		d.month -= MAX_MONTHS;
+		d.year++;
+	}
+
+	flight->date_arrival = create_date(d.day, d.month, d.year);
+	flight->time_arrival = create_time(t.hour, t.minute);
+
+	return;
+}
+
+/* prints flight in format required by the 'v' command */
+void print_flight(flight flight)
+{
+	printf(PRINT_FLIGHT_STR, flight.id, flight.origin, flight.destination,
+			flight.date_departure.day, flight.date_departure.month, flight.date_departure.year,
+			flight.time_departure.hour, flight.time_departure.minute);
+}
+
 /* prints flight in format required by 'c' and 'p' commands */
 void print_flight_in_airport(char *id, char *airport, date d, time t)
 {
 	printf(PRINT_FLIGHT_IN_AIRPORT_STR, id, airport, d.day, d.month, d.year, t.hour, t.minute);
+}
+
+/* returns negative if f2 departs before f1, 0 if flights depart at the same instant and positive if f2 departs after f1 */
+int compare_flight_departure(flight f1, flight f2)
+{
+	/* same departure instant */
+	return compare_flight_schedules(f1.date_departure, f1.time_departure, f2.date_departure, f2.time_departure);
+}
+
+/* returns negative if f2 arrives before f1, 0 if flights arrive at the same instant and positive if f2 arrives after f1 */
+int compare_flight_arrival(flight f1, flight f2)
+{
+	/* same departure instant */
+	return compare_flight_schedules(f1.date_arrival, f1.time_arrival, f2.date_arrival, f2.time_arrival);
+}
+
+/* returns negative if the instant of date d2 and time t2 are set before the instant of date d1 and time t1 */ 
+/* wrapper function */
+int compare_flight_schedules(date d1, time t1, date d2, time t2)
+{
+	/* same departure instant */
+	if(!date_compare(d1, d2) && !time_compare(t1, t2))
+		return 0;
+	
+	return !date_compare(d1, d2) ? time_compare(t1, t2) : date_compare(d1, d2);
 }

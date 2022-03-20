@@ -162,7 +162,7 @@ void handle_list_flight_by_airport(manager *system, char command)
 	int result_value;
 	
 	/* get airport id */
-	scanf("%s", airport_id);
+	scanf(PARSE_AIRPORT_ID, airport_id);
 	
 	result_value = list_flights_by_airport(system, airport_id, command);
 
