@@ -8,15 +8,15 @@ int add_airport(manager *system, char *id, char *country, char *city)
 {
 	airport new_airport;
 	
-	/* check if max amount of airports is reached */
-	if(system->nr_airports >= MAX_AIRPORTS)
-		return -1;
-
 	/* check if airport id is valid */
 	if(!is_valid_airport_id(id))
+		return -1;
+
+	/* check if max amount of airports is reached */
+	if(system->nr_airports >= MAX_AIRPORTS)
 		return -2;
 
-	/* check if airport exists */
+	/* check if airport id is duplicate */
 	if(exists_airport_id(system, id))
 		return -3;
 

@@ -21,8 +21,8 @@
 #define AIRPORT_IDS_PARSE "%s%c"
 /* airport output messages */
 #define AIRPORT_PRINT_STR "%s %s %s %d\n"
-#define ADD_AIRPORT_ERR_1 "too many airports\n"
-#define ADD_AIRPORT_ERR_2 "invalid airport ID\n"
+#define ADD_AIRPORT_ERR_1 "invalid airport ID\n"
+#define ADD_AIRPORT_ERR_2 "too many airports\n"
 #define ADD_AIRPORT_ERR_3 "duplicate airport\n"
 #define ADD_AIRPORT_SUCCESS "airport %s\n"
 #define LIST_AIRPORTS_ERR "%s: no such airport ID\n"
