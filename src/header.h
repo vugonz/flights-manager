@@ -38,10 +38,10 @@
 #define PRINT_FLIGHT_IN_AIRPORT_STR "%s %s %02d-%02d-%d %02hd:%02hd\n"
 
 /* flight output messages */
-#define ADD_FLIGHT_ERR_1 "too many flights\n"
-#define ADD_FLIGHT_ERR_2 "invalid flight code\n"
-#define ADD_FLIGHT_ERR_3 "flight already exists\n"
-#define ADD_FLIGHT_ERR_4N5 "%s: no such airport ID\n"
+#define ADD_FLIGHT_ERR_1 "invalid flight code\n"
+#define ADD_FLIGHT_ERR_2 "flight already exists\n"
+#define ADD_FLIGHT_ERR_3N4 "%s: no such airport ID\n"
+#define ADD_FLIGHT_ERR_5 "too many flights\n"
 #define ADD_FLIGHT_ERR_6 "invalid date\n" 
 #define ADD_FLIGHT_ERR_7 "invalid duration\n"
 #define ADD_FLIGHT_ERR_8 "invalid capacity\n"

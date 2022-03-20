@@ -128,11 +128,11 @@ void handle_add_flight(manager *system)
 		printf(ADD_FLIGHT_ERR_1);
 	} else if(result_value == -2) {
 		printf(ADD_FLIGHT_ERR_2);
-	} else if(result_value == -3) {
-		printf(ADD_FLIGHT_ERR_3);
-	} else if(result_value == -4 || result_value == -5) {
-		/* same error, -4 for origin airport invalid id and -5 for destination airport invalid id */
-		printf(ADD_FLIGHT_ERR_4N5, result_value == -4 ? origin : destination);
+	} else if(result_value == -3 || result_value == -4) {
+		/* same error, -3 for origin airport invalid id and -4 for destination airport invalid id */
+		printf(ADD_FLIGHT_ERR_3N4, result_value == -3 ? origin : destination);
+	} else if(result_value == -5) {
+		printf(ADD_FLIGHT_ERR_5);
 	} else if(result_value == -6) {
 		printf(ADD_FLIGHT_ERR_6);
 	} else if(result_value == -7) {
