@@ -29,15 +29,14 @@ int is_valid_duration(time duration)
  * auxiliary functions
  */
 
+/* returns 1 if given times are the same minute and hour */
+int same_minute(time t1, time t2)
+{
+	return !(DIFF_MINUTES(t1,t2)) && same_hour(t1, t2) ? 1 : 0;
+}
+
 /* returns 1 if given times are the same hour */
 int same_hour(time t1, time t2)
 {
 	return !(DIFF_HOURS(t1, t2)) ? 1 : 0;
 }
-
-/* returns 1 if given times are the same minute and hour */
-int same_time(time t1, time t2)
-{
-	return !(DIFF_MINUTES(t1,t2)) && same_hour(t1, t2) ? 1 : 0;
-}
-
