@@ -1,0 +1,353 @@
+
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width,
+            initial-scale=1.0,maximum-scale=1.0" />
+        <style type="text/css">
+            canvas {
+                border: 1px solid black;
+                width: 700px;
+                height: 700px;
+            }
+        </style>
+        <script type="text/javascript">
+        
+
+function TagCloud(w, h, context) {
+    "use strict";
+    this.ctx = context;
+    this.canvasWidth = w;
+    this.canvasHeight = h;
+    this.fontSize = this.canvasHeight / 3;
+    this.shape = "rectangle";
+}
+
+TagCloud.prototype.setShape = function () {
+    this.shape = "circle";
+};
+
+TagCloud.prototype.render = function (tags) {
+    this.ctx.textBaseline = "top";
+    tags.forEach(function (tag) {
+        this.placeTag(tag[0]);
+    }, this);
+};
+
+TagCloud.prototype.placeTag = function (tag) {
+    var placement;
+    while (!(placement = this._getNonOverlappingPlaceWithBestSize(
+            this.fontSize, tag)))
+        this.fontSize *= 0.9;
+
+    this.ctx.fillStyle = this._getRandomColor();
+    this.ctx.fillText(tag, placement.x, placement.y);
+};
+
+TagCloud.prototype._getNonOverlappingPlaceWithBestSize =
+    function (fontSize, tag) {
+    this.ctx.font = "" + fontSize + "pt " + "Arial";
+    var lineHeight=this.getLineHeight(fontSize);
+    var tagWidth = this.ctx.measureText(tag).width;
+
+    var base = new BasePlacement(
+        (this.canvasWidth - tagWidth) * Math.random(),
+        (this.canvasHeight - lineHeight) * Math.random(),
+        lineHeight
+        );
+
+    var placement;
+    /* jshint ignore:start */
+    while (placement = base.nextPlaceToTry()) {
+        if (this._isPlaceEmpty(placement, tagWidth, lineHeight))
+            break;
+    }
+    /* jshint ignore:end */
+    return placement;
+};
+
+TagCloud.prototype.getLineHeight = function (fontSize) {
+    return this.ctx.measureText('M').width * 1.2;
+}
+
+TagCloud.prototype._getRandomColor = function (){
+    var colors = ["aqua", "black", "blue", "fuchsia", "gray", "green",
+                  "lime", "maroon", "navy", "olive", "orange", "purple",
+                  "red", "silver", "teal"];
+    return colors[Math.floor(colors.length * Math.random())];
+};
+
+TagCloud.prototype._isPlaceEmpty = function (placement, width, height) {
+    if (placement.x < 0 || placement.y < 0 || placement.x + width >
+         this.canvasWidth || placement.y + height > this.canvasHeight)
+        return false;
+
+    var pix = this.ctx.getImageData(
+                placement.x, placement.y, width, height).data;
+
+    for (var i = 0, n = pix.length; i < n; i += 4)
+        if (pix[i+3])
+                return false;
+
+    return [[placement.x, placement.y],
+            [placement.x + width, placement.y],
+            [placement.x, placement.y + height],
+            [placement.x + width, placement.y + height]].every(
+                function(pos) {
+                    var a = this.canvasWidth / 2;
+                    var b = this.canvasHeight / 2;
+                    var X = pos[0] - a;
+                    var Y = pos[1] - b;
+                    return (X * X / a / a + Y * Y / b / b < 1);
+                }, this);
+};
+
+TagCloud.prototype.getCoverage = function () {
+    var pix = this.ctx.getImageData(
+                0, 0, this.canvasWidth, this.canvasHeight).data;
+    var pixCount = 0;
+    for (var i = 0, n = pix.length; i < n; i += 4) {
+        if (pix[i+3])
+            pixCount++;
+    }
+    return pixCount * 100 / this.canvasWidth / this.canvasHeight;
+};
+
+function BasePlacement(x, y, h) {
+    var baseX = x,
+        baseY = y,
+        scale = h,
+        tryNumber = 0;
+
+    this.nextPlaceToTry = function() {
+        if (tryNumber < this._spiralOffsets.length)
+            return {
+                x : baseX + this._spiralOffsets[tryNumber][0] * scale,
+                y : baseY + this._spiralOffsets[tryNumber++][1] * scale
+            };
+    };
+}
+
+function generateSpiralOffsets() {
+    var spiralOffsets = [];
+    var radius = 0;
+    var dr = 0.2;
+    for (var i = 0; radius < 40; i+=0.4, radius += dr) {
+        spiralOffsets.push([
+                   radius * Math.sin(i),
+                   radius * Math.cos(i)
+                ]);
+    }
+    return spiralOffsets;
+}
+
+BasePlacement.prototype._spiralOffsets = generateSpiralOffsets();
+
+    
+        </script>
+        <script type="application/javascript">
+            function draw() {
+                var canvas = document.getElementById("canvas");
+                    if (canvas.getContext) {
+                        var ctx = canvas.getContext("2d");
+                        // scale 2x
+                        if(window.devicePixelRatio == 2) {
+                            canvas.setAttribute('width', canvas.width * 2);
+                            canvas.setAttribute('height', canvas.height * 2);
+                        }
+                        var tagCloud = new TagCloud(canvas.width,
+                            canvas.height, ctx);
+                        tagCloud.render([                                        ["system", 97],
+                                        ["int", 77],
+                                        ["i", 68],
+                                        ["char", 67],
+                                        ["date", 66],
+                                        ["id", 61],
+                                        ["0", 42],
+                                        ["flight", 42],
+                                        ["manager", 42],
+                                        ["time", 40],
+                                        ["1", 32],
+                                        ["d1", 30],
+                                        ["d2", 30],
+                                        ["l", 28],
+                                        ["schedule", 26],
+                                        ["airport", 25],
+                                        ["departure", 23],
+                                        ["new_flight", 22],
+                                        ["result_value", 22],
+                                        ["short", 21],
+                                        ["month", 19],
+                                        ["d", 18],
+                                        ["printf", 18],
+                                        ["day", 17],
+                                        ["hour", 17],
+                                        ["origin", 17],
+                                        ["destination", 16],
+                                        ["duration", 16],
+                                        ["minute", 15],
+                                        ["new_airport", 15],
+                                        ["year", 15],
+                                        ["nr_flights", 14],
+                                        ["size", 14],
+                                        ["nr_passengers", 13],
+                                        ["t1", 13],
+                                        ["t2", 13],
+                                        ["airport_id", 12],
+                                        ["city", 12],
+                                        ["country", 12],
+                                        ["new_date", 12],
+                                        ["t", 12],
+                                        ["s", 11],
+                                        ["command", 10],
+                                        ["scanf", 9],
+                                        ["AIRPORT_LENGTH_ID", 8],
+                                        ["arrival", 8],
+                                        ["f1", 8],
+                                        ["f2", 8],
+                                        ["c", 7],
+                                        ["date_compare", 7],
+                                        ["exists_airport_id", 7],
+                                        ["nr_airports", 7],
+                                        ["s1", 7],
+                                        ["s2", 7],
+                                        ["3", 6],
+                                        ["airports", 6],
+                                        ["strcmp", 6],
+                                        ["strcpy", 6],
+                                        ["<stdio.h>", 5],
+                                        ["create_date", 5],
+                                        ["flights", 5],
+                                        ["2", 4],
+                                        ["DIFF_MONTHS", 4],
+                                        ["DIFF_YEARS", 4],
+                                        ["MAX_FLIGHTS", 4],
+                                        ["compare_schedules", 4],
+                                        ["create_schedule", 4],
+                                        ["create_time", 4],
+                                        ["get_airport_by_id", 4],
+                                        ["handle_list_flight_by_airport", 4],
+                                        ["insert_sorted_flight", 4],
+                                        ["is_valid_date", 4],
+                                        ["new_time", 4],
+                                        ["print_airport", 4],
+                                        ["print_flight_in_airport", 4],
+                                        ["same_hour", 4],
+                                        ["same_month", 4],
+                                        ["same_year", 4],
+                                        ["time_compare", 4],
+                                        ["DIFF_DAYS", 3],
+                                        ["add_airport", 3],
+                                        ["add_flight", 3],
+                                        ["c1", 3],
+                                        ["c2", 3],
+                                        ["calculate_arrival", 3],
+                                        ["command_handler", 3],
+                                        ["compare_flight_arrival", 3],
+                                        ["compare_flight_departure", 3],
+                                        ["create_airport", 3],
+                                        ["create_flight", 3],
+                                        ["dates_year_apart", 3],
+                                        ["forward_date", 3],
+                                        ["getchar", 3],
+                                        ["handle_add_airport", 3],
+                                        ["handle_add_flight", 3],
+                                        ["handle_forward_date", 3],
+                                        ["handle_list_airports", 3],
+                                        ["handle_v_command", 3],
+                                        ["initialize", 3],
+                                        ["insert_airport", 3],
+                                        ["insert_flight", 3],
+                                        ["is_taken_flight_id", 3],
+                                        ["is_valid_airport_id", 3],
+                                        ["is_valid_duration", 3],
+                                        ["is_valid_flight_id", 3],
+                                        ["isupper", 3],
+                                        ["list_airport_flights_by_arrival", 3],
+                                        ["list_airport_flights_by_departure", 3],
+                                        ["list_airports", 3],
+                                        ["list_airports_by_id", 3],
+                                        ["list_flights", 3],
+                                        ["list_flights_by_airport", 3],
+                                        ["n", 3],
+                                        ["print_date", 3],
+                                        ["print_flight", 3],
+                                        ["same_day", 3],
+                                        ["same_minute", 3],
+                                        ["sorted_arrival_flights", 3],
+                                        ["sorted_departure_flights", 3],
+                                        ["t_inc", 3],
+                                        ["--", 2],
+                                        ["4", 2],
+                                        ["5", 2],
+                                        ["6", 2],
+                                        ["7", 2],
+                                        ["8", 2],
+                                        ["<ctype.h>", 2],
+                                        ["<string.h>", 2],
+                                        ["AIRPORT_LENGTH_CITY", 2],
+                                        ["AIRPORT_LENGTH_COUNTRY", 2],
+                                        ["DATE_COMPONENTS_PARSE", 2],
+                                        ["DAYS_IN_MONTH", 2],
+                                        ["DIFF_HOURS", 2],
+                                        ["DIFF_MINUTES", 2],
+                                        ["FLIGHT_LENGTH_ID", 2],
+                                        ["FLIGHT_MAX_HOUR_DURATION", 2],
+                                        ["LIST_AIRPORTS_ERR", 2],
+                                        ["MAX_AIRPORTS", 2],
+                                        ["MAX_HOURS", 2],
+                                        ["MAX_MINUTES", 2],
+                                        ["MAX_MONTHS", 2],
+                                        ["TIME_COMPONENTS_PARSE", 2],
+                                        ["cmp_func", 2],
+                                        ["len", 2],
+                                        ["while", 2],
+                                        ["<stdlib.h>", 1],
+                                        ["ADD_AIRPORT_ERR_1", 1],
+                                        ["ADD_AIRPORT_ERR_2", 1],
+                                        ["ADD_AIRPORT_ERR_3", 1],
+                                        ["ADD_AIRPORT_SUCCESS", 1],
+                                        ["ADD_FLIGHT_ERR_1", 1],
+                                        ["ADD_FLIGHT_ERR_2", 1],
+                                        ["ADD_FLIGHT_ERR_3N4", 1],
+                                        ["ADD_FLIGHT_ERR_5", 1],
+                                        ["ADD_FLIGHT_ERR_6", 1],
+                                        ["ADD_FLIGHT_ERR_7", 1],
+                                        ["ADD_FLIGHT_ERR_8", 1],
+                                        ["AIRPORT_COMPONENTS_PARSE", 1],
+                                        ["AIRPORT_IDS_PARSE", 1],
+                                        ["AIRPORT_PRINT_STR", 1],
+                                        ["DAY_0", 1],
+                                        ["DEPARTURE", 1],
+                                        ["FLIGHT_COMPONENTS_PARSE", 1],
+                                        ["FORWARD_DATE_ERR", 1],
+                                        ["MAX_FLIGHT_CAPACITY", 1],
+                                        ["MIN_FLIGHT_CAPACITY", 1],
+                                        ["MONTH_0", 1],
+                                        ["NR_PASSENGERS_PARSE", 1],
+                                        ["PARSE_AIRPORT_ID", 1],
+                                        ["PRINT_DATE_STR", 1],
+                                        ["PRINT_FLIGHT_IN_AIRPORT_STR", 1],
+                                        ["PRINT_FLIGHT_STR", 1],
+                                        ["SUM_HOURS", 1],
+                                        ["SUM_MINUTES", 1],
+                                        ["YEAR_0", 1],
+                                        ["ariport", 1],
+                                        ["calloc", 1],
+                                        ["cmp_fn", 1],
+                                        ["default", 1],
+                                        ["exists_flight_id", 1],
+                                        ["main", 1],
+                                        ["sizeof", 1],
+                                        ["sscanf", 1],
+                                        ["strlen", 1],
+                                        ["switch", 1],
+
+                                    ]);
+                                }
+                        }
+                    </script>
+                </head>
+                <body onload="draw();">
+                    <canvas id="canvas" width="700" height="700"></canvas>
+                </body>
+            </html>
