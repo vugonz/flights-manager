@@ -19,10 +19,10 @@ int compare_flight_schedules(schedule s1, schedule s2)
 	return !date_compare(s1.date, s2.date) ? time_compare(s1.time, s2.time) : date_compare(s1.date, s2.date);
 }
 
-void calculate_arrival_schedule(flight *flight, departure, time t_inc)
+void calculate_arrival(schedule schedule, time t_inc)
 {
-	time t = departure.time;
-	date d = departure.date;
+	time t = schedule.time;
+	date d = schedule.date;
 
 	if((t.minute = SUM_MINUTES(t, t_inc)) >= MAX_MINUTES) {
 		t.minute -= MAX_MINUTES;
@@ -42,9 +42,7 @@ void calculate_arrival_schedule(flight *flight, departure, time t_inc)
 		d.year++;
 	}
 
-	flight->arrival = create_schedule(t, d);
-
-	return;
+	return schedule;
 }
 
 void print_schedule(schedule s)

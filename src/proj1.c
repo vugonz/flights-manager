@@ -1,10 +1,10 @@
-/*	File: proj1.c 
- *	Author: Gonçalo Azevedo ist193075
+/*  File: proj1.c 
+ *  Author: Gonçalo Azevedo ist193075
  */
+
 #include "header.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 
 int main()
 {
@@ -115,8 +115,6 @@ void handle_add_flight(manager *system)
 	/* parse flight departure time components */
 	scanf(TIME_COMPONENTS_PARSE, &hour, &minute);
 	time_departure = create_time(hour, minute);
-	
-	schedule_departure = create_schedule(time_departure, date_departure)
 
 	/* parse flight duration time components */
 	scanf(TIME_COMPONENTS_PARSE, &hour, &minute);
@@ -125,7 +123,7 @@ void handle_add_flight(manager *system)
 	/* parse flight capacity */
 	scanf(NR_PASSENGERS_PARSE, &nr_passengers);
 
-	result_value = add_flight(system, id, origin, destination, schedule_departure , duration, nr_passengers);
+	result_value = add_flight(system, id, origin, destination, date_departure, time_departure , duration, nr_passengers);
 	
 	if(result_value == -1) {
 		printf(ADD_FLIGHT_ERR_1);
