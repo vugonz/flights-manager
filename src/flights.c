@@ -5,16 +5,15 @@
 #include <ctype.h>
 
 int add_flight(manager *system, char *id, char *origin, char *destination, 
-		date d_departure, time t_departure, time duration, int nr_passengers)
+		schedule departure, time duration, int nr_passengers)
 {
-	schedule departure;
 	flight new_flight;
 
 	if(!is_valid_flight_id(id))
 		return -1;
 	
 	/* check if flight id is taken for the day */
-	if(is_taken_flight_id(system, id, d_departure))
+	if(is_taken_flight_id(system, id, departure.date))
 		return -2;
 	
 	if(!exists_airport_id(system, origin))
@@ -27,7 +26,7 @@ int add_flight(manager *system, char *id, char *origin, char *destination,
 	if(system->nr_flights > MAX_FLIGHTS)
 		return -5;
 	
-	if(!is_valid_date(d_departure, system->date))
+	if(!is_valid_date(departure.date, system->date))
 		return -6;
 
 	if(!is_valid_duration(duration))
@@ -36,8 +35,6 @@ int add_flight(manager *system, char *id, char *origin, char *destination,
 	/* check if plane capacity is met in range [10,100] */
 	if(nr_passengers < MIN_FLIGHT_CAPACITY || nr_passengers > MAX_FLIGHT_CAPACITY)
 		return -8;
-
-	departure = create_schedule(t_departure, d_departure)
 
 	new_flight = create_flight(id, origin, destination, 
 			departure, duration, nr_passengers);
@@ -48,32 +45,6 @@ int add_flight(manager *system, char *id, char *origin, char *destination,
 	++get_airport_by_id(system, origin)->nr_flights;
 
 	++system->nr_flights;
-
-	return 0;
-}
-
-/* returns 1 if given flight id is valid and 0 if it's not */
-int is_valid_flight_id(char *id)
-{
-	char c1, c2;
-	int n;
-
-	if(sscanf(id,"%c%c%d", &c1, &c2, &n) == 3) 
-		return isupper(c1) && isupper(c2) && n >= 0 ? 1 : 0;
-	
-	return 0;
-}
-
-/* returns 1 if given flight id is taken for given date and 0 if it's not */
-int is_taken_flight_id(manager *system, char *id, date date)
-{
-	int i;
-	
-	/* check if any flight has the same id and, if so, check if they have the same date */
-	for(i = 0; i < system->nr_flights; ++i)
-		if(!strcmp(system->flights[i].id, id) && 
-				!date_compare(date, system->flights[i].date_departure))
-			return 1;
 
 	return 0;
 }
@@ -143,7 +114,7 @@ void list_airport_flights_by_departure(flight *l, char *airport_id, int size)
 
 	for(i = 0; i < size; ++i)
 		if(!strcmp(l[i].origin, airport_id))
-			print_flight_in_airport(l[i].id, l[i].destination, l[i].schedule);
+			print_flight_in_airport(l[i].id, l[i].destination, l[i].departure);
 }
 
 /* lists flights with destination in given airport sorted by arrival schedule */
@@ -174,38 +145,63 @@ flight create_flight(char *id, char *origin, char *destination,
 	return new_flight;
 }
 
-/* calculates and assings arrive schedule of given flight with d departure date, t departure time and t_inc duration */
+/* returns negative if f1 departs before f2, 
+ * 0 if flights depart at the same schedule
+ * and positive if f1 departs after f2 */
+int compare_flight_departure(flight f1, flight f2)
+{
+	/* same departure instant */
+	return compare_schedules(f1.departure, f2.departure);
+}
+
+/* returns negative if f1 arrives before f2, 
+ * 0 if flights arrive at the same schedule 
+ * and positive if f1 arrives after f2 */
+int compare_flight_arrival(flight f1, flight f2)
+{
+	/* same departure instant */
+	return compare_schedules(f1.arrival, f2.arrival);
+}
+
+/* returns 1 if given flight id is valid and 0 if it's not */
+int is_valid_flight_id(char *id)
+{
+	char c1, c2;
+	int n;
+
+	if(sscanf(id,"%c%c%d", &c1, &c2, &n) == 3) 
+		return isupper(c1) && isupper(c2) && n >= 0 ? 1 : 0;
+	
+	return 0;
+}
+
+/* returns 1 if given flight id is taken for given date and 0 if it's not */
+int is_taken_flight_id(manager *system, char *id, date date)
+{
+	int i;
+	
+	/* check if any flight has the same id and, if so, check if they have the same date */
+	for(i = 0; i < system->nr_flights; ++i)
+		if(!strcmp(system->flights[i].id, id) && 
+				!date_compare(date, system->flights[i].departure.date))
+			return 1;
+
+	return 0;
+}
 
 /* prints flight in format required by the 'v' command */
 void print_flight(flight flight)
 {
 	printf(PRINT_FLIGHT_STR, flight.id, flight.origin, flight.destination,
-			flight.date_departure.day, flight.date_departure.month, flight.date_departure.year,
-			flight.time_departure.hour, flight.time_departure.minute);
+			flight.departure.date.day, flight.departure.date.month, flight.departure.date.year,
+			flight.departure.time.hour, flight.departure.time.minute);
 }
 
 /* prints flight in format required by 'c' and 'p' commands */
 void print_flight_in_airport(char *id, char *airport, schedule s)
 {
 	printf(PRINT_FLIGHT_IN_AIRPORT_STR, id, airport, 
-			d.day, d.month, d.year, t.hour, t.minute);
-}
-
-/* returns negative if f1 departs before f2, 
- * 0 if flights depart at the same instant
- * and positive if f1 departs after f2 */
-int compare_flight_departure(flight f1, flight f2)
-{
-	/* same departure instant */
-	return compare_flight_schedules(f1.departure, f2.departure);
-}
-
-/* returns negative if f1 arrives before f2, 
- * 0 if flights arrive at the same instant 
- * and positive if f1 arrives after f2 */
-int compare_flight_arrival(flight f1, flight f2)
-{
-	/* same departure instant */
-	return compare_flight_schedules(f1.arrival, f2.arrival);
+			s.date.day, s.date.month, s.date.year,
+			s.time.hour, s.time.minute);
 }
 

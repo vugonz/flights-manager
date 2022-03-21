@@ -98,9 +98,7 @@ void handle_add_flight(manager *system)
 	char origin[AIRPORT_LENGTH_ID], destination[AIRPORT_LENGTH_ID];
 	short nr_passengers;
 	short day, month, year, hour, minute;
-	date date_departure;
-	time time_departure;
-	schedule schedule_departure;
+	schedule departure;
 	time duration;
 	int result_value;
 	
@@ -108,13 +106,10 @@ void handle_add_flight(manager *system)
 	/* parse flight id, origin and destionation airports ids*/
 	scanf(FLIGHT_COMPONENTS_PARSE, id, origin, destination); 
 	
-	/* parse flight date components */
+	/* parse flight date and time departure components */
 	scanf(DATE_COMPONENTS_PARSE, &day, &month, &year);
-	date_departure = create_date(day, month, year);
-
-	/* parse flight departure time components */
 	scanf(TIME_COMPONENTS_PARSE, &hour, &minute);
-	time_departure = create_time(hour, minute);
+	departure = create_schedule(create_time(hour, minute), create_date(day, month, year));
 
 	/* parse flight duration time components */
 	scanf(TIME_COMPONENTS_PARSE, &hour, &minute);
@@ -123,7 +118,7 @@ void handle_add_flight(manager *system)
 	/* parse flight capacity */
 	scanf(NR_PASSENGERS_PARSE, &nr_passengers);
 
-	result_value = add_flight(system, id, origin, destination, date_departure, time_departure , duration, nr_passengers);
+	result_value = add_flight(system, id, origin, destination, departure, duration, nr_passengers);
 	
 	if(result_value == -1) {
 		printf(ADD_FLIGHT_ERR_1);

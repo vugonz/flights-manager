@@ -112,7 +112,10 @@ typedef struct {
 	flight sorted_arrival_flights[MAX_FLIGHTS];    /* list of system's flights sorted by arrival time */
 } manager;
 
-/* proj1.c functions */
+/*
+ * proj1.c functions
+ */
+
 /* handle functions serve the purpose of handling input & buffers and displaying output feedback such as error or success messages */
 int command_handler(manager *system);
 void handle_add_airport(manager *system);
@@ -121,22 +124,25 @@ void handle_v_command(manager *system);
 void handle_add_flight(manager *system);
 void handle_list_flight_by_airport(manager *system, char command);  /* handles both 'c' and 'p' command */
 void handle_forward_date(manager *system);
+
 /* initializes global structure that stores all of current session's useful information */
 manager *initialize();
 int forward_date(manager *system, date);
+
 
 /*
  * airport.c functions
  */
 int add_airport(manager *system, char *id, char *country, char *city);
-int is_valid_airport_id(char *id);
-int exists_airport_id(manager *system, char *id);
 void insert_airport(airport *l, airport new_airport, int size);
 void list_airports(manager *system);
 void list_airports_by_id(manager *system);
+
 /* auxiliary functions */
 airport create_airport(char *id, char *country, char *city);
 airport *get_airport_by_id(manager *system, char *id);
+int is_valid_airport_id(char *id);
+int exists_airport_id(manager *system, char *id);
 void print_airport(airport airport);
 
 
@@ -144,53 +150,58 @@ void print_airport(airport airport);
  * flights.c functions
  */
 int add_flight(manager *system, char *id, char *origin, char *destination, 
-		date flight_date, time flight_time, time flight_duration, int nr_passengers);
-int is_valid_flight_id(char *id);
-int is_taken_flight_id(manager *system, char *id, date date);
+		schedule departure, time duration, int nr_passengers);
 void insert_flight(manager *system, flight new_flight);
-int exists_flight_id(manager *system, char *id);
+void insert_sorted_flight(flight *l, flight new_flight, int size, int (*cmp_fn) (flight f1, flight f2)); 
 void list_flights(manager *system);
 int list_flights_by_airport(manager *system, char *ariport, char command);
+void list_airport_flights_by_departure(flight *l, char *airport, int size);  
+void list_airport_flights_by_arrival(flight *l, char *airport, int size);  
 
  /* auxiliary functions */
 flight create_flight(char *id, char *origin, char *destination,
-		date flight_date, time flight_time, time flight_duration, int nr_passengers);
-void insert_sorted_flight(flight *l, flight new_flight, int size, int (*cmp_fn) (flight f1, flight f2)); 
-void calculate_arrivals(flight *flight, date d,time t, time duration);
-void print_flight(flight flight);
-void print_flight_in_airport(char *id, char *airport, date d, time t); 
-
+		schedule departure, time duration, int nr_passengers);
 /* cmp functions used by sorting algorithm */
-int compare_flight_schedules(date d1, time t1, date d2, time t2);  /* wrapper function */
 int compare_flight_departure(flight f1, flight f2);
 int compare_flight_arrival(flight f1, flight f2);
+int is_valid_flight_id(char *id);
+int is_taken_flight_id(manager *system, char *id, date date);
+int exists_flight_id(manager *system, char *id);
+void print_flight(flight flight);
+void print_flight_in_airport(char *id, char *airport, schedule s); 
 
-/* functions to handle listing of flights by airport */
-void list_airport_flights_by_departure(flight *l, char *airport, int size);  
-void list_airport_flights_by_arrival(flight *l, char *airport, int size);  
+
+/*
+ * schedule.c functions
+ */
+schedule create_schedule(time t, date d);
+int compare_schedules(schedule s1, schedule s2);
+schedule calculate_arrival(schedule s, time duration);
 
 
 /*
  * date.c functions
  */
+date create_date(short day, short month, short year);
 int is_valid_date(date d1, date d2);
 int date_compare(date d1, date d2);
 int dates_year_apart(date d1, date d2); 
-void print_date(date);
+
 /* auxiliary funcions */
-date create_date(short day, short month, short year);
 int same_day(date d1, date d2);
 int same_month(date d1, date d2);
 int same_year(date d1, date d2);
+void print_date(date);
 
 
 /*
  * time.c functions
  */
+time create_time(short hour, short minute);
 int is_valid_duration(time duration);
 int time_compare(time t1, time t2);
+
 /* auxiliary functions */
-time create_time(short hour, short minute);
 int same_minute(time t1, time t2);
 int same_hour(time t1, time t2);
 

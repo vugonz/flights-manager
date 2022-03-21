@@ -10,7 +10,7 @@ schedule create_schedule(time t, date d)
 	return schedule;
 }
 
-int compare_flight_schedules(schedule s1, schedule s2)
+int compare_schedules(schedule s1, schedule s2)
 {
 	/* same schedule instant */
 	if(!date_compare(s1.date, s2.date) && !time_compare(s1.time, s2.time))
@@ -19,10 +19,11 @@ int compare_flight_schedules(schedule s1, schedule s2)
 	return !date_compare(s1.date, s2.date) ? time_compare(s1.time, s2.time) : date_compare(s1.date, s2.date);
 }
 
-void calculate_arrival(schedule schedule, time t_inc)
+schedule calculate_arrival(schedule s, time t_inc)
 {
-	time t = schedule.time;
-	date d = schedule.date;
+	schedule arrival;
+	time t = s.time;
+	date d = s.date;
 
 	if((t.minute = SUM_MINUTES(t, t_inc)) >= MAX_MINUTES) {
 		t.minute -= MAX_MINUTES;
@@ -41,11 +42,9 @@ void calculate_arrival(schedule schedule, time t_inc)
 		d.month -= MAX_MONTHS;
 		d.year++;
 	}
+	
+	arrival = create_schedule(t, d);
 
-	return schedule;
+	return arrival;
 }
 
-void print_schedule(schedule s)
-{
-	printf(PRINT_SCHEDULE_S, s.date.day, s.date.month, s.date.day, s.time.hour, s.time.minute); 
-}
