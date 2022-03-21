@@ -81,6 +81,11 @@ typedef struct {
 } date;
 
 typedef struct {
+	time time;
+	date date;
+} schedule;
+
+typedef struct {
 	char id[AIRPORT_LENGTH_ID];
 	char country[AIRPORT_LENGTH_COUNTRY];
 	char city[AIRPORT_LENGTH_CITY];
@@ -92,10 +97,8 @@ typedef struct {
 	short nr_passengers;
 	char destination[AIRPORT_LENGTH_ID];
 	char origin[AIRPORT_LENGTH_ID];
-	date date_departure;
-	date date_arrival;
-	time time_departure;
-	time time_arrival;
+	schedule departure;
+	schedule arrival;
 } flight;
 
 /* global structure */
