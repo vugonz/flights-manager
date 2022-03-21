@@ -11,11 +11,11 @@ time create_time(short hour, short minute)
 	return new_time;
 }
 
-/* returns negative is t2 is a time set before t1, 0 if t1 and t2 are the sime time and positive if t2 is a time set after t1 */
+/* returns negative is t1 is a time set before t2, 0 if t1 and t2 are the sime time and positive if t1 is a time set after t2 */
 int time_compare(time t1, time t2)
 {
-	return same_time(t1, t2) ? 0 :
-		same_hour(t1, t2) ? DIFF_MINUTES(t2, t1) : DIFF_HOURS(t2, t1); 
+	return same_minute(t1, t2) ? 0 :
+		same_hour(t1, t2) ? DIFF_MINUTES(t1, t2) : DIFF_HOURS(t1, t2); 
 }
 
 /* returns 1 if given duration is valid for a flight and 0 if not */
@@ -32,7 +32,7 @@ int is_valid_duration(time duration)
 /* returns 1 if given times are the same minute and hour */
 int same_minute(time t1, time t2)
 {
-	return !(DIFF_MINUTES(t1,t2)) && same_hour(t1, t2) ? 1 : 0;
+	return same_hour(t1, t2) && !(DIFF_MINUTES(t1, t2)) ? 1 : 0;
 }
 
 /* returns 1 if given times are the same hour */

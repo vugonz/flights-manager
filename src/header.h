@@ -54,14 +54,11 @@
 
 /* date.c constants and macros */
 #define MAX_MONTHS 12
-#define SUM_DAYS(a, b) a.day + b.day
-#define SUM_MONTHS(a, b) a.month + b.month
-#define SUM_YEARS(a, b) a.year + b.year
 #define DIFF_DAYS(a, b) a.day - b.day
 #define DIFF_MONTHS(a, b) a.month - b.month
 #define DIFF_YEARS(a, b) a.year - b.year
-#define DAYS_IN_MONTH(n) (n == 2 ? 28 : (n == 4 || n == 6 || n == 9 || n == 11) ? 30 : 31)
-#define INC(a) a + 1
+#define DAYS_IN_MONTH(n)\
+	(n == 2 ? 28 : (n == 4 || n == 6 || n == 9 || n == 11) ? 30 : 31)
 
 /* time.c constants and macros */
 #define MAX_HOURS 24
@@ -158,6 +155,7 @@ flight create_flight(char *id, char *origin, char *destination,
 void insert_sorted_flight(flight *l, flight new_flight, int size, int (*cmp_fn) (flight f1, flight f2)); 
 void calculate_arrivals(flight *flight, date d,time t, time duration);
 void print_flight(flight flight);
+void print_flight_in_airport(char *id, char *airport, date d, time t); 
 
 /* cmp functions used by sorting algorithm */
 int compare_flight_schedules(date d1, time t1, date d2, time t2);  /* wrapper function */
@@ -190,7 +188,7 @@ int is_valid_duration(time duration);
 int time_compare(time t1, time t2);
 /* auxiliary functions */
 time create_time(short hour, short minute);
-int same_time(time t1, time t2);
+int same_minute(time t1, time t2);
 int same_hour(time t1, time t2);
 
 #endif

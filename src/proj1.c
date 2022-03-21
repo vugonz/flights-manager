@@ -184,7 +184,7 @@ manager *initialize()
 
 int forward_date(manager *system, date new_date)
 {
-	if(!is_valid_date(system->date, new_date))
+	if(!is_valid_date(new_date, system->date))
 		return -1;
 
 	system->date = new_date;

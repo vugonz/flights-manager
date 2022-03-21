@@ -114,6 +114,7 @@ airport create_airport(char *id, char *country, char *city)
 	strcpy(new_airport.id, id);
 	strcpy(new_airport.country, country);
 	strcpy(new_airport.city, city);
+	new_airport.nr_flights = 0;
 
 	return new_airport;
 }
