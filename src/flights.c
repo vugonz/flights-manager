@@ -5,7 +5,7 @@
 #include <ctype.h>
 
 int add_flight(manager *system, char *id, char *origin, char *destination, 
-		date date_departure, time time_departure, time duration, int nr_passengers)
+		schedule departure, time duration, int nr_passengers)
 {
 	flight new_flight;
 
@@ -13,7 +13,7 @@ int add_flight(manager *system, char *id, char *origin, char *destination,
 		return -1;
 	
 	/* check if flight id is taken for the day */
-	if(is_taken_flight_id(system, id, date_departure))
+	if(is_taken_flight_id(system, id, departure.date))
 		return -2;
 	
 	if(!exists_airport_id(system, origin))
@@ -26,7 +26,7 @@ int add_flight(manager *system, char *id, char *origin, char *destination,
 	if(system->nr_flights > MAX_FLIGHTS)
 		return -5;
 	
-	if(!is_valid_date(date_departure, system->date))
+	if(!is_valid_date(departure.date, system->date))
 		return -6;
 
 	if(!is_valid_duration(duration))
@@ -37,7 +37,7 @@ int add_flight(manager *system, char *id, char *origin, char *destination,
 		return -8;
 
 	new_flight = create_flight(id, origin, destination, 
-			date_departure, time_departure, duration, nr_passengers);
+			departure, duration, nr_passengers);
 
 	insert_flight(system, new_flight);
 
@@ -166,40 +166,13 @@ flight create_flight(char *id, char *origin, char *destination,
 	strcpy(new_flight.origin, origin);
 	strcpy(new_flight.destination, destination);
 	new_flight.nr_passengers = nr_passengers;
-	new_flight.date_departure = date_departure;
-	new_flight.time_departure = time_departure;
-	
-	calculate_arrivals(&new_flight, new_flight.date_departure, new_flight.time_departure, duration);
+
+	calculate_arrivals(&new_flight, schedule, duration);
 
 	return new_flight;
 }
 
 /* calculates and assings arrive schedule of given flight with d departure date, t departure time and t_inc duration */
-void calculate_arrivals(flight *flight, date d, time t, time t_inc)
-{
-	if((t.minute = SUM_MINUTES(t, t_inc)) >= MAX_MINUTES) {
-		t.minute -= MAX_MINUTES;
-		t.hour++;
-	}
-
-	if((t.hour = SUM_HOURS(t, t_inc)) >= MAX_HOURS) { 
-		t.hour -= MAX_HOURS;
-		d.day++;
-	}
-	if(d.day > DAYS_IN_MONTH(d.month)) {
-		d.day -= DAYS_IN_MONTH(d.month);
-		d.month++;
-	}
-	if(d.month > MAX_MONTHS){
-		d.month -= MAX_MONTHS;
-		d.year++;
-	}
-
-	flight->date_arrival = create_date(d.day, d.month, d.year);
-	flight->time_arrival = create_time(t.hour, t.minute);
-
-	return;
-}
 
 /* prints flight in format required by the 'v' command */
 void print_flight(flight flight)
@@ -214,19 +187,6 @@ void print_flight_in_airport(char *id, char *airport, date d, time t)
 {
 	printf(PRINT_FLIGHT_IN_AIRPORT_STR, id, airport, 
 			d.day, d.month, d.year, t.hour, t.minute);
-}
-
-/* wrapper function 
- * returns negative is schedule 1 (d1, t1) is set before schedule 2 (d2, t2)
- * 0 if the schedules are the same
- * and positive if schedulde 1 (d1, t1) is set after schedule 2 (d2, t2) */
-int compare_flight_schedules(date d1, time t1, date d2, time t2)
-{
-	/* same schedule instant */
-	if(!date_compare(d1, d2) && !time_compare(t1, t2))
-		return 0;
-	
-	return !date_compare(d1, d2) ? time_compare(t1, t2) : date_compare(d1, d2);
 }
 
 /* returns negative if f1 departs before f2, 
