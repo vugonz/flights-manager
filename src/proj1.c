@@ -57,7 +57,7 @@ void handle_add_airport(manager *system)
 	char city[AIRPORT_LENGTH_CITY];
 	int result_value;
 
-	scanf(AIRPORT_COMPONENTS_PARSE, id, country, city);
+	scanf(AIRPORT_MEMBERS_PARSE, id, country, city);
 
 	result_value = add_airport(system, id, country, city);
 
@@ -102,21 +102,22 @@ void handle_add_flight(manager *system)
 	time duration;
 	int result_value;
 	
-	/* parse input and initialize corresponding buffer structures */
 	/* parse flight id, origin and destionation airports ids*/
-	scanf(FLIGHT_COMPONENTS_PARSE, id, origin, destination); 
+	scanf(FLIGHT_MEMBERS_PARSE, id, origin, destination); 
 	
-	/* parse flight date and time departure components */
-	scanf(DATE_COMPONENTS_PARSE, &day, &month, &year);
-	scanf(TIME_COMPONENTS_PARSE, &hour, &minute);
+	/* parse flight date and time departure members */
+	scanf(DATE_MEMBERS_PARSE, &day, &month, &year);
+	scanf(TIME_MEMBERS_PARSE, &hour, &minute);
+	/* initialize departure component */
 	departure = create_schedule(create_time(hour, minute), create_date(day, month, year));
 
-	/* parse flight duration time components */
-	scanf(TIME_COMPONENTS_PARSE, &hour, &minute);
+	/* parse flight duration time members */
+	scanf(TIME_MEMBERS_PARSE, &hour, &minute);
+	/* initialize duration component */
 	duration = create_time(hour, minute);
 	
 	/* parse flight capacity */
-	scanf(NR_PASSENGERS_PARSE, &nr_passengers);
+	scanf("%hd", &nr_passengers);
 
 	result_value = add_flight(system, id, origin, destination, departure, duration, nr_passengers);
 	
@@ -143,7 +144,7 @@ void handle_forward_date(manager *system)
 	short day, month, year;
 	int result_value;
 
-	scanf(DATE_COMPONENTS_PARSE, &day, &month, &year);
+	scanf(DATE_MEMBERS_PARSE, &day, &month, &year);
 	new_date = create_date(day, month, year);
 	
 	result_value = forward_date(system, new_date);
@@ -158,7 +159,7 @@ void handle_list_flight_by_airport(manager *system, char command)
 	int result_value;
 	
 	/* get airport id */
-	scanf(PARSE_AIRPORT_ID, airport_id);
+	scanf("%s", airport_id);
 	
 	result_value = list_flights_by_airport(system, airport_id, command);
 

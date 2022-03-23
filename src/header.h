@@ -17,7 +17,7 @@
 #define AIRPORT_LENGTH_CITY 61
 #define MIN_FLIGHT_CAPACITY 10
 #define MAX_FLIGHT_CAPACITY 100
-#define AIRPORT_COMPONENTS_PARSE "%s %s %[a-zA-Z- \t]"
+#define AIRPORT_MEMBERS_PARSE "%s %s %[a-zA-Z- \t]"
 #define AIRPORT_IDS_PARSE "%s%c"
 /* airport output messages */
 #define AIRPORT_PRINT_STR "%s %s %s %d\n"
@@ -32,9 +32,7 @@
 #define MAX_FLIGHTS 30000
 #define FLIGHT_LENGTH_ID 7
 #define FLIGHT_MAX_HOUR_DURATION 12
-#define FLIGHT_COMPONENTS_PARSE "%s %s %s" 
-#define NR_PASSENGERS_PARSE "%hd"
-#define PARSE_AIRPORT_ID "%s"
+#define FLIGHT_MEMBERS_PARSE "%s %s %s" 
 #define PRINT_FLIGHT_STR "%s %s %s %02d-%02d-%d %02hd:%02hd\n"
 #define PRINT_FLIGHT_IN_AIRPORT_STR "%s %s %02d-%02d-%d %02hd:%02hd\n"
 /* flight output messages */
@@ -48,8 +46,8 @@
 #define LIST_FLIGHTS_BY_AIRPORT_ID_ERR "%s\n"
 
 /* time and date parse strings */
-#define DATE_COMPONENTS_PARSE "%hd-%hd-%hd" 
-#define TIME_COMPONENTS_PARSE "%hd:%hd"
+#define DATE_MEMBERS_PARSE "%hd-%hd-%hd" 
+#define TIME_MEMBERS_PARSE "%hd:%hd"
 #define PRINT_DATE_STR "%02d-%02d-%d\n"
 
 /* date.c constants and macros */

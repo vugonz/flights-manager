@@ -128,7 +128,7 @@ void list_airport_flights_by_arrival(flight *l, char *airport_id, int size)
 }
 
 
-/* creates a new flight structure with given components */
+/* creates a new flight structure with given member */
 flight create_flight(char *id, char *origin, char *destination,
 		schedule departure, time duration, int nr_passengers)
 {
