@@ -31,15 +31,9 @@ int date_compare(date d1, date d2)
 /* returns 1 if d1 is a year or least apart from d2 and 0 if not (only used with d1 being a date set after d2) */
 int dates_year_apart(date d1, date d2)
 {
-	if(DIFF_YEARS(d1, d2) > 1) {
-		return 1;
-	} else if(DIFF_YEARS(d1,d2) == 1) {
-		if(DIFF_MONTHS(d1, d2) > 0) { 
-			return 1;
-		} else if(DIFF_MONTHS(d1, d2) == 0)
-			if(DIFF_DAYS(d1, d2) > 0)
-				return 1;
-	}
+	if(d1.year != d2.year)
+		return d1.month < d2.month ? 0 : d1.month == d2.month ? d1.day - d2.day : 1;
+
 	return 0;
 }
 

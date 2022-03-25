@@ -22,6 +22,7 @@ int compare_schedules(schedule s1, schedule s2)
 }
 
 /* calculates arrival schedule with given departure schedule and duration of time
+ */
 schedule calculate_arrival(schedule s, time t_inc)
 {
 	schedule arrival;
