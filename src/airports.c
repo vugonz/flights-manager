@@ -1,4 +1,6 @@
-/*	File: airports.c Author: Gonçalo Azevedo ist193075 */ 
+/*  Author: Gonçalo Azevedo 193075
+ *  File: airports.c
+ */
 #include "header.h"
 #include <stdio.h>
 #include <string.h>
@@ -30,9 +32,6 @@ int add_airport(manager *system, char *id, char *country, char *city)
 	return 0;
 }
 
-
-
-
 int is_valid_airport_id(char *id)
 {
 	int i;
@@ -58,14 +57,14 @@ int exists_airport_id(manager *system, char *id)
 	return 0;
 }
 
-/* inserts given airport structure in the global structure's airport's list, keeps the list always sorted */
+/* inserts given airport structure sorted in the global structure's airport's list */
 void insert_airport(airport *l, airport new_airport, int size)
 {
 	int i;
 	
 	l[size] = new_airport;
 
-	/* inserts new element in sorted position of the list by id (insertion sort) */
+	/* inserts new element in sorted position of the list by id */
 	for(i = size - 1; i >= 0; --i) {	
 		if(strcmp(new_airport.id, l[i].id) > 0) {
 			l[i+1] = new_airport;
@@ -77,7 +76,6 @@ void insert_airport(airport *l, airport new_airport, int size)
 		if(i == 0)
 			l[i] = new_airport;
 	}
-	
 }
 
 void list_airports(manager *system)
@@ -94,19 +92,17 @@ void list_airports_by_id(manager *system)
 {
 	char id[AIRPORT_LENGTH_ID];
 	char c;
-	
+	int res;
 	/* print all airport's by ids read in stdin until no more ids are available */
 	do { 	
-		scanf(AIRPORT_IDS_PARSE, id, &c); 
+		res = scanf("%s%c", id, &c); 
 		if(!exists_airport_id(system, id)) {
 			printf(LIST_AIRPORTS_ERR, id);
 		} else 
 			print_airport(*get_airport_by_id(system, id));
-		
-	} while(c != '\n');
+	} while(res == 2 && c != '\n');
 }
 
-/* prints the formatted information of given airport structure, similar to python's __str__ method  */
 airport create_airport(char *id, char *country, char *city)
 {
 	airport new_airport;
@@ -131,6 +127,7 @@ airport *get_airport_by_id(manager *system, char *id)
 	return 0;
 }
 
+/* prints the formatted information of given airport structure */
 void print_airport(airport airport)
 {
 	printf(AIRPORT_PRINT_STR, airport.id, airport.city, airport.country, airport.nr_flights);

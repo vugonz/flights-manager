@@ -1,7 +1,6 @@
-/*  File: proj1.c 
- *  Author: Gonçalo Azevedo ist193075
+/*  Author: Gonçalo Azevedo 193075
+ *  File: proj1.c
  */
-
 #include "header.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -16,9 +15,7 @@ int main()
 	return 0;
 }
 
-/*
- * handle functions
- */
+/* handle commands from stdin until 'q' command */
 int command_handler(manager *system)
 {
 	char command = getchar();
@@ -47,6 +44,7 @@ int command_handler(manager *system)
 		default:
 			break;
 	}
+
 	return 1;
 }
 
@@ -96,7 +94,7 @@ void handle_add_flight(manager *system)
 {
 	char id[FLIGHT_LENGTH_ID];
 	char origin[AIRPORT_LENGTH_ID], destination[AIRPORT_LENGTH_ID];
-	short nr_passengers;
+	int nr_passengers;
 	short day, month, year, hour, minute;
 	schedule departure;
 	time duration;
@@ -117,7 +115,7 @@ void handle_add_flight(manager *system)
 	duration = create_time(hour, minute);
 	
 	/* parse flight capacity */
-	scanf("%hd", &nr_passengers);
+	scanf("%d", &nr_passengers);
 
 	result_value = add_flight(system, id, origin, destination, departure, duration, nr_passengers);
 	
@@ -138,6 +136,20 @@ void handle_add_flight(manager *system)
 		printf(ADD_FLIGHT_ERR_8);
 }
 
+void handle_list_flight_by_airport(manager *system, char command)
+{
+	char airport_id[AIRPORT_LENGTH_ID];
+	int result_value;
+	
+	/* get airport id */
+	scanf("%s", airport_id);
+	
+	result_value = list_flights_by_airport(system, airport_id, command);
+
+	if(result_value == -1)
+		printf(LIST_AIRPORTS_ERR, airport_id);
+}
+
 void handle_forward_date(manager *system)
 {
 	date new_date;
@@ -151,20 +163,6 @@ void handle_forward_date(manager *system)
 
 	if(result_value == -1)
 		printf(FORWARD_DATE_ERR);
-}
-
-void handle_list_flight_by_airport(manager *system, char command)
-{
-	char airport_id[AIRPORT_LENGTH_ID];
-	int result_value;
-	
-	/* get airport id */
-	scanf("%s", airport_id);
-	
-	result_value = list_flights_by_airport(system, airport_id, command);
-
-	if(result_value == -1)
-		printf(LIST_AIRPORTS_ERR, airport_id);
 }
 
 /* 

@@ -1,3 +1,6 @@
+/*  Author: Gonçalo Azevedo 193075
+ *  File: date.c
+ */
 #include "header.h"
 #include <stdio.h>
 
@@ -12,7 +15,7 @@ date create_date(short day, short month, short year)
 	return new_date;
 }
 
-/* returns true if d1 is a date set a year or less after d2 */
+/* returns 1 if d1 is a date set a year or less after d2 */
 int is_valid_date(date d1, date d2)
 {
 	return date_compare(d1, d2) >= 0 && !dates_year_apart(d1, d2); 
@@ -21,9 +24,8 @@ int is_valid_date(date d1, date d2)
 /* returns negative if d1 is a date set before d2, zero if d1 and d2 are the same date and positive if d1 is set after d2 */
 int date_compare(date d1, date d2)
 {
-	return same_day(d1, d2) ? 0 :
-		same_month(d1, d2) ? DIFF_DAYS(d1, d2) :
-			same_year(d1, d2) ? DIFF_MONTHS(d1, d2) : DIFF_YEARS(d1, d2); 	
+	return same_month(d1, d2) ? DIFF_DAYS(d1, d2) :
+			!(DIFF_YEARS(d1, d2)) ? DIFF_MONTHS(d1, d2) : DIFF_YEARS(d1, d2); 	
 }
 
 /* returns 1 if d1 is a year or least apart from d2 and 0 if not (only used with d1 being a date set after d2) */
@@ -49,12 +51,7 @@ int same_day(date d1, date d2)
 
 int same_month(date d1, date d2)
 {
-	return same_year(d1, d2) && !(DIFF_MONTHS(d1, d2)) ? 1 : 0;
-}
-
-int same_year(date d1, date d2)
-{
-	return !(DIFF_YEARS(d1, d2)) ? 1 : 0;
+	return !(DIFF_YEARS(d1, d2)) && !(DIFF_MONTHS(d1, d2)) ? 1 : 0;
 }
 
 void print_date(date d)

@@ -1,9 +1,10 @@
-/*	File: header.h Author: Gonçalo Azevedo ist193075 */ 
-
+/*  Author: Gonçalo Azevedo 193075
+ *  File: header.h
+ */
 #ifndef HEADER
 #define HEADER
 
-/* global init date config macros */
+/* global init date config */
 #define DAY_0 1
 #define MONTH_0 1
 #define YEAR_0 2022
@@ -15,10 +16,7 @@
 #define AIRPORT_LENGTH_ID 4
 #define AIRPORT_LENGTH_COUNTRY 31
 #define AIRPORT_LENGTH_CITY 61
-#define MIN_FLIGHT_CAPACITY 10
-#define MAX_FLIGHT_CAPACITY 100
 #define AIRPORT_MEMBERS_PARSE "%s %s %[a-zA-Z- \t]"
-#define AIRPORT_IDS_PARSE "%s%c"
 /* airport output messages */
 #define AIRPORT_PRINT_STR "%s %s %s %d\n"
 #define ADD_AIRPORT_ERR_1 "invalid airport ID\n"
@@ -31,10 +29,13 @@
 #define DEPARTURE 'p'
 #define MAX_FLIGHTS 30000
 #define FLIGHT_LENGTH_ID 7
+#define FLIGHT_MAX_NUM_ID 10000
 #define FLIGHT_MAX_HOUR_DURATION 12
+#define MIN_FLIGHT_CAPACITY 10
+#define MAX_FLIGHT_CAPACITY 100
 #define FLIGHT_MEMBERS_PARSE "%s %s %s" 
-#define PRINT_FLIGHT_STR "%s %s %s %02d-%02d-%d %02hd:%02hd\n"
-#define PRINT_FLIGHT_IN_AIRPORT_STR "%s %s %02d-%02d-%d %02hd:%02hd\n"
+#define PRINT_FLIGHT_STR "%s %s %s %02hd-%02hd-%hd %02hd:%02hd\n"
+#define PRINT_FLIGHT_IN_AIRPORT_STR "%s %s %02hd-%02hd-%hd %02hd:%02hd\n"
 /* flight output messages */
 #define ADD_FLIGHT_ERR_1 "invalid flight code\n"
 #define ADD_FLIGHT_ERR_2 "flight already exists\n"
@@ -48,7 +49,7 @@
 /* time and date parse strings */
 #define DATE_MEMBERS_PARSE "%hd-%hd-%hd" 
 #define TIME_MEMBERS_PARSE "%hd:%hd"
-#define PRINT_DATE_STR "%02d-%02d-%d\n"
+#define PRINT_DATE_STR "%02hd-%02hd-%hd\n"
 
 /* date.c constants and macros */
 #define MAX_MONTHS 12
@@ -92,7 +93,7 @@ typedef struct {
 
 typedef struct {
 	char id[FLIGHT_LENGTH_ID];
-	short nr_passengers;
+	int nr_passengers;
 	char destination[AIRPORT_LENGTH_ID];
 	char origin[AIRPORT_LENGTH_ID];
 	schedule departure;
@@ -101,13 +102,13 @@ typedef struct {
 
 /* global structure */
 typedef struct {
-	short nr_airports;
-	short nr_flights;
+	int nr_airports;
+	int nr_flights;
 	date date;
-	airport airports[MAX_AIRPORTS];
-	flight flights[MAX_FLIGHTS];                   /* list of system's flights, also the list of flights sorted by creation */
-	flight sorted_departure_flights[MAX_FLIGHTS];  /* list of system's flights sorted by departure time */
-	flight sorted_arrival_flights[MAX_FLIGHTS];    /* list of system's flights sorted by arrival time */
+	airport airports[MAX_AIRPORTS];               /* list of system's airports alphabetically sorted */
+	flight flights[MAX_FLIGHTS];                  /* list of system's flights sorted by creation time */
+	flight sorted_departure_flights[MAX_FLIGHTS]; /* list of system's flights sorted by departure time */
+	flight sorted_arrival_flights[MAX_FLIGHTS];   /* list of system's flights sorted by arrival time */
 } manager;
 
 /*
@@ -120,7 +121,7 @@ void handle_add_airport(manager *system);
 void handle_list_airports(manager *system);
 void handle_v_command(manager *system);
 void handle_add_flight(manager *system);
-void handle_list_flight_by_airport(manager *system, char command);  /* handles both 'c' and 'p' command */
+void handle_list_flight_by_airport(manager *system, char command);  /* handles both 'c' and 'p' commands */
 void handle_forward_date(manager *system);
 
 /* initializes global structure that stores all of current session's useful information */
@@ -159,22 +160,22 @@ void list_airport_flights_by_arrival(flight *l, char *airport, int size);
  /* auxiliary functions */
 flight create_flight(char *id, char *origin, char *destination,
 		schedule departure, time duration, int nr_passengers);
-/* cmp functions used by sorting algorithm */
-int compare_flight_departure(flight f1, flight f2);
-int compare_flight_arrival(flight f1, flight f2);
 int is_valid_flight_id(char *id);
 int is_taken_flight_id(manager *system, char *id, date date);
 int exists_flight_id(manager *system, char *id);
 void print_flight(flight flight);
-void print_flight_in_airport(char *id, char *airport, schedule s); 
+void print_flight_in_airport(char *id, char *airport, schedule s);
+/* cmp functions used by sorted insertion algorithm */
+int compare_flight_departure(flight f1, flight f2);
+int compare_flight_arrival(flight f1, flight f2);
 
 
 /*
  * schedule.c functions
  */
 schedule create_schedule(time t, date d);
-int compare_schedules(schedule s1, schedule s2);
 schedule calculate_arrival(schedule s, time duration);
+int compare_schedules(schedule s1, schedule s2);
 
 
 /*
@@ -184,11 +185,9 @@ date create_date(short day, short month, short year);
 int is_valid_date(date d1, date d2);
 int date_compare(date d1, date d2);
 int dates_year_apart(date d1, date d2); 
-
 /* auxiliary funcions */
 int same_day(date d1, date d2);
 int same_month(date d1, date d2);
-int same_year(date d1, date d2);
 void print_date(date);
 
 

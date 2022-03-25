@@ -1,3 +1,6 @@
+/*  Author: Gonçalo Azevedo 193075
+ *  File: schedule.c
+ */
 #include "header.h"
 
 schedule create_schedule(time t, date d)
@@ -10,15 +13,15 @@ schedule create_schedule(time t, date d)
 	return schedule;
 }
 
+/* returns negative if s1 is a schedule set before s2
+0 if both schedules are equal and
+positive is s1 is a schedule set after s2 */
 int compare_schedules(schedule s1, schedule s2)
 {
-	/* same schedule instant */
-	if(!date_compare(s1.date, s2.date) && !time_compare(s1.time, s2.time))
-		return 0;
-	
-	return !date_compare(s1.date, s2.date) ? time_compare(s1.time, s2.time) : date_compare(s1.date, s2.date);
+	return same_day(s1.date, s2.date) ? time_compare(s1.time, s2.time) : date_compare(s1.date, s2.date);
 }
 
+/* calculates arrival schedule with given departure schedule and duration of time
 schedule calculate_arrival(schedule s, time t_inc)
 {
 	schedule arrival;
@@ -47,4 +50,3 @@ schedule calculate_arrival(schedule s, time t_inc)
 
 	return arrival;
 }
-

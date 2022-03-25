@@ -1,3 +1,6 @@
+/*  Author: Gonçalo Azevedo 193075
+ *  File: flights.c
+ */
 #include "header.h"
 
 #include <stdio.h>
@@ -23,7 +26,7 @@ int add_flight(manager *system, char *id, char *origin, char *destination,
 		return -4;
 
 	/* if max flights limit reached */
-	if(system->nr_flights > MAX_FLIGHTS)
+	if(system->nr_flights >= MAX_FLIGHTS)
 		return -5;
 	
 	if(!is_valid_date(departure.date, system->date))
@@ -41,7 +44,6 @@ int add_flight(manager *system, char *id, char *origin, char *destination,
 
 	insert_flight(system, new_flight);
 
-	/* increment number of flights in origin airport */
 	++get_airport_by_id(system, origin)->nr_flights;
 
 	++system->nr_flights;
@@ -128,7 +130,7 @@ void list_airport_flights_by_arrival(flight *l, char *airport_id, int size)
 }
 
 
-/* creates a new flight structure with given member */
+/* creates a new flight structure with given members */
 flight create_flight(char *id, char *origin, char *destination,
 		schedule departure, time duration, int nr_passengers)
 {
@@ -170,7 +172,7 @@ int is_valid_flight_id(char *id)
 	int n;
 
 	if(sscanf(id,"%c%c%d", &c1, &c2, &n) == 3) 
-		return isupper(c1) && isupper(c2) && n >= 0 ? 1 : 0;
+		return isupper(c1) && isupper(c2) && n > 0 && n < FLIGHT_MAX_NUM_ID ? 1 : 0;
 	
 	return 0;
 }
@@ -183,7 +185,7 @@ int is_taken_flight_id(manager *system, char *id, date date)
 	/* check if any flight has the same id and, if so, check if they have the same date */
 	for(i = 0; i < system->nr_flights; ++i)
 		if(!strcmp(system->flights[i].id, id) && 
-				!date_compare(date, system->flights[i].departure.date))
+				same_day(date, system->flights[i].departure.date))
 			return 1;
 
 	return 0;
