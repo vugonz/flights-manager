@@ -153,7 +153,7 @@ flight create_flight(char *id, char *origin, char *destination,
 int compare_flight_departure(flight f1, flight f2)
 {
 	/* same departure instant */
-	return compare_schedules(f1.departure, f2.departure);
+	return schedule_cmp(f1.departure, f2.departure);
 }
 
 /* returns negative if f1 arrives before f2, 
@@ -162,7 +162,7 @@ int compare_flight_departure(flight f1, flight f2)
 int compare_flight_arrival(flight f1, flight f2)
 {
 	/* same departure instant */
-	return compare_schedules(f1.arrival, f2.arrival);
+	return schedule_cmp(f1.arrival, f2.arrival);
 }
 
 /* returns 1 if given flight id is valid and 0 if it's not */

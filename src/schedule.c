@@ -3,6 +3,9 @@
  */
 #include "header.h"
 
+/*
+ * Returns a schedule structure with given arguments as members
+ */
 schedule create_schedule(time t, date d)
 {
 	schedule schedule;
@@ -13,15 +16,20 @@ schedule create_schedule(time t, date d)
 	return schedule;
 }
 
-/* returns negative if s1 is a schedule set before s2
-0 if both schedules are equal and
-positive is s1 is a schedule set after s2 */
-int compare_schedules(schedule s1, schedule s2)
+/*
+ * Returns negative if s1 is a schedule set before s2
+ * Returns 0 if s1 and s2 are the same schedule
+ * Returns positive if s1 is a schedule set after s2
+ */
+int schedule_cmp(schedule s1, schedule s2)
 {
-	return same_day(s1.date, s2.date) ? time_compare(s1.time, s2.time) : date_compare(s1.date, s2.date);
+	return same_day(s1.date, s2.date) ?
+		time_cmp(s1.time, s2.time) : date_cmp(s1.date, s2.date);
 }
 
-/* calculates arrival schedule with given departure schedule and duration of time
+/*
+ *	Returns schedule that is the result of adding t_inc time to 
+ *	schedule given as argument
  */
 schedule calculate_arrival(schedule s, time t_inc)
 {

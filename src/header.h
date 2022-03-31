@@ -175,7 +175,7 @@ int compare_flight_arrival(flight f1, flight f2);
  */
 schedule create_schedule(time t, date d);
 schedule calculate_arrival(schedule s, time duration);
-int compare_schedules(schedule s1, schedule s2);
+int schedule_cmp(schedule s1, schedule s2);
 
 
 /*
@@ -183,7 +183,7 @@ int compare_schedules(schedule s1, schedule s2);
  */
 date create_date(short day, short month, short year);
 int is_valid_date(date d1, date d2);
-int date_compare(date d1, date d2);
+int date_cmp(date d1, date d2);
 int dates_year_apart(date d1, date d2); 
 /* auxiliary funcions */
 int same_day(date d1, date d2);
@@ -196,7 +196,7 @@ void print_date(date);
  */
 time create_time(short hour, short minute);
 int is_valid_duration(time duration);
-int time_compare(time t1, time t2);
+int time_cmp(time t1, time t2);
 
 /* auxiliary functions */
 int same_minute(time t1, time t2);

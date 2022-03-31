@@ -115,7 +115,9 @@ airport create_airport(char *id, char *country, char *city)
 	return new_airport;
 }
 
-/* returns pointer to airport structure with given id */
+/* 
+ * Returns pointer to airport structure with given id 
+ */
 airport *get_airport_by_id(manager *system, char *id)
 {
 	int i;
@@ -127,7 +129,9 @@ airport *get_airport_by_id(manager *system, char *id)
 	return 0;
 }
 
-/* prints the formatted information of given airport structure */
+/* 
+ *  Formatted print of given airport structure
+ */
 void print_airport(airport airport)
 {
 	printf(AIRPORT_PRINT_STR, airport.id, airport.city, airport.country, airport.nr_flights);
