@@ -7,8 +7,8 @@
 #include "header.h"
 
 /*
- * Adds airports to global structure if all stdin parameters are valid
- * If invalid parameters are passed, returns an error value to handle function
+ * Adds airports to global structure if all given parameters are valid
+ * If invalid parameters are given, returns an error value to handle function
  */
 int add_airport(manager *system, char *id, char *country, char *city)
 {

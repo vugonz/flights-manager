@@ -8,8 +8,8 @@
 #include <ctype.h>
 
 /*
- * Adds new flight to global structure if all stdin parameters are valid
- * If invalid parameters are passed, returns an error value to handle function
+ * Adds new flight to global structure if all given parameters are valid
+ * If invalid parameters are given, returns an error value to handle function
  */
 int add_flight(manager *system, char *id, char *origin, char *destination, 
 		schedule departure, time duration, int nr_passengers)
