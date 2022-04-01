@@ -142,13 +142,13 @@ void print_airport(airport airport);
 
 /* flights.c functions */
 
-int add_flight(manager *system, char *id, char *origin, char *destination, 
+int add_flight(manager *system, char *id, char *origin, char *destination,
 		schedule departure, time duration, int nr_passengers);
 void insert_flight(manager *system, flight new_flight);
-void insert_sorted_flight(flight *l, flight new_flight, int size, int (*cmp_fn) (flight f1, flight f2)); 
+void insert_sorted_flight(flight *l, flight new_flight, int size, int (*cmp_fn) (flight f1, flight f2));
 void list_flights(manager *system);
 int list_flights_by_airport(manager *system, char *ariport, char command);
-void list_airport_flights_by_departure(flight *l, char *airport, int size);  
+void list_airport_flights_by_departure(flight *l, char *airport, int size);
 void list_airport_flights_by_arrival(flight *l, char *airport, int size);  
  /* auxiliary functions */
 flight create_flight(char *id, char *origin, char *destination,
@@ -175,7 +175,7 @@ int schedule_cmp(schedule s1, schedule s2);
 date create_date(short day, short month, short year);
 int is_valid_date(date d1, date d2);
 int date_cmp(date d1, date d2);
-int dates_year_apart(date d1, date d2); 
+int dates_year_apart(date d1, date d2);
 /* auxiliary funcions */
 int same_day(date d1, date d2);
 int same_month(date d1, date d2);

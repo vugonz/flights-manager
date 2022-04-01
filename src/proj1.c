@@ -2,6 +2,7 @@
  *  File: proj1.c
  */
 #include "header.h"
+
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -55,7 +56,7 @@ int command_handler(manager *system)
 }
 
 /*
- * Reads airport structure's members from stdin and, if input is valid, adds a new airport 
+ * Reads airport structure's members from stdin and, if input is valid, adds a new airport
  * If input is invalid, prints error message
  */
 void handle_add_airport(manager *system)
@@ -81,7 +82,7 @@ void handle_add_airport(manager *system)
 }
 
 /*
- * Handles 'l' command with or without optional arguments 
+ * Handles 'l' command with or without optional arguments
  * If optional arguments are specified, lists specified airports
  * If no optional argument are specified, lists all airports alphabetically sorted
  */
@@ -97,7 +98,7 @@ void handle_list_airports(manager *system)
 }
 
 /*
- * Handles 'v' command with or without optional arguments 
+ * Handles 'v' command with or without optional arguments
  * If optional arguments are specified, go to handle_add_flight function
  * If no optional arguments are specified, lists all flights sorted by creation
  */
@@ -114,7 +115,7 @@ void handle_v_command(manager *system)
 
 
 /*
- * Reads flights structure from stdin and, if input is valid, adds a new flight 
+ * Reads flights structure from stdin and, if input is valid, adds a new flight
  * If input is invalid, prints error message
  */
 void handle_add_flight(manager *system)
@@ -164,7 +165,7 @@ void handle_add_flight(manager *system)
 	}
 }
 
-/* 
+/*
  * Lists flights in given airports.
  * If 'p' command is given as argument, lists flights arriving in airport ID read from stdin
  * If 'c' command is given as argument, lists flights departing from airport ID read from stdin
@@ -202,14 +203,14 @@ void handle_forward_date(manager *system)
 		printf(FORWARD_DATE_ERR);
 }
 
-/* 
+/*
  * Returns pointer to newly initialized global structure
  */
 manager *initialize()
 {
 	manager *system = calloc(1, sizeof *system);
 
-	/* initializes system's date defined in macros */
+	/* initializes system's date with defined configuration */
 	system->date = create_date(DAY_0, MONTH_0, YEAR_0);
 	
 	return system;

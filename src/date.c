@@ -2,10 +2,11 @@
  *  File: date.c
  */
 #include "header.h"
+
 #include <stdio.h>
 
 /*
- * Returns a date structure with given arguments as memmbers 
+ * Returns a date structure with given arguments as memmbers
  */
 date create_date(short day, short month, short year)
 {
@@ -20,7 +21,7 @@ date create_date(short day, short month, short year)
 
 /*
  * Returns 1 if d1 is a date set a year or less after d2
- * Returns 0 elsewise 
+ * Returns 0 elsewise
  */
 int is_valid_date(date d1, date d2)
 {
@@ -35,10 +36,10 @@ int is_valid_date(date d1, date d2)
 int date_cmp(date d1, date d2)
 {
 	return same_month(d1, d2) ? DIFF_DAYS(d1, d2) :
-			!(DIFF_YEARS(d1, d2)) ? DIFF_MONTHS(d1, d2) : DIFF_YEARS(d1, d2); 	
+			!(DIFF_YEARS(d1, d2)) ? DIFF_MONTHS(d1, d2) : DIFF_YEARS(d1, d2);
 }
 
-/* 
+/*
  * Returns 1 if d1 is a year or less apart from d2
  * Returns 0 elsewise
  */
@@ -55,7 +56,7 @@ int dates_year_apart(date d1, date d2)
  * Returns 1 if given dates are the same
  * Returns 0 elsewise
  * -- More efficient than date_cmp for simple check in flights.c members validation
- */ 
+ */
 int same_day(date d1, date d2)
 {
 	return same_month(d1, d2) && !(DIFF_DAYS(d1, d2)) ? 1 : 0;

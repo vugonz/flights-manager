@@ -8,8 +8,8 @@
 #include <ctype.h>
 
 /*
- * Adds new flight to global structure if all given parameters are valid
- * If invalid parameters are given, returns an error value to handle function
+ * Adds new flight to global structure if all given arguments are valid
+ * If invalid arguments are given, returns an error value to handle function
  */
 int add_flight(manager *system, char *id, char *origin, char *destination, 
 		schedule departure, time duration, int nr_passengers)
@@ -66,7 +66,7 @@ int add_flight(manager *system, char *id, char *origin, char *destination,
 void insert_flight(manager *system, flight new_flight)
 {
 	/* list will always be sorted by creation as long as new elements are appended in end */
-	system->flights[system->nr_flights] = new_flight;	
+	system->flights[system->nr_flights] = new_flight;
 
 	/* insert flight in list sorted by departure schedule */
 	insert_sorted_flight(system->sorted_departure_flights, new_flight,
@@ -111,8 +111,8 @@ void list_flights(manager *system)
 }
 
 /*
- * If 'p' command is given, lists departing flights in airport with given ID 
- * If 'c' command is given, lists arriving flights in airport with given ID 
+ * If 'p' command is given, lists departing flights in airport with given ID
+ * If 'c' command is given, lists arriving flights in airport with given ID
  */
 int list_flights_by_airport(manager *system, char *airport_id, char command)
 {
@@ -121,37 +121,37 @@ int list_flights_by_airport(manager *system, char *airport_id, char command)
 	
 	/* if given command is 'p' */
 	if(command == DEPARTURE) {
-		list_airport_flights_by_departure(system->sorted_departure_flights, 
+		list_airport_flights_by_departure(system->sorted_departure_flights,
 				airport_id, system->nr_flights);
 	/* if given command is 'c' */
 	} else
-		list_airport_flights_by_arrival(system->sorted_arrival_flights, 
+		list_airport_flights_by_arrival(system->sorted_arrival_flights,
 				airport_id, system->nr_flights);
 	
 	return 0;
 }
 
 /*
- * Lists flights with origin in airport with given ID sorted by departure schedule 
+ * Lists flights sorted by departure schedule with origin in airport with given ID
  */
 void list_airport_flights_by_departure(flight *l, char *airport_id, int size)
 {
 	int i;
 
-	/* print flights in sorted by departure schedule array if they have given airport_id as origin */
+	/* print flights sorted by departure schedule if they have given airport_id as origin */
 	for(i = 0; i < size; ++i)
 		if(!strcmp(l[i].origin, airport_id))
 			print_flight_in_airport(l[i].id, l[i].destination, l[i].departure);
 }
 
-/* 
- * Lists flights with destination in airport with given ID sorted by arrival schedule 
+/*
+ * Lists flights sorted by arrival schedule with destination in airport with given ID
  */
 void list_airport_flights_by_arrival(flight *l, char *airport_id, int size)
 {
 	int i;
 
-	/* print flights in sorted by arrival schedule array if they have given airport_id as destination */
+	/* print flights sorted by arrival schedule if they have given airport_id as destination */
 	for(i = 0; i < size; ++i)
 		if(!strcmp(l[i].destination, airport_id))
 			print_flight_in_airport(l[i].id, l[i].origin, l[i].arrival);
@@ -159,7 +159,7 @@ void list_airport_flights_by_arrival(flight *l, char *airport_id, int size)
 
 
 /*
- * Returns a flight structure with given arguments as members 
+ * Returns a flight structure with given arguments as members
  */
 flight create_flight(char *id, char *origin, char *destination,
 		schedule departure, time duration, int nr_passengers)
@@ -178,7 +178,7 @@ flight create_flight(char *id, char *origin, char *destination,
 	return new_flight;
 }
 
-/* 
+/*
  * Returns negative if f1 departs before f2,
  * Returns 0 if f1 and f2 depart at the same schedule
  * Returns positive if f1 departs after f2
@@ -207,10 +207,10 @@ int is_valid_flight_id(char *id)
 	char c1, c2;
 	int n;
 
-	/* check if two first characters are upper case and if remaining characters form an integer in ]0, 9999]*/
+	/* check if two first characters are upper case and if remaining characters form an integer in range ]0, 10000[ */
 	if(sscanf(id,"%c%c%d", &c1, &c2, &n) == 3) 
 		return isupper(c1) && isupper(c2) && n > 0 && n < FLIGHT_MAX_NUM_ID ? 1 : 0;
-	
+
 	return 0;
 }
 
@@ -221,7 +221,7 @@ int is_valid_flight_id(char *id)
 int is_taken_flight_id(manager *system, char *id, date date)
 {
 	int i;
-	
+
 	/* check if any flight has the same id and, if so, check if they have the same date */
 	for(i = 0; i < system->nr_flights; ++i)
 		if(!strcmp(system->flights[i].id, id) && 
@@ -231,7 +231,7 @@ int is_taken_flight_id(manager *system, char *id, date date)
 	return 0;
 }
 
-/* 
+/*
  * Formatted print of flight structure to be used in 'v' command
  */
 void print_flight(flight flight)
@@ -250,4 +250,3 @@ void print_flight_in_airport(char *id, char *airport, schedule s)
 			s.date.day, s.date.month, s.date.year,
 			s.time.hour, s.time.minute);
 }
-

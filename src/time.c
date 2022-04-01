@@ -3,6 +3,7 @@
  *  File: time.c
  */
 #include "header.h"
+
 #include <stdio.h>
 
 /*
@@ -25,7 +26,7 @@ time create_time(short hour, short minute)
  */
 int time_cmp(time t1, time t2)
 {
-	return !(DIFF_HOURS(t1, t2)) ? DIFF_MINUTES(t1, t2) : DIFF_HOURS(t1, t2); 
+	return !(DIFF_HOURS(t1, t2)) ? DIFF_MINUTES(t1, t2) : DIFF_HOURS(t1, t2);
 }
 
 /*

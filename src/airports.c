@@ -1,10 +1,11 @@
 /*  Author: Gonçalo Azevedo 193075
  *  File: airports.c
  */
+#include "header.h"
+
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-#include "header.h"
 
 /*
  * Adds airports to global structure if all given parameters are valid
@@ -70,7 +71,7 @@ int exists_airport_id(manager *system, char *id)
 }
 
 /* 
- * Inserts given airport structure alphabetically sorted in given airport's list with "size" elements
+ * Inserts given airport in alphabetically sorted airport's list with "size" elements
  */
 void insert_airport(airport *l, airport new_airport, int size)
 {
@@ -78,7 +79,7 @@ void insert_airport(airport *l, airport new_airport, int size)
 	
 	l[size] = new_airport;
 
-	/* inserts new element in alphabetically sorted by id position with insertion sort */
+	/* inserts new element alphabetically sorted in list with insertion sort */
 	for(i = size - 1; i >= 0; --i) {	
 		if(strcmp(new_airport.id, l[i].id) > 0) {
 			l[i+1] = new_airport;
@@ -125,7 +126,7 @@ void list_airports_by_id(manager *system)
 }
 
 /*
- * Returns an airports structure with given arguments as members 
+ * Returns an airports structure with given arguments as members
  */
 airport create_airport(char *id, char *country, char *city)
 {
@@ -139,8 +140,8 @@ airport create_airport(char *id, char *country, char *city)
 	return new_airport;
 }
 
-/* 
- * Returns pointer to airport structure with given id 
+/*
+ * Returns pointer to airport structure with given ID 
  */
 airport *get_airport_by_id(manager *system, char *id)
 {
@@ -153,7 +154,7 @@ airport *get_airport_by_id(manager *system, char *id)
 	return 0;
 }
 
-/* 
+/*
  * Formatted print of given airport structure
  */
 void print_airport(airport airport)
