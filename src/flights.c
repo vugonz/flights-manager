@@ -11,35 +11,35 @@
  * Adds new flight to global structure if all given arguments are valid
  * If invalid arguments are given, returns an error value to handle function
  */
-int add_flight(manager *system, char *id, char *origin, char *destination, 
+int add_flight(manager *system, char *id, char *origin, char *destination,
 		schedule departure, time duration, int nr_passengers)
 {
 	flight new_flight;
 
 	if(!is_valid_flight_id(id))
 		return -1;
-	
+
 	/* check if flight id is taken for the day */
 	if(is_taken_flight_id(system, id, departure.date))
 		return -2;
-	
+
 	if(!exists_airport_id(system, origin))
 		return -3;
-	
+
 	if(!exists_airport_id(system, destination))
 		return -4;
 
 	/* check if max flights limit reached */
 	if(system->nr_flights >= MAX_FLIGHTS)
 		return -5;
-	
+
 	/* check if flight date is a year or less into the future */
 	if(!is_valid_date(departure.date, system->date))
 		return -6;
 
 	if(!is_valid_duration(duration))
 		return -7;
-	
+
 	/* check if flight capacity is met in range [10,100] */
 	if(nr_passengers < MIN_FLIGHT_CAPACITY || nr_passengers > MAX_FLIGHT_CAPACITY)
 		return -8;
