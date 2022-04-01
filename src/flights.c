@@ -45,7 +45,7 @@ int add_flight(manager *system, char *id, char *origin, char *destination,
 		return -8;
 
 	/* create new flight */
-	new_flight = create_flight(id, origin, destination, 
+	new_flight = create_flight(id, origin, destination,
 			departure, duration, nr_passengers);
 
 	/* insert new flight in system's sorted lists */
@@ -73,7 +73,7 @@ void insert_flight(manager *system, flight new_flight)
 			system->nr_flights, compare_flight_departure);
 	/* insert flight in list sorted by arrival schedule */
 	insert_sorted_flight(system->sorted_arrival_flights, new_flight,
-			system->nr_flights, compare_flight_arrival); 
+			system->nr_flights, compare_flight_arrival);
 }
 
 /* 
@@ -82,7 +82,7 @@ void insert_flight(manager *system, flight new_flight)
 void insert_sorted_flight(flight *l, flight new_flight, int size, int (*cmp_func)(flight f1, flight f2))
 {
 	int i;
-	
+
 	l[size] = new_flight;
 
 	/* inserts new flight in sorted position using cmp_func as comparison method */
@@ -99,7 +99,7 @@ void insert_sorted_flight(flight *l, flight new_flight, int size, int (*cmp_func
 	}
 }
 
-/* 
+/*
  * Lists flights in system sorted by creation 
  */
 void list_flights(manager *system)
@@ -118,7 +118,7 @@ int list_flights_by_airport(manager *system, char *airport_id, char command)
 {
 	if(!exists_airport_id(system, airport_id))
 		return -1;
-	
+
 	/* if given command is 'p' */
 	if(command == DEPARTURE) {
 		list_airport_flights_by_departure(system->sorted_departure_flights,
@@ -127,7 +127,7 @@ int list_flights_by_airport(manager *system, char *airport_id, char command)
 	} else
 		list_airport_flights_by_arrival(system->sorted_arrival_flights,
 				airport_id, system->nr_flights);
-	
+
 	return 0;
 }
 
@@ -165,7 +165,7 @@ flight create_flight(char *id, char *origin, char *destination,
 		schedule departure, time duration, int nr_passengers)
 {
 	flight new_flight;
-	
+
 	strcpy(new_flight.id, id);
 	strcpy(new_flight.origin, origin);
 	strcpy(new_flight.destination, destination);
