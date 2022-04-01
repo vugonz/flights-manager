@@ -41,7 +41,7 @@ schedule calculate_arrival(schedule s, time t_inc)
 		t.hour++;
 	}
 
-	if((t.hour = SUM_HOURS(t, t_inc)) >= MAX_HOURS) { 
+	if((t.hour = SUM_HOURS(t, t_inc)) >= MAX_HOURS) {
 		t.hour -= MAX_HOURS;
 		d.day++;
 	}
@@ -53,7 +53,7 @@ schedule calculate_arrival(schedule s, time t_inc)
 		d.month -= MAX_MONTHS;
 		d.year++;
 	}
-	
+
 	arrival = create_schedule(t, d);
 
 	return arrival;

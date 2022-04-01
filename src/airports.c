@@ -14,7 +14,7 @@
 int add_airport(manager *system, char *id, char *country, char *city)
 {
 	airport new_airport;
-	
+
 	/* check if airport id is valid */
 	if(!is_valid_airport_id(id))
 		return -1;
@@ -33,7 +33,7 @@ int add_airport(manager *system, char *id, char *country, char *city)
 	insert_airport(system->airports, new_airport, system->nr_airports);
 
 	++system->nr_airports;
-	
+
 	return 0;
 }
 
@@ -45,7 +45,7 @@ int is_valid_airport_id(char *id)
 {
 	int i;
 	int len = strlen(id);
-	
+
 	/* check if any airport id characters is not uppercase */
 	for(i = 0; i < len; ++i)
 		if(!isupper(id[i]))
@@ -54,14 +54,14 @@ int is_valid_airport_id(char *id)
 	return 1;
 }
 
-/* 
+/*
  * Returns 1 if given ID is already used by an airport
  * Returns 0 if given ID is not in use
  */
 int exists_airport_id(manager *system, char *id)
 {
 	int i;
-	
+
 	/* checks if an airport already exists with given id */
 	for(i = 0; i < system->nr_airports; ++i)
 		if(!strcmp(system->airports[i].id, id))
@@ -70,17 +70,17 @@ int exists_airport_id(manager *system, char *id)
 	return 0;
 }
 
-/* 
+/*
  * Inserts given airport in alphabetically sorted airport's list with "size" elements
  */
 void insert_airport(airport *l, airport new_airport, int size)
 {
 	int i;
-	
+
 	l[size] = new_airport;
 
 	/* inserts new element alphabetically sorted in list with insertion sort */
-	for(i = size - 1; i >= 0; --i) {	
+	for(i = size - 1; i >= 0; --i) {
 		if(strcmp(new_airport.id, l[i].id) > 0) {
 			l[i+1] = new_airport;
 			break;
@@ -99,12 +99,11 @@ void insert_airport(airport *l, airport new_airport, int size)
 void list_airports(manager *system)
 {
 	int i;
-	
+
 	/* print all airports in the system */
 	for(i = 0; i < system->nr_airports; ++i)
 		print_airport(system->airports[i]);
 }
-
 
 /*
  * Reads airports' IDs from stdin and prints them until not more IDs are available
@@ -116,11 +115,11 @@ void list_airports_by_id(manager *system)
 	char c;
 	int res;
 	/* print all airport's by ids read in stdin until no more ids are available */
-	do { 	
-		res = scanf("%s%c", id, &c); 
+	do {
+		res = scanf("%s%c", id, &c);
 		if(!exists_airport_id(system, id)) {
 			printf(LIST_AIRPORTS_ERR, id);
-		} else 
+		} else
 			print_airport(*get_airport_by_id(system, id));
 	} while(res == 2 && c != '\n');
 }
@@ -131,7 +130,7 @@ void list_airports_by_id(manager *system)
 airport create_airport(char *id, char *country, char *city)
 {
 	airport new_airport;
-	
+
 	strcpy(new_airport.id, id);
 	strcpy(new_airport.country, country);
 	strcpy(new_airport.city, city);
@@ -146,7 +145,7 @@ airport create_airport(char *id, char *country, char *city)
 airport *get_airport_by_id(manager *system, char *id)
 {
 	int i;
-	
+
 	for(i = 0; i < system->nr_airports; ++i)
 		if(!strcmp(system->airports[i].id, id))
 			return &system->airports[i];

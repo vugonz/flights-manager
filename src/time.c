@@ -36,5 +36,5 @@ int time_cmp(time t1, time t2)
 int is_valid_duration(time duration)
 {
 	return duration.hour < FLIGHT_MAX_HOUR_DURATION ? 1 :
-		duration.hour == FLIGHT_MAX_HOUR_DURATION && !duration.minute ? 1 : 0; 
+		duration.hour == FLIGHT_MAX_HOUR_DURATION && !duration.minute ? 1 : 0;
 }

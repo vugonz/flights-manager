@@ -246,7 +246,7 @@ void print_flight(flight flight)
  */
 void print_flight_in_airport(char *id, char *airport, schedule s)
 {
-	printf(PRINT_FLIGHT_IN_AIRPORT_STR, id, airport, 
+	printf(PRINT_FLIGHT_IN_AIRPORT_STR, id, airport,
 			s.date.day, s.date.month, s.date.year,
 			s.time.hour, s.time.minute);
 }

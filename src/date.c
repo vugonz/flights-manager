@@ -25,7 +25,7 @@ date create_date(short day, short month, short year)
  */
 int is_valid_date(date d1, date d2)
 {
-	return date_cmp(d1, d2) >= 0 && !dates_year_apart(d1, d2); 
+	return date_cmp(d1, d2) >= 0 && !dates_year_apart(d1, d2);
 }
 
 /*
@@ -46,7 +46,7 @@ int date_cmp(date d1, date d2)
 int dates_year_apart(date d1, date d2)
 {
 	if(d1.year != d2.year)
-		return d1.month < d2.month ? 0 : 
+		return d1.month < d2.month ? 0 :
 			d1.month == d2.month ? d1.day - d2.day : 1;
 
 	return 0;
