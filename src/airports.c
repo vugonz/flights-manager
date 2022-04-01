@@ -37,8 +37,8 @@ int add_airport(manager *system, char *id, char *country, char *city)
 }
 
 /*
- * Returns 1 if given id is a valid airport id
- * Returns 0 if id is invalid
+ * Returns 1 if given ID is a valid airport id
+ * Returns 0 if given ID is invalid
  */
 int is_valid_airport_id(char *id)
 {
@@ -54,8 +54,8 @@ int is_valid_airport_id(char *id)
 }
 
 /* 
- * Returns 1 if given id is already used by an airport
- * Returns 0 if given id is not in use
+ * Returns 1 if given ID is already used by an airport
+ * Returns 0 if given ID is not in use
  */
 int exists_airport_id(manager *system, char *id)
 {

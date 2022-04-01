@@ -7,6 +7,10 @@
 #include <string.h>
 #include <ctype.h>
 
+/*
+ * Adds new flight to global structure if all stdin parameters are valid
+ * If invalid parameters are passed, returns an error value to handle function
+ */
 int add_flight(manager *system, char *id, char *origin, char *destination, 
 		schedule departure, time duration, int nr_passengers)
 {
@@ -51,6 +55,9 @@ int add_flight(manager *system, char *id, char *origin, char *destination,
 	return 0;
 }
 
+/* 
+ * Inserts given flight structure in sorted system's list
+ */
 void insert_flight(manager *system, flight new_flight)
 {
 	/* list will always be sorted by creation date as long as new elements are appended in end */
@@ -64,6 +71,9 @@ void insert_flight(manager *system, flight new_flight)
 			system->nr_flights, compare_flight_arrival); 
 }
 
+/* 
+ * Inserts given flight structure sorted with cmp_func as comparison method in given flights's list with "size" elements
+ */
 void insert_sorted_flight(flight *l, flight new_flight, int size, int (*cmp_func)(flight f1, flight f2))
 {
 	int i;
@@ -113,7 +123,9 @@ int list_flights_by_airport(manager *system, char *airport_id, char command)
 	return 0;
 }
 
-/* lists flights with origin in given airport sorted by departure schedule */
+/*
+ * Lists flights with origin in airport with given ID sorted by departure schedule 
+ */
 void list_airport_flights_by_departure(flight *l, char *airport_id, int size)
 {
 	int i;
@@ -123,7 +135,9 @@ void list_airport_flights_by_departure(flight *l, char *airport_id, int size)
 			print_flight_in_airport(l[i].id, l[i].destination, l[i].departure);
 }
 
-/* lists flights with destination in given airport sorted by arrival schedule */
+/* 
+ * Lists flights with destination in airport with given ID sorted by arrival schedule 
+ */
 void list_airport_flights_by_arrival(flight *l, char *airport_id, int size)
 {
 	int i;
@@ -134,7 +148,9 @@ void list_airport_flights_by_arrival(flight *l, char *airport_id, int size)
 }
 
 
-/* creates a new flight structure with given members */
+/*
+ * Returns a flight structure with given arguments as members 
+ */
 flight create_flight(char *id, char *origin, char *destination,
 		schedule departure, time duration, int nr_passengers)
 {
@@ -151,25 +167,30 @@ flight create_flight(char *id, char *origin, char *destination,
 	return new_flight;
 }
 
-/* returns negative if f1 departs before f2, 
- * 0 if flights depart at the same schedule
- * and positive if f1 departs after f2 */
+/* 
+ * Returns negative if f1 departs before f2,
+ * Returns 0 if f1 and f2 depart at the same schedule
+ * Returns positive if f1 departs after f2
+ */
 int compare_flight_departure(flight f1, flight f2)
 {
-	/* same departure instant */
 	return schedule_cmp(f1.departure, f2.departure);
 }
 
-/* returns negative if f1 arrives before f2, 
- * 0 if flights arrive at the same schedule 
- * and positive if f1 arrives after f2 */
+/*
+ * Returns negative if f1 arrives before f2,
+ * Returns 0 if flights arrive at the same schedule
+ * Returns positive if f1 arrives after f2
+ */
 int compare_flight_arrival(flight f1, flight f2)
 {
-	/* same departure instant */
 	return schedule_cmp(f1.arrival, f2.arrival);
 }
 
-/* returns 1 if given flight id is valid and 0 if it's not */
+/*
+ * Returns 1 if given ID is a valid flight ID
+ * Returns 0 if given ID is invalid
+ */
 int is_valid_flight_id(char *id)
 {
 	char c1, c2;
@@ -181,7 +202,10 @@ int is_valid_flight_id(char *id)
 	return 0;
 }
 
-/* returns 1 if given flight id is taken for given date and 0 if it's not */
+/*
+ * Returns 1 if given ID is already in use by a flight for given date
+ * Returns 0 if given ID is free for a flight in given date
+ */
 int is_taken_flight_id(manager *system, char *id, date date)
 {
 	int i;
@@ -195,7 +219,8 @@ int is_taken_flight_id(manager *system, char *id, date date)
 	return 0;
 }
 
-/* prints flight in format required by the 'v' command */
+/* 
+ * Formatted print of flight structure to be used in 'v' command */
 void print_flight(flight flight)
 {
 	printf(PRINT_FLIGHT_STR, flight.id, flight.origin, flight.destination,
@@ -203,7 +228,7 @@ void print_flight(flight flight)
 			flight.departure.time.hour, flight.departure.time.minute);
 }
 
-/* prints flight in format required by 'c' and 'p' commands */
+/* Formatted print of flight structure to be used in 'c' and 'p' commands */
 void print_flight_in_airport(char *id, char *airport, schedule s)
 {
 	printf(PRINT_FLIGHT_IN_AIRPORT_STR, id, airport, 

@@ -18,7 +18,7 @@ int main()
 }
 
 /*
- * Handle commands from stdin and return 1 to caller function
+ * Handle commands from stdin and returns 1 to caller function
  * When 'q' command is read, returns 0
  */
 int command_handler(manager *system)
@@ -55,8 +55,8 @@ int command_handler(manager *system)
 }
 
 /*
- * Reads airport structure's members from stdin and, if invalid input is given, outputs error message 
- * If all input is valid, adds an airport to the system
+ * Reads airport structure's members from stdin and, if input is valid, adds a new airport 
+ * If input is invalid, prints error message
  */
 void handle_add_airport(manager *system)
 {
@@ -99,7 +99,7 @@ void handle_list_airports(manager *system)
 /*
  * Handles 'v' command with or without optional arguments 
  * If optional arguments are specified, go to handle_add_flight function
- * If no optional arguments are specified, lists all flights sorted by creation date
+ * If no optional arguments are specified, lists all flights sorted by creation
  */
 void handle_v_command(manager *system)
 {
@@ -114,8 +114,8 @@ void handle_v_command(manager *system)
 
 
 /*
- * Reads flights structure from stdin and, if invalid input is given, outputs error message 
- * If all input is valid, adds a flight to the system
+ * Reads flights structure from stdin and, if input is valid, adds a new flight 
+ * If input is invalid, prints error message
  */
 void handle_add_flight(manager *system)
 {
@@ -167,7 +167,7 @@ void handle_add_flight(manager *system)
 /* 
  * Lists flights in given airports.
  * If 'p' command is given as argument, lists flights arriving in airport ID read from stdin
- * If 'c' command is given as argument, lists flights departing from airport ID read from the stdin
+ * If 'c' command is given as argument, lists flights departing from airport ID read from stdin
  */
 void handle_list_flight_by_airport(manager *system, char command)
 {
@@ -184,8 +184,8 @@ void handle_list_flight_by_airport(manager *system, char command)
 }
 
 /*
- * Reads a date structure from stdin and, if invalid, outputs error message
- * If input is valid, forwards system's date to new given specified date
+ * Reads a date structure from stdin and, if input is valid, forwards system's date to specified date
+ * If input is invalid, prints error message
  */
 void handle_forward_date(manager *system)
 {

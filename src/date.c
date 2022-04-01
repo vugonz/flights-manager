@@ -39,7 +39,7 @@ int date_cmp(date d1, date d2)
 }
 
 /* 
- * Returns 1 if d1 is a year or least apart from d2
+ * Returns 1 if d1 is a year or less apart from d2
  * Returns 0 elsewise
  */
 int dates_year_apart(date d1, date d2)
@@ -62,7 +62,7 @@ int same_day(date d1, date d2)
 }
 
 /*
- * Returns 1 if given dates happen in the same month and year
+ * Returns 1 if given dates share the same year and month
  * Returns 0 elsewise
  */
 int same_month(date d1, date d2)
@@ -71,7 +71,7 @@ int same_month(date d1, date d2)
 }
 
 /*
- * Formatted print of given date structure
+ * Formatted print of date structure
  */
 void print_date(date d)
 {
