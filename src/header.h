@@ -1,8 +1,8 @@
 /*  Author: Gonçalo Azevedo 193075
  *  File: header.h
  */
-#ifndef HEADER
-#define HEADER
+#ifndef _HEADER_
+#define _HEADER_
 
 /* global init date config */
 #define DAY_0 1
@@ -111,7 +111,6 @@ typedef struct {
 	flight sorted_arrival_flights[MAX_FLIGHTS];   /* list of system's flights sorted by arrival time */
 } manager;
 
-
 /* proj1.c functions */
 
 /* handle functions manage input, buffers and output feedback such as error or success messages */
@@ -127,7 +126,6 @@ manager *initialize();
 int forward_date(manager *system, date);
 
 
-
 /* airports.c functions */
 
 int add_airport(manager *system, char *id, char *country, char *city);
@@ -140,7 +138,6 @@ airport *get_airport_by_id(manager *system, char *id);
 int is_valid_airport_id(char *id);
 int exists_airport_id(manager *system, char *id);
 void print_airport(airport airport);
-
 
 
 /* flights.c functions */
@@ -166,13 +163,11 @@ int compare_flight_departure(flight f1, flight f2);
 int compare_flight_arrival(flight f1, flight f2);
 
 
-
 /* schedule.c functions */
 
 schedule create_schedule(time t, date d);
 schedule calculate_arrival(schedule s, time duration);
 int schedule_cmp(schedule s1, schedule s2);
-
 
 
 /* date.c functions */
@@ -185,7 +180,6 @@ int dates_year_apart(date d1, date d2);
 int same_day(date d1, date d2);
 int same_month(date d1, date d2);
 void print_date(date);
-
 
 
 /* time.c functions */
