@@ -89,7 +89,7 @@ void handle_add_airport(manager *system)
 void handle_list_airports(manager *system)
 {
 	char c = getchar();
-	
+
 	if(c == '\n') {
 		list_airports(system);
 	} else {
@@ -127,10 +127,10 @@ void handle_add_flight(manager *system)
 	schedule departure;
 	time duration;
 	int result_value;
-	
+
 	/* parse flight id, origin and destionation airports ids*/
 	scanf(FLIGHT_MEMBERS_PARSE, id, origin, destination); 
-	
+
 	/* parse flight date and time departure members */
 	scanf(DATE_MEMBERS_PARSE, &day, &month, &year);
 	scanf(TIME_MEMBERS_PARSE, &hour, &minute);
@@ -141,12 +141,12 @@ void handle_add_flight(manager *system)
 	scanf(TIME_MEMBERS_PARSE, &hour, &minute);
 	/* initialize duration component */
 	duration = create_time(hour, minute);
-	
+
 	/* parse flight capacity */
 	scanf("%d", &nr_passengers);
 
 	result_value = add_flight(system, id, origin, destination, departure, duration, nr_passengers);
-	
+
 	if(result_value == -1) {
 		printf(ADD_FLIGHT_ERR_1);
 	} else if(result_value == -2) {
@@ -174,10 +174,10 @@ void handle_list_flight_by_airport(manager *system, char command)
 {
 	char airport_id[AIRPORT_LENGTH_ID];
 	int result_value;
-	
+
 	/* read airport id from stdin */
 	scanf("%s", airport_id);
-	
+
 	result_value = list_flights_by_airport(system, airport_id, command);
 
 	if(result_value == -1)
@@ -196,7 +196,7 @@ void handle_forward_date(manager *system)
 
 	scanf(DATE_MEMBERS_PARSE, &day, &month, &year);
 	new_date = create_date(day, month, year);
-	
+
 	result_value = forward_date(system, new_date);
 
 	if(result_value == -1)
@@ -212,7 +212,7 @@ manager *initialize()
 
 	/* initializes system's date with defined configuration */
 	system->date = create_date(DAY_0, MONTH_0, YEAR_0);
-	
+
 	return system;
 }
 
@@ -225,7 +225,7 @@ int forward_date(manager *system, date new_date)
 		return -1;
 
 	system->date = new_date;
-	
+
 	print_date(new_date);
 
 	return 0;
