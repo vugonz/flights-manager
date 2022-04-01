@@ -56,11 +56,11 @@ int add_flight(manager *system, char *id, char *origin, char *destination,
 }
 
 /* 
- * Inserts given flight structure in sorted system's list
+ * Inserts given flight in sorted system's lists
  */
 void insert_flight(manager *system, flight new_flight)
 {
-	/* list will always be sorted by creation date as long as new elements are appended in end */
+	/* list will always be sorted by creation as long as new elements are appended in end */
 	system->flights[system->nr_flights] = new_flight;	
 
 	/* insert flight in list sorted by departure schedule */
@@ -72,7 +72,7 @@ void insert_flight(manager *system, flight new_flight)
 }
 
 /* 
- * Inserts given flight structure sorted with cmp_func as comparison method in given flights's list with "size" elements
+ * Inserts given flight sorted with cmp_func as comparison method in given flights's list with "size" elements
  */
 void insert_sorted_flight(flight *l, flight new_flight, int size, int (*cmp_func)(flight f1, flight f2))
 {
