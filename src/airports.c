@@ -6,6 +6,10 @@
 #include <string.h>
 #include <ctype.h>
 
+/*
+ * Adds airports to global structure if all stdin parameters are valid
+ * If invalid parameters are passed, returns an error value to handle function
+ */
 int add_airport(manager *system, char *id, char *country, char *city)
 {
 	airport new_airport;
@@ -32,6 +36,10 @@ int add_airport(manager *system, char *id, char *country, char *city)
 	return 0;
 }
 
+/*
+ * Returns 1 if given id is a valid airport id
+ * Returns 0 if id is invalid
+ */
 int is_valid_airport_id(char *id)
 {
 	int i;
@@ -45,6 +53,9 @@ int is_valid_airport_id(char *id)
 	return 1;
 }
 
+/* Returns 1 if given id is already used by an airport
+ * Returns 0 if given id is not in use
+ */
 int exists_airport_id(manager *system, char *id)
 {
 	int i;
@@ -57,14 +68,16 @@ int exists_airport_id(manager *system, char *id)
 	return 0;
 }
 
-/* inserts given airport structure sorted in the global structure's airport's list */
+/* 
+ * Inserts given airport structure alphabetically sorted in given airport's list with "size" elements
+ */
 void insert_airport(airport *l, airport new_airport, int size)
 {
 	int i;
 	
 	l[size] = new_airport;
 
-	/* inserts new element in sorted position of the list by id */
+	/* inserts new element in alphabetically sorted by id position with insertion sort */
 	for(i = size - 1; i >= 0; --i) {	
 		if(strcmp(new_airport.id, l[i].id) > 0) {
 			l[i+1] = new_airport;
@@ -78,6 +91,9 @@ void insert_airport(airport *l, airport new_airport, int size)
 	}
 }
 
+/*
+ * Lists all airports in the system in alphabetical order
+ */
 void list_airports(manager *system)
 {
 	int i;
@@ -88,6 +104,10 @@ void list_airports(manager *system)
 }
 
 
+/*
+ * Reads airports' IDs from stdin and prints them until not more IDs are available
+ * If ID read doesn't exist, prints an error message and procceds reading the stdin
+ */
 void list_airports_by_id(manager *system)
 {
 	char id[AIRPORT_LENGTH_ID];
@@ -103,6 +123,9 @@ void list_airports_by_id(manager *system)
 	} while(res == 2 && c != '\n');
 }
 
+/*
+ * Returns an airports structure with given arguments as members 
+ */
 airport create_airport(char *id, char *country, char *city)
 {
 	airport new_airport;
@@ -130,7 +153,7 @@ airport *get_airport_by_id(manager *system, char *id)
 }
 
 /* 
- *  Formatted print of given airport structure
+ * Formatted print of given airport structure
  */
 void print_airport(airport airport)
 {

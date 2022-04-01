@@ -8,7 +8,7 @@
 #define DAY_0 1
 #define MONTH_0 1
 #define YEAR_0 2022
-/* global output messages */
+/* global structure output messages */
 #define FORWARD_DATE_ERR "invalid date\n"
 
 /* airport constants & parse strings */
@@ -111,11 +111,10 @@ typedef struct {
 	flight sorted_arrival_flights[MAX_FLIGHTS];   /* list of system's flights sorted by arrival time */
 } manager;
 
-/*
- * proj1.c functions
- */
 
-/* handle functions serve the purpose of handling input & buffers and displaying output feedback such as error or success messages */
+/* proj1.c functions */
+
+/* handle functions manage input, buffers and output feedback such as error or success messages */
 int command_handler(manager *system);
 void handle_add_airport(manager *system);
 void handle_list_airports(manager *system);
@@ -123,20 +122,18 @@ void handle_v_command(manager *system);
 void handle_add_flight(manager *system);
 void handle_list_flight_by_airport(manager *system, char command);  /* handles both 'c' and 'p' commands */
 void handle_forward_date(manager *system);
-
 /* initializes global structure that stores all of current session's useful information */
 manager *initialize();
 int forward_date(manager *system, date);
 
 
-/*
- * airport.c functions
- */
+
+/* airports.c functions */
+
 int add_airport(manager *system, char *id, char *country, char *city);
 void insert_airport(airport *l, airport new_airport, int size);
 void list_airports(manager *system);
 void list_airports_by_id(manager *system);
-
 /* auxiliary functions */
 airport create_airport(char *id, char *country, char *city);
 airport *get_airport_by_id(manager *system, char *id);
@@ -145,9 +142,9 @@ int exists_airport_id(manager *system, char *id);
 void print_airport(airport airport);
 
 
-/*
- * flights.c functions
- */
+
+/* flights.c functions */
+
 int add_flight(manager *system, char *id, char *origin, char *destination, 
 		schedule departure, time duration, int nr_passengers);
 void insert_flight(manager *system, flight new_flight);
@@ -156,7 +153,6 @@ void list_flights(manager *system);
 int list_flights_by_airport(manager *system, char *ariport, char command);
 void list_airport_flights_by_departure(flight *l, char *airport, int size);  
 void list_airport_flights_by_arrival(flight *l, char *airport, int size);  
-
  /* auxiliary functions */
 flight create_flight(char *id, char *origin, char *destination,
 		schedule departure, time duration, int nr_passengers);
@@ -170,17 +166,17 @@ int compare_flight_departure(flight f1, flight f2);
 int compare_flight_arrival(flight f1, flight f2);
 
 
-/*
- * schedule.c functions
- */
+
+/* schedule.c functions */
+
 schedule create_schedule(time t, date d);
 schedule calculate_arrival(schedule s, time duration);
 int schedule_cmp(schedule s1, schedule s2);
 
 
-/*
- * date.c functions
- */
+
+/* date.c functions */
+
 date create_date(short day, short month, short year);
 int is_valid_date(date d1, date d2);
 int date_cmp(date d1, date d2);
@@ -191,13 +187,12 @@ int same_month(date d1, date d2);
 void print_date(date);
 
 
-/*
- * time.c functions
- */
+
+/* time.c functions */
+
 time create_time(short hour, short minute);
 int is_valid_duration(time duration);
 int time_cmp(time t1, time t2);
-
 /* auxiliary functions */
 int same_minute(time t1, time t2);
 int same_hour(time t1, time t2);
