@@ -10,7 +10,7 @@ int main()
 {
 	/* initialize global structure */
 	manager *system = initialize();
-	
+
 	/* keep reading commands until 'q' command is read */
 	while(command_handler(system))
 		;
