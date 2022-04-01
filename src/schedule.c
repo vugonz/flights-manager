@@ -28,8 +28,7 @@ int schedule_cmp(schedule s1, schedule s2)
 }
 
 /*
- *	Returns schedule that is the result of adding t_inc time to 
- *	schedule given as argument
+ * Returns schedule that is the result of adding t_inc time to given schedule
  */
 schedule calculate_arrival(schedule s, time t_inc)
 {
