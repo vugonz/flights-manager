@@ -90,9 +90,9 @@ void handle_list_airports(manager *system)
 {
 	char c = getchar();
 	
-	if(c == '\n') { 
+	if(c == '\n') {
 		list_airports(system);
-	} else { 
+	} else {
 		list_airports_by_id(system);
 	}
 }
