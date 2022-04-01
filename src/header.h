@@ -158,7 +158,7 @@ int is_taken_flight_id(manager *system, char *id, date date);
 int exists_flight_id(manager *system, char *id);
 void print_flight(flight flight);
 void print_flight_in_airport(char *id, char *airport, schedule s);
-/* cmp functions used by sorted insertion algorithm */
+/* compare functions used by sorting insertion algorithm */
 int compare_flight_departure(flight f1, flight f2);
 int compare_flight_arrival(flight f1, flight f2);
 
