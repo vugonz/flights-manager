@@ -83,7 +83,9 @@ void insert_sorted_flight(flight *l, flight new_flight, int size, int (*cmp_func
 	}
 }
 
-/* lists flights sorted by creation */
+/* 
+ * Lists flights in system sorted by creation 
+ */
 void list_flights(manager *system)
 {
 	int i;
@@ -92,8 +94,10 @@ void list_flights(manager *system)
 		print_flight(system->flights[i]);
 }
 
-/* lists departing flights in airport with given id for 'p' command
- * lists arriving flights in airport with given id for 'c' command */
+/*
+ * If 'p' command is given, lists departing flights in airport with given ID 
+ * If 'c' command is given, lists arriving flights in airport with given ID 
+ */
 int list_flights_by_airport(manager *system, char *airport_id, char command)
 {
 	if(!exists_airport_id(system, airport_id))

@@ -1,10 +1,10 @@
 /*  Author: Gonçalo Azevedo 193075
  *  File: airports.c
  */
-#include "header.h"
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include "header.h"
 
 /*
  * Adds airports to global structure if all stdin parameters are valid
@@ -53,7 +53,8 @@ int is_valid_airport_id(char *id)
 	return 1;
 }
 
-/* Returns 1 if given id is already used by an airport
+/* 
+ * Returns 1 if given id is already used by an airport
  * Returns 0 if given id is not in use
  */
 int exists_airport_id(manager *system, char *id)

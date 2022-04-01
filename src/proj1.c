@@ -7,15 +7,20 @@
 
 int main()
 {
+	/* initialize global structure */
 	manager *system = initialize();
 	
+	/* keep reading commands until 'q' command is read */
 	while(command_handler(system))
 		;
 
 	return 0;
 }
 
-/* handle commands from stdin until 'q' command */
+/*
+ * Handle commands from stdin and return 1 to caller function
+ * When 'q' command is read, returns 0
+ */
 int command_handler(manager *system)
 {
 	char command = getchar();
@@ -41,6 +46,7 @@ int command_handler(manager *system)
 		case 't':
 			handle_forward_date(system);
 			break;
+		/* ignore unknown commands */
 		default:
 			break;
 	}
@@ -48,6 +54,10 @@ int command_handler(manager *system)
 	return 1;
 }
 
+/*
+ * Reads airport structure's members from stdin and, if invalid input is given, outputs error message 
+ * If all input is valid, adds an airport to the system
+ */
 void handle_add_airport(manager *system)
 {
 	char id[AIRPORT_LENGTH_ID];
@@ -70,6 +80,11 @@ void handle_add_airport(manager *system)
 	}
 }
 
+/*
+ * Handles 'l' command with or without optional arguments 
+ * If optional arguments are specified, lists specified airports
+ * If no optional argument are specified, lists all airports alphabetically sorted
+ */
 void handle_list_airports(manager *system)
 {
 	char c = getchar();
@@ -81,6 +96,11 @@ void handle_list_airports(manager *system)
 	}
 }
 
+/*
+ * Handles 'v' command with or without optional arguments 
+ * If optional arguments are specified, go to handle_add_flight function
+ * If no optional arguments are specified, lists all flights sorted by creation date
+ */
 void handle_v_command(manager *system)
 {
 	char c = getchar();
@@ -93,6 +113,10 @@ void handle_v_command(manager *system)
 }
 
 
+/*
+ * Reads flights structure from stdin and, if invalid input is given, outputs error message 
+ * If all input is valid, adds a flight to the system
+ */
 void handle_add_flight(manager *system)
 {
 	char id[FLIGHT_LENGTH_ID];
@@ -140,12 +164,17 @@ void handle_add_flight(manager *system)
 	}
 }
 
+/* 
+ * Lists flights in given airports.
+ * If 'p' command is given as argument, lists flights arriving in airport ID read from stdin
+ * If 'c' command is given as argument, lists flights departing from airport ID read from the stdin
+ */
 void handle_list_flight_by_airport(manager *system, char command)
 {
 	char airport_id[AIRPORT_LENGTH_ID];
 	int result_value;
 	
-	/* get airport id */
+	/* read airport id from stdin */
 	scanf("%s", airport_id);
 	
 	result_value = list_flights_by_airport(system, airport_id, command);
@@ -154,6 +183,10 @@ void handle_list_flight_by_airport(manager *system, char command)
 		printf(LIST_AIRPORTS_ERR, airport_id);
 }
 
+/*
+ * Reads a date structure from stdin and, if invalid, outputs error message
+ * If input is valid, forwards system's date to new given specified date
+ */
 void handle_forward_date(manager *system)
 {
 	date new_date;
@@ -170,17 +203,21 @@ void handle_forward_date(manager *system)
 }
 
 /* 
- * global structure functions
+ * Returns pointer to newly initialized global structure
  */
 manager *initialize()
 {
 	manager *system = calloc(1, sizeof *system);
 
+	/* initializes system's date defined in macros */
 	system->date = create_date(DAY_0, MONTH_0, YEAR_0);
 	
 	return system;
 }
 
+/*
+ * Forwards system's date if given date is valid
+ */
 int forward_date(manager *system, date new_date)
 {
 	if(!is_valid_date(new_date, system->date))
