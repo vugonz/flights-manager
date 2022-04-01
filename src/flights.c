@@ -56,7 +56,7 @@ int add_flight(manager *system, char *id, char *origin, char *destination,
 }
 
 /* 
- * Inserts given flight in sorted system's lists
+ * Inserts given flight in system's sorted lists
  */
 void insert_flight(manager *system, flight new_flight)
 {
@@ -72,7 +72,7 @@ void insert_flight(manager *system, flight new_flight)
 }
 
 /* 
- * Inserts given flight sorted with cmp_func as comparison method in given flights's list with "size" elements
+ * Inserts given flight sorted with cmp_func as comparison method in given flights' list with "size" elements
  */
 void insert_sorted_flight(flight *l, flight new_flight, int size, int (*cmp_func)(flight f1, flight f2))
 {
@@ -220,7 +220,8 @@ int is_taken_flight_id(manager *system, char *id, date date)
 }
 
 /* 
- * Formatted print of flight structure to be used in 'v' command */
+ * Formatted print of flight structure to be used in 'v' command
+ */
 void print_flight(flight flight)
 {
 	printf(PRINT_FLIGHT_STR, flight.id, flight.origin, flight.destination,
@@ -228,7 +229,9 @@ void print_flight(flight flight)
 			flight.departure.time.hour, flight.departure.time.minute);
 }
 
-/* Formatted print of flight structure to be used in 'c' and 'p' commands */
+/*
+ * Formatted print of flight structure to be used in 'c' and 'p' commands
+ */
 void print_flight_in_airport(char *id, char *airport, schedule s)
 {
 	printf(PRINT_FLIGHT_IN_AIRPORT_STR, id, airport, 
