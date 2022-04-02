@@ -36,19 +36,25 @@ schedule calculate_arrival(schedule s, time t_inc)
 	time t = s.time;
 	date d = s.date;
 
+	/* calculate minutes and adjust overflow if needed */
 	if((t.minute = SUM_MINUTES(t, t_inc)) >= MAX_MINUTES) {
 		t.minute -= MAX_MINUTES;
 		t.hour++;
 	}
 
+	/* calculate hours and adjust overflow if needed */
 	if((t.hour = SUM_HOURS(t, t_inc)) >= MAX_HOURS) {
 		t.hour -= MAX_HOURS;
 		d.day++;
 	}
+
+	/* adjust day overflow if necessary */
 	if(d.day > DAYS_IN_MONTH(d.month)) {
 		d.day -= DAYS_IN_MONTH(d.month);
 		d.month++;
 	}
+
+	/* adjust month overflow if needed */
 	if(d.month > MAX_MONTHS){
 		d.month -= MAX_MONTHS;
 		d.year++;
