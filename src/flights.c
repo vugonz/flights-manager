@@ -15,17 +15,18 @@ int add_flight(manager *system, char *id, char *origin, char *destination,
 		schedule departure, time duration, int nr_passengers)
 {
 	flight new_flight;
-
+	
+	/* check if flight id is valid */
 	if(!is_valid_flight_id(id))
 		return -1;
 
 	/* check if flight id is taken for the day */
 	if(is_taken_flight_id(system, id, departure.date))
 		return -2;
-
+	
+	/* check if airports ids exist */
 	if(!exists_airport_id(system, origin))
 		return -3;
-
 	if(!exists_airport_id(system, destination))
 		return -4;
 
@@ -37,6 +38,7 @@ int add_flight(manager *system, char *id, char *origin, char *destination,
 	if(!is_valid_date(departure.date, system->date))
 		return -6;
 
+	/* check if duration is valid */
 	if(!is_valid_duration(duration))
 		return -7;
 
@@ -85,7 +87,7 @@ void insert_sorted_flight(flight *l, flight new_flight, int size, int (*cmp_func
 
 	l[size] = new_flight;
 
-	/* inserts new flight in sorted position using cmp_func as comparison method */
+	/* inserts new flight in sorted position using insertion sort with cmp_func as comparison method */
 	for(i = size - 1; i >= 0; --i) {
 		if(cmp_func(new_flight, l[i]) > 0) {
 			l[i+1] = new_flight;
