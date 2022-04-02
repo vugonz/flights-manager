@@ -8,7 +8,7 @@
 #include <ctype.h>
 
 /*
- * Adds airports to global structure if all given arguments are valid
+ * Adds a new airport to global structure if all given arguments are valid
  * If invalid arguments are given, returns an error value to handle function
  */
 int add_airport(manager *system, char *id, char *country, char *city)
