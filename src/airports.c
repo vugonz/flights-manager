@@ -8,8 +8,8 @@
 #include <ctype.h>
 
 /*
- * Adds airports to global structure if all given parameters are valid
- * If invalid parameters are given, returns an error value to handle function
+ * Adds airports to global structure if all given arguments are valid
+ * If invalid arguments are given, returns an error value to handle function
  */
 int add_airport(manager *system, char *id, char *country, char *city)
 {
@@ -117,6 +117,7 @@ void list_airports_by_id(manager *system)
 	/* print all airport's by ids read in stdin until no more ids are available */
 	do {
 		res = scanf("%s%c", id, &c);
+		/* prints error if airport doesn't exist */
 		if(!exists_airport_id(system, id)) {
 			printf(LIST_AIRPORTS_ERR, id);
 		} else
