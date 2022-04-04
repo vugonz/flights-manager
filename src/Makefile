@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -ansi -Wall -Wextra -Werror -pedantic -g
+CFLAGS = -ansi -Wall -Wextra -Werror -pedantic -pg
 OBJECTS = proj1.o airports.o flights.o time.o date.o schedule.o
 
 all:
