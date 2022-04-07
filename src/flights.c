@@ -12,16 +12,14 @@
  * If invalid arguments are given, returns an error value to handle function
  */
 int add_flight(manager *system, char *id, char *origin, char *destination,
-		schedule departure, time duration, int nr_passengers)
+		date departure_date, time departure_time, time duration, int nr_passengers)
 {
-	flight new_flight;
-	
 	/* check if flight id is valid */
 	if(!is_valid_flight_id(id))
 		return -1;
 
 	/* check if flight id is taken for the day */
-	if(is_taken_flight_id(system, id, departure.date))
+	if(is_taken_flight_id(system, id, departure_date))
 		return -2;
 	
 	/* check if airports ids exist */
@@ -35,7 +33,7 @@ int add_flight(manager *system, char *id, char *origin, char *destination,
 		return -5;
 
 	/* check if flight date is a year or less into the future */
-	if(!is_valid_date(departure.date, system->date))
+	if(!is_valid_date(system->date, departure_date))
 		return -6;
 
 	/* check if duration is valid */
@@ -47,58 +45,13 @@ int add_flight(manager *system, char *id, char *origin, char *destination,
 		return -8;
 
 	/* create new flight */
-	new_flight = create_flight(id, origin, destination,
-			departure, duration, nr_passengers);
-
-	/* insert new flight in system's sorted lists */
-	insert_flight(system, new_flight);
+	create_flight(system, id, origin, destination,
+			departure_date, departure_time, duration, nr_passengers);
 
 	/* increment nr of flights in origin airport */
 	++get_airport_by_id(system, origin)->nr_flights;
 
-	/* increment global nr of flights */
-	++system->nr_flights;
-
 	return 0;
-}
-
-/* 
- * Inserts given flight in system's sorted lists
- */
-void insert_flight(manager *system, flight new_flight)
-{
-	/* list will always be sorted by creation as long as new elements are appended in end */
-	system->flights[system->nr_flights] = new_flight;
-
-	/* insert flight in list sorted by departure schedule */
-	insert_sorted_flight(system->sorted_departure_flights, new_flight,
-			system->nr_flights, compare_flight_departure);
-	/* insert flight in list sorted by arrival schedule */
-	insert_sorted_flight(system->sorted_arrival_flights, new_flight,
-			system->nr_flights, compare_flight_arrival);
-}
-
-/* 
- * Inserts given flight sorted with cmp_func as comparison method in given flights' list with "size" elements
- */
-void insert_sorted_flight(flight *l, flight new_flight, int size, int (*cmp_func)(flight f1, flight f2))
-{
-	int i;
-
-	l[size] = new_flight;
-
-	/* inserts new flight in sorted position using insertion sort with cmp_func as comparison method */
-	for(i = size - 1; i >= 0; --i) {
-		if(cmp_func(new_flight, l[i]) > 0) {
-			l[i+1] = new_flight;
-			break;
-		} else
-			l[i+1] = l[i];
-
-		/* if ever reached with i = 0 then new element belongs in the first position */
-		if(i == 0)
-			l[i] = new_flight;
-	}
 }
 
 /*
@@ -123,12 +76,10 @@ int list_flights_by_airport(manager *system, char *airport_id, char command)
 
 	/* if given command is 'p' */
 	if(command == DEPARTURE) {
-		list_airport_flights_by_departure(system->sorted_departure_flights,
-				airport_id, system->nr_flights);
+		list_airport_flights_by_departure(system, airport_id);
 	/* if given command is 'c' */
 	} else
-		list_airport_flights_by_arrival(system->sorted_arrival_flights,
-				airport_id, system->nr_flights);
+		list_airport_flights_by_arrival(system, airport_id);
 
 	return 0;
 }
@@ -136,35 +87,47 @@ int list_flights_by_airport(manager *system, char *airport_id, char command)
 /*
  * Lists flights sorted by departure schedule with origin in airport with given ID
  */
-void list_airport_flights_by_departure(flight *l, char *airport_id, int size)
+void list_airport_flights_by_departure(manager *system, char *airport_id)
 {
-	int i;
+	int i, n = 0;
+	int indexes[MAX_FLIGHTS];
 
-	/* print flights sorted by departure schedule if they have given airport_id as origin */
-	for(i = 0; i < size; ++i)
-		if(!strcmp(l[i].origin, airport_id))
-			print_flight_in_airport(l[i].id, l[i].destination, l[i].departure);
+
+	for(i = 0; i < system->nr_flights; ++i)
+		if(!strcmp(system->flights[i].origin, airport_id))
+			indexes[n++] = i;
+
+	bubblesort(system, indexes, n, compare_flight_departure);
+
+	for(i = 0; i < n; ++i)
+		print_departing_flight(system, indexes[i]);
 }
 
 /*
  * Lists flights sorted by arrival schedule with destination in airport with given ID
  */
-void list_airport_flights_by_arrival(flight *l, char *airport_id, int size)
+void list_airport_flights_by_arrival(manager *system, char *airport_id)
 {
-	int i;
+	int i, n = 0;
+	int indexes[MAX_FLIGHTS];
 
-	/* print flights sorted by arrival schedule if they have given airport_id as destination */
-	for(i = 0; i < size; ++i)
-		if(!strcmp(l[i].destination, airport_id))
-			print_flight_in_airport(l[i].id, l[i].origin, l[i].arrival);
+
+	for(i = 0; i < system->nr_flights; ++i)
+		if(!strcmp(system->flights[i].destination, airport_id))
+			indexes[n++] = i;
+
+	bubblesort(system, indexes, n, compare_flight_arrival);
+
+	for(i = 0; i < n; ++i)
+		print_arriving_flight(system, indexes[i]);
 }
 
 
 /*
  * Returns a flight structure with given arguments as members
  */
-flight create_flight(char *id, char *origin, char *destination,
-		schedule departure, time duration, int nr_passengers)
+void create_flight(manager *system, char *id, char *origin, char *destination,
+		date departure_date, time departure_time, time duration, int nr_passengers)
 {
 	flight new_flight;
 
@@ -173,11 +136,17 @@ flight create_flight(char *id, char *origin, char *destination,
 	strcpy(new_flight.destination, destination);
 	new_flight.nr_passengers = nr_passengers;
 
-	new_flight.departure = departure;
-	/* calculate arrival schedule for flight */
-	new_flight.arrival = calculate_arrival(departure, duration);
+	new_flight.date = departure_date;
+	new_flight.time = departure_time;
 
-	return new_flight;
+	new_flight.departure_schedule = 
+		convert_date_time_to_int(departure_date, departure_time);
+
+	new_flight.arrival_schedule = new_flight.departure_schedule +
+		convert_time_to_int(duration);
+	
+	system->flights[system->nr_flights] = new_flight;
+	system->nr_flights++;	
 }
 
 /*
@@ -185,9 +154,9 @@ flight create_flight(char *id, char *origin, char *destination,
  * Returns 0 if f1 and f2 depart at the same schedule
  * Returns positive if f1 departs after f2
  */
-int compare_flight_departure(flight f1, flight f2)
+int compare_flight_departure(manager *system, int a, int b)
 {
-	return schedule_cmp(f1.departure, f2.departure);
+	return system->flights[a].departure_schedule > system->flights[b].departure_schedule;
 }
 
 /*
@@ -195,9 +164,9 @@ int compare_flight_departure(flight f1, flight f2)
  * Returns 0 if flights arrive at the same schedule
  * Returns positive if f1 arrives after f2
  */
-int compare_flight_arrival(flight f1, flight f2)
+int compare_flight_arrival(manager *system, int a, int b)
 {
-	return schedule_cmp(f1.arrival, f2.arrival);
+	return system->flights[a].arrival_schedule > system->flights[b].arrival_schedule;
 }
 
 /*
@@ -223,11 +192,12 @@ int is_valid_flight_id(char *id)
 int is_taken_flight_id(manager *system, char *id, date date)
 {
 	int i;
+	int n_date = convert_date_to_int(date);
 
 	/* check if any flight has the same id and, if so, check if they have the same date */
 	for(i = 0; i < system->nr_flights; ++i)
-		if(!strcmp(system->flights[i].id, id) && 
-				same_day(date, system->flights[i].departure.date))
+		if(!strcmp(system->flights[i].id, id) &&
+				convert_date_to_int(system->flights[i].date) == n_date)
 			return 1;
 
 	return 0;
@@ -239,16 +209,37 @@ int is_taken_flight_id(manager *system, char *id, date date)
 void print_flight(flight flight)
 {
 	printf(PRINT_FLIGHT_STR, flight.id, flight.origin, flight.destination,
-			flight.departure.date.day, flight.departure.date.month, flight.departure.date.year,
-			flight.departure.time.hour, flight.departure.time.minute);
+			flight.date.day, flight.date.month, flight.date.year,
+			flight.time.hour, flight.time.minute);
 }
 
 /*
  * Formatted print of flight structure to be used in 'c' and 'p' commands
  */
-void print_flight_in_airport(char *id, char *airport, schedule s)
+void print_departing_flight(manager *system, int index)
 {
-	printf(PRINT_FLIGHT_IN_AIRPORT_STR, id, airport,
-			s.date.day, s.date.month, s.date.year,
-			s.time.hour, s.time.minute);
+	/* print flight's id and destination airport's id */
+	printf("%s %s ", system->flights[index].id, system->flights[index].destination);
+
+	/* print arrival date */
+	print_date(system->flights[index].date);
+	printf(" ");
+	/* print arrival time */
+	print_time(system->flights[index].time);
+	printf("\n");
+}
+
+void print_arriving_flight(manager *system, int index)
+{
+	time t = convert_int_to_time(system->flights[index].arrival_schedule);
+	
+	/* print flight's id and origin airport's id */
+	printf("%s %s ", system->flights[index].id, system->flights[index].origin);
+
+	/* print departure date */
+	print_date(convert_int_to_date(system->flights[index].arrival_schedule));
+	printf(" ");
+	/* print departure time */
+	print_time(t);
+	printf("\n");
 }

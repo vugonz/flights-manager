@@ -49,23 +49,14 @@
 /* time and date parse strings */
 #define DATE_MEMBERS_PARSE "%hd-%hd-%hd" 
 #define TIME_MEMBERS_PARSE "%hd:%hd"
-#define PRINT_DATE_STR "%02hd-%02hd-%hd\n"
+#define PRINT_DATE_STR "%02hd-%02hd-%hd"
+#define PRINT_TIME_STR "%02hd:%02hd"
+/* time and date constants */
+#define MINUTES_IN_HOUR 60
+#define MINUTES_IN_DAY 1440
+#define HOURS_IN_DAY 24
+#define DAYS_IN_YEAR 365
 
-/* date.c constants and macros */
-#define MAX_MONTHS 12
-#define DIFF_DAYS(a, b) a.day - b.day
-#define DIFF_MONTHS(a, b) a.month - b.month
-#define DIFF_YEARS(a, b) a.year - b.year
-#define DAYS_IN_MONTH(n)\
-	(n == 2 ? 28 : (n == 4 || n == 6 || n == 9 || n == 11) ? 30 : 31)
-
-/* time.c constants and macros */
-#define MAX_HOURS 24
-#define MAX_MINUTES 60
-#define SUM_MINUTES(a, b) a.minute + b.minute
-#define SUM_HOURS(a, b) a.hour + b.hour
-#define DIFF_MINUTES(a, b) a.minute - b.minute
-#define DIFF_HOURS(a, b) a.hour - b.hour
 
 /* structures */
 typedef struct {
@@ -80,11 +71,6 @@ typedef struct {
 } date;
 
 typedef struct {
-	time time;
-	date date;
-} schedule;
-
-typedef struct {
 	char id[AIRPORT_LENGTH_ID];
 	char country[AIRPORT_LENGTH_COUNTRY];
 	char city[AIRPORT_LENGTH_CITY];
@@ -96,8 +82,11 @@ typedef struct {
 	int nr_passengers;
 	char destination[AIRPORT_LENGTH_ID];
 	char origin[AIRPORT_LENGTH_ID];
-	schedule departure;
-	schedule arrival;
+	date date;
+	time time;
+	time duration;
+	int departure_schedule;
+	int arrival_schedule;
 } flight;
 
 /* global structure */
@@ -106,9 +95,7 @@ typedef struct {
 	int nr_flights;
 	date date;
 	airport airports[MAX_AIRPORTS];               /* list of system's airports alphabetically sorted */
-	flight flights[MAX_FLIGHTS];                  /* list of system's flights sorted by creation time */
-	flight sorted_departure_flights[MAX_FLIGHTS]; /* list of system's flights sorted by departure time */
-	flight sorted_arrival_flights[MAX_FLIGHTS];   /* list of system's flights sorted by arrival time */
+	flight flights[MAX_FLIGHTS];                  /* list of system's flights sorted by creation date */
 } manager;
 
 /* proj1.c functions */
@@ -122,8 +109,9 @@ void handle_add_flight(manager *system);
 void handle_list_flight_by_airport(manager *system, char command);  /* handles both 'c' and 'p' commands */
 void handle_forward_date(manager *system);
 /* initializes global structure that stores all of current session's useful information */
-manager *initialize();
+void initialize(manager *system);
 int forward_date(manager *system, date);
+void bubblesort(manager *system, int *index_list, int size, int(*cmp_func)(manager *system, int a, int b));
 
 
 /* airports.c functions */
@@ -132,8 +120,9 @@ int add_airport(manager *system, char *id, char *country, char *city);
 void insert_airport(airport *l, airport new_airport, int size);
 void list_airports(manager *system);
 void list_airports_by_id(manager *system);
+int cmp_airports(manager *system, int a, int b);
 /* auxiliary functions */
-airport create_airport(char *id, char *country, char *city);
+void create_airport(manager *system, char *id, char *country, char *city);
 airport *get_airport_by_id(manager *system, char *id);
 int is_valid_airport_id(char *id);
 int exists_airport_id(manager *system, char *id);
@@ -143,52 +132,33 @@ void print_airport(airport airport);
 /* flights.c functions */
 
 int add_flight(manager *system, char *id, char *origin, char *destination,
-		schedule departure, time duration, int nr_passengers);
-void insert_flight(manager *system, flight new_flight);
-void insert_sorted_flight(flight *l, flight new_flight, int size, int (*cmp_fn) (flight f1, flight f2));
+		date departure_date, time departure_time , time duration, int nr_passengers);
 void list_flights(manager *system);
 int list_flights_by_airport(manager *system, char *ariport, char command);
-void list_airport_flights_by_departure(flight *l, char *airport, int size);
-void list_airport_flights_by_arrival(flight *l, char *airport, int size);  
+void list_airport_flights_by_departure(manager *system, char *airport);
+void list_airport_flights_by_arrival(manager *system, char *airport);  
  /* auxiliary functions */
-flight create_flight(char *id, char *origin, char *destination,
-		schedule departure, time duration, int nr_passengers);
+void create_flight(manager *system, char *id, char *origin, char *destination,
+		date departure_date, time departure_time, time duration, int nr_passengers);
 int is_valid_flight_id(char *id);
 int is_taken_flight_id(manager *system, char *id, date date);
 int exists_flight_id(manager *system, char *id);
 void print_flight(flight flight);
-void print_flight_in_airport(char *id, char *airport, schedule s);
+void print_departing_flight(manager *system, int index);
+void print_arriving_flight(manager *system, int index);
 /* compare functions used by sorting insertion algorithm */
-int compare_flight_departure(flight f1, flight f2);
-int compare_flight_arrival(flight f1, flight f2);
+int compare_flight_departure(manager *system, int a, int b);
+int compare_flight_arrival(manager *system, int a, int b);
 
-
-/* schedule.c functions */
-
-schedule create_schedule(time t, date d);
-schedule calculate_arrival(schedule s, time duration);
-int schedule_cmp(schedule s1, schedule s2);
-
-
-/* date.c functions */
-
-date create_date(short day, short month, short year);
-int is_valid_date(date d1, date d2);
-int date_cmp(date d1, date d2);
-int dates_year_apart(date d1, date d2);
-/* auxiliary funcions */
-int same_day(date d1, date d2);
-int same_month(date d1, date d2);
-void print_date(date);
-
-
-/* time.c functions */
-
-time create_time(short hour, short minute);
-int is_valid_duration(time duration);
-int time_cmp(time t1, time t2);
-/* auxiliary functions */
-int same_minute(time t1, time t2);
-int same_hour(time t1, time t2);
+/* shcedule.c functions */
+int convert_time_to_int(time t);
+int convert_date_to_int(date d);
+int convert_date_time_to_int(date d, time t);
+int is_valid_date(date current_date, date d);
+int is_valid_duration(time t);
+date convert_int_to_date(int n);
+time convert_int_to_time(int n);
+void print_date(date d);
+void print_time(time t);
 
 #endif

@@ -1,6 +1,6 @@
 CC = gcc
-CFLAGS = -ansi -Wall -Wextra -Werror -pedantic -pg
-OBJECTS = proj1.o airports.o flights.o time.o date.o schedule.o
+CFLAGS = -ansi -Wall -Wextra -Werror -pedantic -g
+OBJECTS = proj1.o airports.o flights.o schedule.o
 
 all:
 	make proj1

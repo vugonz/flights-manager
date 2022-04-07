@@ -9,10 +9,11 @@
 int main()
 {
 	/* initialize global structure */
-	manager *system = initialize();
+	manager system = {0};
+	initialize(&system);
 
 	/* keep reading commands until 'q' command is read */
-	while(command_handler(system))
+	while(command_handler(&system))
 		;
 
 	return 0;
@@ -124,7 +125,8 @@ void handle_add_flight(manager *system)
 	char origin[AIRPORT_LENGTH_ID], destination[AIRPORT_LENGTH_ID];
 	int nr_passengers;
 	short day, month, year, hour, minute;
-	schedule departure;
+	date departure_date;
+	time departure_time;
 	time duration;
 	int result_value;
 
@@ -133,19 +135,26 @@ void handle_add_flight(manager *system)
 
 	/* parse flight date and time departure members */
 	scanf(DATE_MEMBERS_PARSE, &day, &month, &year);
+	departure_date.day = day;
+	departure_date.month = month;
+	departure_date.year = year;
+
 	scanf(TIME_MEMBERS_PARSE, &hour, &minute);
 	/* initialize departure component */
-	departure = create_schedule(create_time(hour, minute), create_date(day, month, year));
+	departure_time.hour = hour;
+	departure_time.minute = minute;
 
 	/* parse flight duration time members */
 	scanf(TIME_MEMBERS_PARSE, &hour, &minute);
 	/* initialize duration component */
-	duration = create_time(hour, minute);
+	duration.hour = hour;
+	duration.minute = minute;
 
 	/* parse flight capacity */
 	scanf("%d", &nr_passengers);
 
-	result_value = add_flight(system, id, origin, destination, departure, duration, nr_passengers);
+	result_value = add_flight(system, id, origin, destination,
+			departure_date, departure_time, duration, nr_passengers);
 
 	if(result_value == -1) {
 		printf(ADD_FLIGHT_ERR_1);
@@ -195,7 +204,9 @@ void handle_forward_date(manager *system)
 	int result_value;
 
 	scanf(DATE_MEMBERS_PARSE, &day, &month, &year);
-	new_date = create_date(day, month, year);
+	new_date.day = day;
+	new_date.month = month;
+	new_date.year = year;
 
 	result_value = forward_date(system, new_date);
 
@@ -206,14 +217,12 @@ void handle_forward_date(manager *system)
 /*
  * Returns pointer to newly initialized global structure
  */
-manager *initialize()
+void initialize(manager *system)
 {
-	manager *system = calloc(1, sizeof *system);
-
 	/* initializes system's date with defined configuration */
-	system->date = create_date(DAY_0, MONTH_0, YEAR_0);
-
-	return system;
+	system->date.day = DAY_0;
+	system->date.month = MONTH_0;
+	system->date.year = YEAR_0;
 }
 
 /*
@@ -221,12 +230,30 @@ manager *initialize()
  */
 int forward_date(manager *system, date new_date)
 {
-	if(!is_valid_date(new_date, system->date))
+	if(!is_valid_date(system->date, new_date))
 		return -1;
 
 	system->date = new_date;
 
 	print_date(new_date);
+	printf("\n");
 
 	return 0;
+}
+
+void bubblesort(manager *system, int indexes[], int size, int (*cmp_func) (manager *system, int a, int b)) {
+	int i, j, done;
+  
+	for (i = 0; i < size - 1; ++i){
+		done = 1;
+		for (j = size - 1; j > i; --j) 
+			if ((*cmp_func)(system, indexes[j - 1], indexes[j])) {
+				int aux = indexes[j];
+				indexes[j] = indexes[j - 1];
+				indexes[j - 1] = aux;
+				done = 0;
+			}
+		if(done)
+			break;
+	}
 }

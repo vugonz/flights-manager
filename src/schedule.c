@@ -3,64 +3,84 @@
  */
 #include "header.h"
 
-/*
- * Returns a schedule structure with given arguments as members
- */
-schedule create_schedule(time t, date d)
+#include <stdio.h>
+
+int convert_time_to_int(time t)
 {
-	schedule schedule;
+	return t.minute + t.hour * MINUTES_IN_HOUR;
+}
 
-	schedule.time = t;
-	schedule.date = d;
+int convert_date_to_int(date d)
+{
+	int acc_days[] = {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334};
 
-	return schedule;
+	return d.day + acc_days[d.month - 1] + (d.year - YEAR_0)*DAYS_IN_YEAR - 1;
+}
+
+int convert_date_time_to_int(date d, time t)
+{
+	return convert_date_to_int(d) * MINUTES_IN_DAY + convert_time_to_int(t);
 }
 
 /*
- * Returns negative if s1 is a schedule set before s2
- * Returns 0 if s1 and s2 are the same schedule
- * Returns positive if s1 is a schedule set after s2
+ * Returns 1 if given date is set a year or less after current system's date
+ * Returns 0 elsewise
  */
-int schedule_cmp(schedule s1, schedule s2)
+int is_valid_date(date curr_date, date d)
 {
-	return same_day(s1.date, s2.date) ?
-		time_cmp(s1.time, s2.time) : date_cmp(s1.date, s2.date);
+	int n_date;
+	date next_year_date = curr_date;
+	next_year_date.year++;
+
+	n_date = convert_date_to_int(d);
+	
+	return !(n_date < convert_date_to_int(curr_date) 
+			|| n_date > convert_date_to_int(next_year_date)); 
 }
 
 /*
- * Returns schedule that is the result of adding t_inc time to given schedule
+ * Returns 1 if given time is a duration of 12 or less hours
+ * Returns 0 elsewise
  */
-schedule calculate_arrival(schedule s, time t_inc)
+int is_valid_duration(time t)
 {
-	schedule arrival;
-	time t = s.time;
-	date d = s.date;
+	return !(t.hour > 12 || (t.hour == 12 && t.minute > 0));
+}
 
-	/* calculate minutes and adjust overflow if needed */
-	if((t.minute = SUM_MINUTES(t, t_inc)) >= MAX_MINUTES) {
-		t.minute -= MAX_MINUTES;
-		t.hour++;
-	}
+date convert_int_to_date(int n)
+{
+	int i = 0;
+	int acc_days[] = {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334};
+	date d;
 
-	/* calculate hours and adjust overflow if needed */
-	if((t.hour = SUM_HOURS(t, t_inc)) >= MAX_HOURS) {
-		t.hour -= MAX_HOURS;
-		d.day++;
-	}
+	n = (n - (n % MINUTES_IN_DAY)) / MINUTES_IN_DAY;
+	d.year = (n / DAYS_IN_YEAR) + YEAR_0;
+	n = n - ((d. year - YEAR_0) * DAYS_IN_YEAR);
 
-	/* adjust day overflow if necessary */
-	if(d.day > DAYS_IN_MONTH(d.month)) {
-		d.day -= DAYS_IN_MONTH(d.month);
-		d.month++;
-	}
+	while(i <= 11 && n >= acc_days[i]) 
+		i++;
+	d.month = i;
+	d.day = n - acc_days[i - 1] + 1;
 
-	/* adjust month overflow if needed */
-	if(d.month > MAX_MONTHS){
-		d.month -= MAX_MONTHS;
-		d.year++;
-	}
+	return d;
+}
 
-	arrival = create_schedule(t, d);
+time convert_int_to_time(int n)
+{
+	time t;
 
-	return arrival;
+	t.minute = n % MINUTES_IN_HOUR;
+	t.hour = ((n - t.minute) / (MINUTES_IN_HOUR) % HOURS_IN_DAY); 
+
+	return t;
+}
+
+void print_date(date d)
+{
+	printf(PRINT_DATE_STR, d.day, d.month, d.year);
+}
+
+void print_time(time t)
+{
+	printf(PRINT_TIME_STR, t.hour, t.minute);
 }

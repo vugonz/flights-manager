@@ -13,8 +13,6 @@
  */
 int add_airport(manager *system, char *id, char *country, char *city)
 {
-	airport new_airport;
-
 	/* check if airport id is valid */
 	if(!is_valid_airport_id(id))
 		return -1;
@@ -28,11 +26,7 @@ int add_airport(manager *system, char *id, char *country, char *city)
 		return -3;
 
 	/* create new airport */
-	new_airport = create_airport(id, country, city);
-	/* insert new airport in sorted order in list */
-	insert_airport(system->airports, new_airport, system->nr_airports);
-
-	++system->nr_airports;
+	create_airport(system, id, country, city);
 
 	return 0;
 }
@@ -71,26 +65,11 @@ int exists_airport_id(manager *system, char *id)
 }
 
 /*
- * Inserts given airport in alphabetically sorted airport's list with "size" elements
+ * Recieves indices of airports and returns 1 if airport a is bigger than airport b
  */
-void insert_airport(airport *l, airport new_airport, int size)
+int cmp_airports(manager *system, int a, int b)
 {
-	int i;
-
-	l[size] = new_airport;
-
-	/* inserts new element alphabetically sorted in list with insertion sort */
-	for(i = size - 1; i >= 0; --i) {
-		if(strcmp(new_airport.id, l[i].id) > 0) {
-			l[i+1] = new_airport;
-			break;
-		} else
-			l[i+1] = l[i];
-
-		/* if ever reached with i = 0 then new element belongs in the first position */
-		if(i == 0)
-			l[i] = new_airport;
-	}
+	return (strcmp(system->airports[a].id, system->airports[b].id) > 0);
 }
 
 /*
@@ -99,10 +78,16 @@ void insert_airport(airport *l, airport new_airport, int size)
 void list_airports(manager *system)
 {
 	int i;
+	int index_airports[MAX_AIRPORTS];
+
+	for(i = 0; i < system->nr_airports; ++i)
+		index_airports[i] = i;
+
+	bubblesort(system, index_airports, system->nr_airports, cmp_airports);
 
 	/* print all airports in the system */
 	for(i = 0; i < system->nr_airports; ++i)
-		print_airport(system->airports[i]);
+		print_airport(system->airports[index_airports[i]]);
 }
 
 /*
@@ -128,7 +113,7 @@ void list_airports_by_id(manager *system)
 /*
  * Returns an airports structure with given arguments as members
  */
-airport create_airport(char *id, char *country, char *city)
+void create_airport(manager *system, char *id, char *country, char *city)
 {
 	airport new_airport;
 
@@ -136,8 +121,9 @@ airport create_airport(char *id, char *country, char *city)
 	strcpy(new_airport.country, country);
 	strcpy(new_airport.city, city);
 	new_airport.nr_flights = 0;
-
-	return new_airport;
+	
+	system->airports[system->nr_airports] = new_airport;
+	system->nr_airports++;
 }
 
 /*
