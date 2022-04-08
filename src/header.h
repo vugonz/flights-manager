@@ -92,6 +92,21 @@ typedef struct {
 	int arrival_schedule;
 } flight;
 
+struct reservation {
+	int nr_passengers;
+	char *id;
+	struct reservation *prev;
+	struct reservation *next;
+};
+
+struct res_l {
+	struct reservation *head;
+	struct reservation *tail;
+};
+
+typedef struct reservation reservation;
+typedef struct res_l res_l;
+
 /* global structure */
 typedef struct {
 	int nr_airports;
@@ -99,6 +114,7 @@ typedef struct {
 	date date;
 	airport airports[MAX_AIRPORTS];               /* list of system's airports alphabetically sorted */
 	flight flights[MAX_FLIGHTS];                  /* list of system's flights sorted by creation date */
+	reservation reservations[2];
 } manager;
 
 /* proj1.c functions */
@@ -166,10 +182,10 @@ void print_time(time t);
 
 /* new functions */
 flight *get_flight_by_id_and_date(manager *system, char *id, date date);
-void handle_reservations(); 
-void handle_add_reservation(char *buffer, char *flight_id, date *d);
+void handle_reservations(manager *system); 
+void handle_add_reservation(manager *system, char *buffer, char *flight_id, date *d);
 void read_date_and_flight_id(char **buffer, char *flight_id, date *d);
 void read_reservation_id(char **buffer, char **reservation_id);
-char *ignore_whitespaces(char **buffer);
+void ignore_whitespaces(char **buffer);
 
 #endif

@@ -2,29 +2,15 @@
  *  Author: Gonçalo Azevedo 93075
  *  File: structures.h
  */
-
+#include "header.h"
 #include <stdlib.h>
-
-struct reservation {
-	int nr_passengers;
-	char *id;
-	struct reservation *prev;
-	struct reservation *next;
-};
-
-struct res_l {
-	struct reservation *head;
-	struct reservation *tail;
-};
-
-typedef struct reservation reservation;
 
 void init_list(res_l *l)
 {
 	l->tail = l->head = NULL;
 };
 
-void add_reservation(list *l)
+void add_reservation(res_l *l)
 {
 	reservation *new_node = malloc(sizeof *new_node);
 	
@@ -44,7 +30,7 @@ void add_reservation(list *l)
 	return 0;
 };
 
-void remove_reservation(list *l, reservation *node)
+void remove_reservation(res_l *l, reservation *node)
 {
 	if(node->prev == NULL) 
 		l->head = node->next;
@@ -82,3 +68,4 @@ void destroy_list(res_l *l)
 		p = p->next;
 		free(p->prev);
 }
+
