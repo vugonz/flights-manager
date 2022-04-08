@@ -269,7 +269,7 @@ void handle_add_reservation(manager *system, char *buffer, char *flight_id, date
 	printf("%s", flight_id);
 	printf("%hd", d->day);
 	/* read reservation id */
-	read_reservation_id(&buffer, &reservation_id);
+	reservation_id = read_reservation_id(&buffer, reservation_id);
 
 	if(reservation_id == NULL) {
 		free(reservation_id);
@@ -292,14 +292,13 @@ void read_reservation_id(char **buffer, char **reservation_id)
 		++i;
 
 	/* allocate memory for reservation's id */
-	*reservation_id = malloc((i + 1) * sizeof(char));
-	if(*reservation_id == NULL) {
-		free(*reservation_id);
+	reservation_id = malloc((i + 1) * sizeof(char));
+	if(reservation_id == NULL) {
 		return;
 	}
 
 	/* get reservation id in allocated memory */
-	sscanf(*buffer, "%s", *reservation_id);
+	sscanf(*buffer, "%s", reservation_id);
 
 	*buffer += i;
 }
