@@ -168,8 +168,8 @@ void print_time(time t);
 flight *get_flight_by_id_and_date(manager *system, char *id, date date);
 void handle_reservations(); 
 void handle_add_reservation(char *buffer, char *flight_id, date *d);
-char *read_date_and_flight_id(char *buffer, char *flight_id, date *d);
-char *read_reservation_id(char *buffer, char **reservation_id);
-void ignore_whitespaces(char **buffer);
+void read_date_and_flight_id(char **buffer, char *flight_id, date *d);
+void read_reservation_id(char **buffer, char **reservation_id);
+char *ignore_whitespaces(char **buffer);
 
 #endif
