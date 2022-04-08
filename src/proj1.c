@@ -5,6 +5,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 int main()
 {
@@ -48,6 +49,10 @@ int command_handler(manager *system)
 		case 't':
 			handle_forward_date(system);
 			break;
+		case 'r':
+			handle_reservations(system);
+			break;
+		case 'e':
 		/* ignore unknown commands */
 		default:
 			break;
@@ -212,6 +217,103 @@ void handle_forward_date(manager *system)
 
 	if(result_value == -1)
 		printf(FORWARD_DATE_ERR);
+}
+
+void handle_reservations()
+{
+	char *buffer;
+	char flight_id[FLIGHT_LENGTH_ID];
+	date d = {0};
+	
+	buffer = (char*)malloc(sizeof(char) * 65000);
+
+	fgets(buffer, MAX_COMMAND_SIZE, stdin);
+
+	buffer = read_date_and_flight_id(buffer, flight_id, &d);
+	
+	if(*buffer == '\n') {
+		return;
+	} else {
+		handle_add_reservation(buffer, flight_id, &d);
+	}
+}
+
+/* 
+ * Reads flight id and date from given buffer string and sets given flight_id and date with read input
+ * Returns given buffer char* pointing to character after read input
+ */
+char *read_date_and_flight_id(char *buffer, char *flight_id, date *d)
+{
+	/* ignore trailling whitspaces */
+	ignore_whitespaces(&buffer);
+	
+	/* get flight id */
+	sscanf(buffer, "%s", flight_id);
+	buffer += strlen(flight_id);
+	
+	/* remove trailling whitespaces */
+	ignore_whitespaces(&buffer);
+
+	/* get date members */
+	sscanf(buffer, DATE_MEMBERS_PARSE, &d->day, &d->month, &d->year);
+	buffer += 10;
+
+	/* ignore trailling whitespaces */
+	ignore_whitespaces(&buffer);
+
+	return buffer;
+}
+	
+void handle_add_reservation(char *buffer, char *flight_id, date *d)
+{
+	char *reservation_id = NULL;
+	int nr_passengers;
+
+	/* read reservation id */
+	buffer = read_reservation_id(buffer, &reservation_id);
+
+	if(reservation_id == NULL)
+		return;
+
+	/* read nr_passengers */
+	sscanf(buffer, "%d", &nr_passengers);
+
+	printf("%s", reservation_id);
+	printf("\n%d", nr_passengers);
+	printf("\n%s", flight_id);
+	printf("%hd", d->day);
+}
+
+char* read_reservation_id(char *buffer, char **reservation_id)
+{
+	int i = 0;
+
+	/* get reservation_id length */
+	while(buffer[i] != ' ' && buffer[i] != '\t')
+		++i;
+
+	/* allocate memory for reservation's id */
+	*reservation_id = malloc((i + 1) * sizeof(char));
+	if(*reservation_id == NULL)
+		return NULL;
+
+	/* get reservation id in allocated memory */
+	sscanf(buffer, "%s", *reservation_id);
+
+	return buffer += i;
+}
+
+/* 
+ * Skips trailing whitspaces in given buffer and updates buffer to next character that is not a whitespace
+ */
+void ignore_whitespaces(char **buffer)
+{
+	int i = 0;
+
+	while(*buffer[i] == ' ' || *buffer[i] == '\t')
+		i++;
+
+	*buffer += i;
 }
 
 /*

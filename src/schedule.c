@@ -75,11 +75,16 @@ time convert_int_to_time(int n)
 	return t;
 }
 
-void print_date(date d)
+/* 
+ * Formatted print of given date
+ */void print_date(date d)
 {
 	printf(PRINT_DATE_STR, d.day, d.month, d.year);
 }
 
+/*
+ * Formatted print of given time
+ */
 void print_time(time t)
 {
 	printf(PRINT_TIME_STR, t.hour, t.minute);

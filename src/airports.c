@@ -137,7 +137,7 @@ airport *get_airport_by_id(manager *system, char *id)
 		if(!strcmp(system->airports[i].id, id))
 			return &system->airports[i];
 
-	return 0;
+	return NULL;
 }
 
 /*

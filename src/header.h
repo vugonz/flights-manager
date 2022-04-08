@@ -10,6 +10,8 @@
 #define YEAR_0 2022
 /* global structure output messages */
 #define FORWARD_DATE_ERR "invalid date\n"
+#define MEM_ERROR -1
+#define MAX_COMMAND_SIZE 65000
 
 /* airport constants & parse strings */
 #define MAX_AIRPORTS 40
@@ -79,6 +81,7 @@ typedef struct {
 
 typedef struct {
 	char id[FLIGHT_LENGTH_ID];
+	int max_passengers;
 	int nr_passengers;
 	char destination[AIRPORT_LENGTH_ID];
 	char origin[AIRPORT_LENGTH_ID];
@@ -141,7 +144,6 @@ void list_airport_flights_by_arrival(manager *system, char *airport);
 void create_flight(manager *system, char *id, char *origin, char *destination,
 		date departure_date, time departure_time, time duration, int nr_passengers);
 int is_valid_flight_id(char *id);
-int is_taken_flight_id(manager *system, char *id, date date);
 int exists_flight_id(manager *system, char *id);
 void print_flight(flight flight);
 void print_departing_flight(manager *system, int index);
@@ -160,5 +162,14 @@ date convert_int_to_date(int n);
 time convert_int_to_time(int n);
 void print_date(date d);
 void print_time(time t);
+
+
+/* new functions */
+flight *get_flight_by_id_and_date(manager *system, char *id, date date);
+void handle_reservations(); 
+void handle_add_reservation(char *buffer, char *flight_id, date *d);
+char *read_date_and_flight_id(char *buffer, char *flight_id, date *d);
+char *read_reservation_id(char *buffer, char **reservation_id);
+void ignore_whitespaces(char **buffer);
 
 #endif

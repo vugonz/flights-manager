@@ -19,7 +19,7 @@ int add_flight(manager *system, char *id, char *origin, char *destination,
 		return -1;
 
 	/* check if flight id is taken for the day */
-	if(is_taken_flight_id(system, id, departure_date))
+	if(get_flight_by_id_and_date(system, id, departure_date) != NULL)
 		return -2;
 	
 	/* check if airports ids exist */
@@ -124,7 +124,7 @@ void list_airport_flights_by_arrival(manager *system, char *airport_id)
 
 
 /*
- * Returns a flight structure with given arguments as members
+ * Adds a flight to the system with given arguments as members
  */
 void create_flight(manager *system, char *id, char *origin, char *destination,
 		date departure_date, time departure_time, time duration, int nr_passengers)
@@ -186,10 +186,10 @@ int is_valid_flight_id(char *id)
 }
 
 /*
- * Returns 1 if given ID is already in use by a flight for given date
- * Returns 0 if given ID is free for a flight in given date
+ * Returns pointer to flight with given ID for given date
+ * Returns NULL pointer if flight doesn't exist
  */
-int is_taken_flight_id(manager *system, char *id, date date)
+flight *get_flight_by_id_and_date(manager *system, char *id, date date)
 {
 	int i;
 	int n_date = convert_date_to_int(date);
@@ -198,9 +198,9 @@ int is_taken_flight_id(manager *system, char *id, date date)
 	for(i = 0; i < system->nr_flights; ++i)
 		if(!strcmp(system->flights[i].id, id) &&
 				convert_date_to_int(system->flights[i].date) == n_date)
-			return 1;
+			return &system->flights[i];
 
-	return 0;
+	return NULL;
 }
 
 /*
@@ -214,7 +214,7 @@ void print_flight(flight flight)
 }
 
 /*
- * Formatted print of flight structure to be used in 'c' and 'p' commands
+ * Formatted print of flight structure to be used in 'p' commands
  */
 void print_departing_flight(manager *system, int index)
 {
@@ -228,7 +228,9 @@ void print_departing_flight(manager *system, int index)
 	print_time(system->flights[index].time);
 	printf("\n");
 }
-
+/*
+ * Formatted print of flight structure to be used in 'c' commands
+ */
 void print_arriving_flight(manager *system, int index)
 {
 	time t = convert_int_to_time(system->flights[index].arrival_schedule);
