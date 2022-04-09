@@ -276,6 +276,7 @@ void handle_add_reservation(manager *system, char *buffer, char *flight_id, date
 	/* adds reservation */
 	result_value = validate_reservation(system, reservation_id, flight_id, d, nr_passengers);
 
+
 	if(result_value == -2){
 		printf(ADD_RESERVATION_ERR2, flight_id);
 	} else if(result_value == -3) {
@@ -287,6 +288,10 @@ void handle_add_reservation(manager *system, char *buffer, char *flight_id, date
 	} else if(result_value == -6) {
 		printf(ADD_RESERVATION_ERR6);
 	}
+
+	/* if reservation is invalid, free the memory of id */
+	if(result_value != 0)
+		free(reservation_id);
 }
 
 

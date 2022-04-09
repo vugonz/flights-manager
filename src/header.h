@@ -71,7 +71,6 @@
 struct reservation {
 	int nr_passengers;
 	char *id;
-	struct reservation *prev; 
 	struct reservation *next;
 };
 
@@ -202,6 +201,8 @@ int read_reservation_id(char *buffer);
 void ignore_whitespaces(char **buffer);
 void terminate_program(manager *system);
 reservation *get_reservation_by_id(manager *system, char *reservation_id);
+reservation *sort_list(reservation *head, int size);
+reservation *merge(reservation *left, reservation *right);
 /* new functions */
 
 /* structure.c functions */
@@ -210,6 +211,7 @@ void add_reservation_to_list(list *l, reservation *new_node);
 void remove_reservation(list *l, reservation *node);
 void free_all_memory(manager *system);
 void destroy_list(list *l);
+reservation *find_node_in_list(list *l, char *id);
 
 
 #endif

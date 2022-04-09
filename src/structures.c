@@ -4,6 +4,7 @@
  */
 #include "header.h"
 #include <stdlib.h>
+#include <string.h>
 
 list *init_list(list *l)
 {
@@ -18,12 +19,11 @@ list *init_list(list *l)
 void add_reservation_to_list(list *l, reservation *new_node)
 {
 	/* add to end of list */
-	new_node->prev = l->tail;
 	new_node->next = NULL;
-
+	
 	if(l->tail != NULL)
 		l->tail->next = new_node;
-	
+
 	l->tail = new_node;
 
 	/* if first element */
@@ -65,5 +65,18 @@ void destroy_list(list *l)
 	}
 
 	free(l);
+}
+
+reservation *find_node_in_list(list *l, char *id)
+{
+	reservation *p = l->head; 
+
+	while(p != NULL) {
+		if(!strcmp(p->id, id))
+			break;
+		p = p->next;
+	}
+	
+	return p;
 }
 
