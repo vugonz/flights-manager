@@ -1,22 +1,17 @@
 /*
  *  Author: Gonçalo Azevedo 93075
- *  File: structures.h
+ *  File: structures.c
  */
 #include "header.h"
+#include "structures.h"
+
 #include <stdlib.h>
 #include <string.h>
 
-list *init_list(manager *system, list *l)
+void init_list(list *l)
 {
-	l = (list *)malloc(sizeof(list));
-
-	if(l == NULL)
-		terminate_program(system);
-
 	l->tail = NULL;
 	l->head = NULL;
-
-	return l;
 }
 
 void add_reservation_to_list(list *l, reservation *new_node)

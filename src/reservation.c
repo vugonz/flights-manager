@@ -1,3 +1,7 @@
+/*
+ * Author: Gonçalo Azevedo 93075
+ * File: reservations.c
+ */
 #include "header.h"
 
 #include <stdio.h>
@@ -157,7 +161,8 @@ reservation *get_reservation_by_id(manager *system, char *id)
 	/* iterate over all flights lists and look for matching node in each list until no more reservations */
 	for(i = 0; i < system->nr_flights && j != system->nr_reservations; ++i)
 		if(system->flights[i].nr_reservations > 0) {
-			if((node = find_node_in_list(system->flights[i].reservations, id)) != NULL)
+			if((node = find_node_in_list
+						(system->flights[i].reservations, id)) != NULL)
 				return node;
 			j += system->flights[i].nr_reservations;
 		}
@@ -175,7 +180,8 @@ int evaluate_reservation_id(char *buffer)
 
 	/* check if reservation's id characters are valid */
 	while(buffer[i] != ' ' && buffer[i] != '\t') {
-		if(!((buffer[i] >= '0' && buffer[i] <= '9') || (buffer[i] >= 'A' && buffer[i] <= 'Z')))
+		if(!((buffer[i] >= '0' && buffer[i] <= '9') ||
+					(buffer[i] >= 'A' && buffer[i] <= 'Z')))
 			return -1;
 		++i;
 	}

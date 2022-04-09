@@ -222,4 +222,20 @@ void print_date(date d);
 
 void print_time(time t);
 
+/* reservation.c functions */
+void add_reservation(manager *system, flight *f, char *reservation_id, int nr_passengers); 
+
+void list_reservations(manager *system, char *flight_id, date *d);
+
+reservation *get_reservation_by_id(manager *system, char *reservation_id);
+
+/* auxiliary functions */
+int validate_reservation(manager *system, char *buffer, char *flight, date *d, int nr_passengers);
+
+int evaluate_reservation_id(char *buffer);
+
+void read_date_and_flight_id(char **buffer, char *flight_id, date *d);
+
+void ignore_whitespaces(char **buffer);
+
 #endif
