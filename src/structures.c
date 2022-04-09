@@ -6,9 +6,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-list *init_list(list *l)
+list *init_list(manager *system, list *l)
 {
 	l = (list *)malloc(sizeof(list));
+
+	if(l == NULL)
+		terminate_program(system);
 
 	l->tail = NULL;
 	l->head = NULL;

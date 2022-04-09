@@ -251,8 +251,8 @@ void handle_add_reservation(manager *system, char *buffer, char *flight_id, date
 	int nr_passengers;
 	int result_value;
 
-	/* read reservation id from buffer*/
-	result_value = read_reservation_id(buffer);
+	/* analyze reservation id from buffer*/
+	result_value = evaluate_reservation_id(buffer);
 
 	/* if reservation id is invalid */
 	if(result_value == -1) {
@@ -348,6 +348,8 @@ void terminate_program(manager *system)
 		if(system->flights[i].nr_reservations > 0) {
 			destroy_list(system->flights[i].reservations);
 			j += system->flights[i].nr_reservations;
+		} else {
+			free(system->flights[i].reservations);
 		}
 	}	
 		

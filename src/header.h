@@ -1,6 +1,8 @@
 /*  Author: Gonçalo Azevedo 193075
  *  File: header.h
  */
+#include "structures.h"
+
 #ifndef _HEADER_
 #define _HEADER_
 
@@ -68,20 +70,6 @@
 #define ADD_RESERVATION_ERR6 "invalid passenger number\n"
 #define ADD_RESERVATION_SUCCESS "%s %d\n"
 
-struct reservation {
-	int nr_passengers;
-	char *id;
-	struct reservation *next;
-};
-
-struct list {
-	struct reservation *head;
-	struct reservation *tail;
-};
-
-typedef struct reservation reservation;
-typedef struct list list;
-
 /* structures */
 typedef struct {
 	short hour;
@@ -131,87 +119,107 @@ typedef struct {
 
 /* handle functions manage input, buffers and output feedback such as error or success messages */
 int command_handler(manager *system);
+
 void handle_add_airport(manager *system);
+
 void handle_list_airports(manager *system);
+
 void handle_v_command(manager *system);
+
 void handle_add_flight(manager *system);
+
 void handle_list_flight_by_airport(manager *system, char command);  /* handles both 'c' and 'p' commands */
+
 void handle_forward_date(manager *system);
+
+void handle_reservations(manager *system); 
+
+void handle_add_reservation(manager *system, char *buffer, char *flight_id, date *d);
+
 /* initializes global structure that stores all of current session's useful information */
 void initialize(manager *system);
+
+void terminate_program(manager *system);
+
 int forward_date(manager *system, date);
+
 void bubblesort(manager *system, int *index_list, int size, int(*cmp_func)(manager *system, int a, int b));
 
 
 /* airports.c functions */
-
 int add_airport(manager *system, char *id, char *country, char *city);
+
 void insert_airport(airport *l, airport new_airport, int size);
+
 void list_airports(manager *system);
+
 void list_airports_by_id(manager *system);
+
 int cmp_airports(manager *system, int a, int b);
+
+airport *get_airport_by_id(manager *system, char *id);
+
 /* auxiliary functions */
 void create_airport(manager *system, char *id, char *country, char *city);
-airport *get_airport_by_id(manager *system, char *id);
+
 int is_valid_airport_id(char *id);
+
 int exists_airport_id(manager *system, char *id);
+
 void print_airport(airport airport);
 
 
 /* flights.c functions */
-
 int add_flight(manager *system, char *id, char *origin, char *destination,
 		date departure_date, time departure_time , time duration, int nr_passengers);
+
 void list_flights(manager *system);
+
 int list_flights_by_airport(manager *system, char *ariport, char command);
+
 void list_airport_flights_by_departure(manager *system, char *airport);
+
 void list_airport_flights_by_arrival(manager *system, char *airport);  
+
  /* auxiliary functions */
 void create_flight(manager *system, char *id, char *origin, char *destination,
 		date departure_date, time departure_time, time duration, int nr_passengers);
+
 int is_valid_flight_id(char *id);
+
 int exists_flight_id(manager *system, char *id);
+
 void print_flight(flight flight);
+
 void print_departing_flight(manager *system, int index);
+
 void print_arriving_flight(manager *system, int index);
+
 flight *get_flight_by_id_and_date(manager *system, char *id, date date);
+
 /* compare functions used by sorting insertion algorithm */
 int compare_flight_departure(manager *system, int a, int b);
+
 int compare_flight_arrival(manager *system, int a, int b);
 
-/* shcedule.c functions */
+
+/* schedule.c functions */
 int convert_time_to_int(time t);
+
 int convert_date_to_int(date d);
+
 int convert_date_time_to_int(date d, time t);
+
 int is_valid_date(date current_date, date d);
+
 int is_valid_duration(time t);
+
 date convert_int_to_date(int n);
+
 time convert_int_to_time(int n);
+
 void print_date(date d);
+
 void print_time(time t);
-
-/* reservation.c functions */
-void handle_reservations(manager *system); 
-void handle_add_reservation(manager *system, char *buffer, char *flight_id, date *d);
-int validate_reservation(manager *system, char *buffer, char *flight, date *d, int nr_passengers);
-void add_reservation(manager *system, flight *f, char *reservation_id, int nr_passengers); 
-void list_reservations(manager *system, char *flight_id, date *d);
-void read_date_and_flight_id(char **buffer, char *flight_id, date *d);
-int read_reservation_id(char *buffer);
-void ignore_whitespaces(char **buffer);
-void terminate_program(manager *system);
-reservation *get_reservation_by_id(manager *system, char *reservation_id);
-reservation *sort_list(reservation *head, int size);
-reservation *merge(reservation *left, reservation *right);
-/* new functions */
-
-/* structure.c functions */
-list *init_list(list *l);
-void add_reservation_to_list(list *l, reservation *new_node);
-void remove_reservation(list *l, reservation *node);
-void free_all_memory(manager *system);
-void destroy_list(list *l);
-reservation *find_node_in_list(list *l, char *id);
-
 
 #endif

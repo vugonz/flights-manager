@@ -1,4 +1,5 @@
 #include "header.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -81,36 +82,41 @@ reservation *sort_list(reservation *head, int size)
 	reservation *right = head;
 	reservation *aux;
 	
-	/* empty list or single element list are already sorted */
-	if(head == NULL || head->next == NULL)
+	/* empty list case or base case for recursive calls */
+	if(size == 0 || size == 1)
 		return head;
 
-	/* split lists in the middle into two */
+	/* get right pointing to middle list's element */
 	for(i = 0; i < size - size/2 - 1; ++i)
 		right = right->next;
-
+	/* divide list */
 	aux = right->next;
 	right->next = NULL;
 	right = aux;
 
+	/* recursive division */
 	left = sort_list(left, size - size/2);
 	right = sort_list(right, size/2);
+	/* return pointer of sorted sub division to previous stack */
 	return merge(left, right);
 }
 
 reservation *merge(reservation *h1, reservation *h2)
 {
-	reservation *tail;
-	reservation *aux;
-
-	tail = strcmp(h1->id, h2->id) < 0 ? h1 : h2;
-	if(tail == h1)
+	reservation *aux;  /* auxiliary pointer to traverse */
+	reservation *head; /* head of sorted list */
+	
+	/* get first element in auxiliary pointer */
+	aux = strcmp(h1->id, h2->id) < 0 ? h1 : h2;
+	if(aux == h1)
 		h1 = h1->next;
 	else
 		h2 = h2->next;
+	
+	/* save head pointer */
+	head = aux;
 
-	aux = tail;
-
+	/* link elements in order until a sub list runs out of elements */
 	while(h1 != NULL && h2 != NULL) {
 		if(strcmp(h1->id, h2->id) < 0) {
 			aux->next = h1;
@@ -121,20 +127,22 @@ reservation *merge(reservation *h1, reservation *h2)
 		}
 		aux = aux->next;
 	}
+
+	/* link remaining elements */
 	if(h1 != NULL) {
 		while(h1 != NULL) {
 			aux->next = h1;
 			h1 = h1->next;
 			aux = aux->next;
 		}
-	} else if (h2 != NULL){
+	} else {
 		while(h2 != NULL) {
 			aux->next = h2;
 			h2 = h2->next;
 			aux = aux->next;
 		}
 	}
-	return tail;
+	return head;
 }
 
 /* 
@@ -161,7 +169,7 @@ reservation *get_reservation_by_id(manager *system, char *id)
  * If reservation id is invalid returns -1
  * If reservation id is valid returns reservation's length
  */
-int read_reservation_id(char *buffer)
+int evaluate_reservation_id(char *buffer)
 {
 	int i = 0;
 

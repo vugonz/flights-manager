@@ -146,7 +146,7 @@ void create_flight(manager *system, char *id, char *origin, char *destination,
 		convert_time_to_int(duration);
 	
 	/* initialize reservations list */
-	new_flight.reservations = init_list(new_flight.reservations);
+	new_flight.reservations = init_list(system, new_flight.reservations);
 	new_flight.nr_passengers = 0;
 	new_flight.nr_reservations = 0;
 	
