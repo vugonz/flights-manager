@@ -59,6 +59,29 @@
 #define HOURS_IN_DAY 24
 #define DAYS_IN_YEAR 365
 
+/* reservation output messages */
+#define ADD_RESERVATION_ERR1 "invalid reservation code\n"
+#define ADD_RESERVATION_ERR2 "%s: flight does not exist\n"
+#define ADD_RESERVATION_ERR3 "%s: flight reservation already exists\n"
+#define ADD_RESERVATION_ERR4 "too many reservations\n"
+#define ADD_RESERVATION_ERR5 "invalid date\n"
+#define ADD_RESERVATION_ERR6 "invalid passenger number\n"
+#define ADD_RESERVATION_SUCCESS "%s %d\n"
+
+struct reservation {
+	int nr_passengers;
+	char *id;
+	struct reservation *prev; 
+	struct reservation *next;
+};
+
+struct list {
+	struct reservation *head;
+	struct reservation *tail;
+};
+
+typedef struct reservation reservation;
+typedef struct list list;
 
 /* structures */
 typedef struct {
@@ -81,8 +104,7 @@ typedef struct {
 
 typedef struct {
 	char id[FLIGHT_LENGTH_ID];
-	int max_passengers;
-	int nr_passengers;
+	int capacity;
 	char destination[AIRPORT_LENGTH_ID];
 	char origin[AIRPORT_LENGTH_ID];
 	date date;
@@ -90,31 +112,20 @@ typedef struct {
 	time duration;
 	int departure_schedule;
 	int arrival_schedule;
+	list *reservations;
+	int nr_passengers;
+	int nr_reservations;
 } flight;
 
-struct reservation {
-	int nr_passengers;
-	char *id;
-	struct reservation *prev;
-	struct reservation *next;
-};
-
-struct res_l {
-	struct reservation *head;
-	struct reservation *tail;
-};
-
-typedef struct reservation reservation;
-typedef struct res_l res_l;
 
 /* global structure */
 typedef struct {
 	int nr_airports;
 	int nr_flights;
+	int nr_reservations;
 	date date;
 	airport airports[MAX_AIRPORTS];               /* list of system's airports alphabetically sorted */
 	flight flights[MAX_FLIGHTS];                  /* list of system's flights sorted by creation date */
-	reservation reservations[2];
 } manager;
 
 /* proj1.c functions */
@@ -164,6 +175,7 @@ int exists_flight_id(manager *system, char *id);
 void print_flight(flight flight);
 void print_departing_flight(manager *system, int index);
 void print_arriving_flight(manager *system, int index);
+flight *get_flight_by_id_and_date(manager *system, char *id, date date);
 /* compare functions used by sorting insertion algorithm */
 int compare_flight_departure(manager *system, int a, int b);
 int compare_flight_arrival(manager *system, int a, int b);
@@ -179,13 +191,25 @@ time convert_int_to_time(int n);
 void print_date(date d);
 void print_time(time t);
 
-
-/* new functions */
-flight *get_flight_by_id_and_date(manager *system, char *id, date date);
+/* reservation.c functions */
 void handle_reservations(manager *system); 
 void handle_add_reservation(manager *system, char *buffer, char *flight_id, date *d);
+int validate_reservation(manager *system, char *buffer, char *flight, date *d, int nr_passengers);
+void add_reservation(manager *system, flight *f, char *reservation_id, int nr_passengers); 
+void list_reservations(manager *system, char *flight_id, date *d);
 void read_date_and_flight_id(char **buffer, char *flight_id, date *d);
-void read_reservation_id(char **buffer, char **reservation_id);
+int read_reservation_id(char *buffer);
 void ignore_whitespaces(char **buffer);
+void terminate_program(manager *system);
+reservation *get_reservation_by_id(manager *system, char *reservation_id);
+/* new functions */
+
+/* structure.c functions */
+list *init_list(list *l);
+void add_reservation_to_list(list *l, reservation *new_node);
+void remove_reservation(list *l, reservation *node);
+void free_all_memory(manager *system);
+void destroy_list(list *l);
+
 
 #endif

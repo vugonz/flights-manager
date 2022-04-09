@@ -17,6 +17,8 @@ int main()
 	while(command_handler(&system))
 		;
 
+	terminate_program(&system);
+
 	return 0;
 }
 
@@ -128,7 +130,7 @@ void handle_add_flight(manager *system)
 {
 	char id[FLIGHT_LENGTH_ID];
 	char origin[AIRPORT_LENGTH_ID], destination[AIRPORT_LENGTH_ID];
-	int nr_passengers;
+	int capacity;
 	short day, month, year, hour, minute;
 	date departure_date;
 	time departure_time;
@@ -156,10 +158,10 @@ void handle_add_flight(manager *system)
 	duration.minute = minute;
 
 	/* parse flight capacity */
-	scanf("%d", &nr_passengers);
+	scanf("%d", &capacity);
 
 	result_value = add_flight(system, id, origin, destination,
-			departure_date, departure_time, duration, nr_passengers);
+			departure_date, departure_time, duration, capacity);
 
 	if(result_value == -1) {
 		printf(ADD_FLIGHT_ERR_1);
@@ -219,6 +221,9 @@ void handle_forward_date(manager *system)
 		printf(FORWARD_DATE_ERR);
 }
 
+/*
+ * Handles 'r' command
+ */
 void handle_reservations(manager *system)
 {
 	char buffer[MAX_COMMAND_SIZE];
@@ -231,90 +236,59 @@ void handle_reservations(manager *system)
 	read_date_and_flight_id(&buffer_aux, flight_id, &d);
 	
 	if(*buffer_aux == '\n') {
-		return;
+		list_reservations(system, flight_id, &d);
 	} else {
 		handle_add_reservation(system, buffer_aux, flight_id, &d);
 	}
 }
 
-/* 
- * Reads flight id and date from given buffer string and sets given flight_id and date with read input
- * Returns given buffer char* pointing to character after read input
+/*
+ * Handles add reservation
  */
-void read_date_and_flight_id(char **buffer, char *flight_id, date *d)
-{
-	/* ignore trailling whitspaces */
-	ignore_whitespaces(buffer);
-	
-	/* get flight id */
-	sscanf(*buffer, "%s", flight_id);
-	*buffer += strlen(flight_id);
-	
-	/* remove trailling whitespaces */
-	ignore_whitespaces(buffer);
-
-	/* get date members */
-	sscanf(*buffer, DATE_MEMBERS_PARSE, &d->day, &d->month, &d->year);
-	*buffer += 10;
-
-	/* ignore trailling whitespaces */
-	ignore_whitespaces(buffer);
-}
-	
 void handle_add_reservation(manager *system, char *buffer, char *flight_id, date *d)
 {
 	char *reservation_id = NULL;
 	int nr_passengers;
+	int result_value;
 
-	printf("%s", flight_id);
-	printf("%hd", d->day);
-	/* read reservation id */
-	reservation_id = read_reservation_id(&buffer, reservation_id);
+	/* read reservation id from buffer*/
+	result_value = read_reservation_id(buffer);
 
-	if(reservation_id == NULL) {
-		free(reservation_id);
+	/* if reservation id is invalid */
+	if(result_value == -1) {
+		printf(ADD_RESERVATION_ERR1);
 		return;
 	}
-
-	sscanf(buffer, "%d", &nr_passengers);
-	
-	system->reservations[0].nr_passengers = nr_passengers;
-	
-	free(reservation_id);
-}
-
-void read_reservation_id(char **buffer, char **reservation_id)
-{
-	int i = 0;
-
-	/* get reservation_id length */
-	while(*(*buffer + i) != ' ' && *(*buffer + 1) != '\t')
-		++i;
 
 	/* allocate memory for reservation's id */
-	reservation_id = malloc((i + 1) * sizeof(char));
+	reservation_id = (char*)malloc((result_value + 1) * sizeof(char));
+	/* if no memory for reservation's id, terminate*/
 	if(reservation_id == NULL) {
-		return;
+		terminate_program(system);
 	}
+	
+	/* get reservation id from buffer */
+	sscanf(buffer, "%s", reservation_id);
+	buffer += result_value;
+	/* read nr_passengers from buffer */
+	sscanf(buffer, "%d", &nr_passengers);
 
-	/* get reservation id in allocated memory */
-	sscanf(*buffer, "%s", reservation_id);
+	/* adds reservation */
+	result_value = validate_reservation(system, reservation_id, flight_id, d, nr_passengers);
 
-	*buffer += i;
+	if(result_value == -2){
+		printf(ADD_RESERVATION_ERR2, flight_id);
+	} else if(result_value == -3) {
+		printf(ADD_RESERVATION_ERR3, reservation_id);
+	} else if(result_value == -4) {
+		printf(ADD_RESERVATION_ERR4);
+	} else if(result_value == -5) {
+		printf(ADD_RESERVATION_ERR5);
+	} else if(result_value == -6) {
+		printf(ADD_RESERVATION_ERR6);
+	}
 }
 
-/* 
- * Skips trailing whitspaces in given buffer and updates buffer to next character that is not a whitespace
- */
-void ignore_whitespaces(char **buffer)
-{
-	int i = 0;
-
-	while(*(*buffer + i) == ' ' || *(*buffer + i) == '\t')
-		i++;
-
-	*buffer += i;
-}
 
 /*
  * Returns pointer to newly initialized global structure
@@ -358,4 +332,19 @@ void bubblesort(manager *system, int indexes[], int size, int (*cmp_func) (manag
 		if(done)
 			break;
 	}
+}
+
+void terminate_program(manager *system)
+{
+	int i, j = 0;
+	
+	/* destroy all reservation's lists and nodes */
+	for(i = 0; i < system->nr_flights && j != system->nr_reservations; ++i) {
+		if(system->flights[i].nr_reservations > 0) {
+			destroy_list(system->flights[i].reservations);
+			j += system->flights[i].nr_reservations;
+		}
+	}	
+		
+	exit(EXIT_SUCCESS);
 }

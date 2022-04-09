@@ -12,7 +12,7 @@
  * If invalid arguments are given, returns an error value to handle function
  */
 int add_flight(manager *system, char *id, char *origin, char *destination,
-		date departure_date, time departure_time, time duration, int nr_passengers)
+		date departure_date, time departure_time, time duration, int capacity)
 {
 	/* check if flight id is valid */
 	if(!is_valid_flight_id(id))
@@ -41,13 +41,13 @@ int add_flight(manager *system, char *id, char *origin, char *destination,
 		return -7;
 
 	/* check if flight capacity is met in range [10,100] */
-	if(nr_passengers < MIN_FLIGHT_CAPACITY || nr_passengers > MAX_FLIGHT_CAPACITY)
+	if(capacity < MIN_FLIGHT_CAPACITY || capacity > MAX_FLIGHT_CAPACITY)
 		return -8;
 
 	/* create new flight */
 	create_flight(system, id, origin, destination,
-			departure_date, departure_time, duration, nr_passengers);
-
+			departure_date, departure_time, duration, capacity);
+	
 	/* increment nr of flights in origin airport */
 	++get_airport_by_id(system, origin)->nr_flights;
 
@@ -127,26 +127,32 @@ void list_airport_flights_by_arrival(manager *system, char *airport_id)
  * Adds a flight to the system with given arguments as members
  */
 void create_flight(manager *system, char *id, char *origin, char *destination,
-		date departure_date, time departure_time, time duration, int nr_passengers)
+		date departure_date, time departure_time, time duration, int capacity)
 {
 	flight new_flight;
 
 	strcpy(new_flight.id, id);
 	strcpy(new_flight.origin, origin);
 	strcpy(new_flight.destination, destination);
-	new_flight.nr_passengers = nr_passengers;
-
+	new_flight.capacity = capacity;
 	new_flight.date = departure_date;
 	new_flight.time = departure_time;
 
+	/* calculate departure's schedule numeric value */ 
 	new_flight.departure_schedule = 
 		convert_date_time_to_int(departure_date, departure_time);
-
+	/* calculate arrival schedule numeric value */
 	new_flight.arrival_schedule = new_flight.departure_schedule +
 		convert_time_to_int(duration);
 	
+	/* initialize reservations list */
+	new_flight.reservations = init_list(new_flight.reservations);
+	new_flight.nr_passengers = 0;
+	new_flight.nr_reservations = 0;
+	
+
 	system->flights[system->nr_flights] = new_flight;
-	system->nr_flights++;	
+	system->nr_flights++;
 }
 
 /*
