@@ -10,9 +10,9 @@
 #define DAY_0 1
 #define MONTH_0 1
 #define YEAR_0 2022
+
 /* global structure output messages */
 #define FORWARD_DATE_ERR "invalid date\n"
-#define MEM_ERROR -1
 #define MAX_COMMAND_SIZE 65000
 
 /* airport constants & parse strings */
@@ -99,7 +99,7 @@ typedef struct {
 	time duration;
 	int departure_schedule;
 	int arrival_schedule;
-	list *reservations;
+	list *reservations;     /* pointer to list structure with flight's reservations addresses */
 	int nr_passengers;
 	int nr_reservations;
 } flight;
@@ -141,15 +141,13 @@ void initialize(manager *system);
 
 void terminate_program(manager *system);
 
-int forward_date(manager *system, date);
+int forward_date(manager *system, date *d);
 
 void bubblesort(manager *system, int *index_list, int size, int(*cmp_func)(manager *system, int a, int b));
 
 
 /* airports.c functions */
 int add_airport(manager *system, char *id, char *country, char *city);
-
-void insert_airport(airport *l, airport new_airport, int size);
 
 void list_airports(manager *system);
 
@@ -166,12 +164,12 @@ int is_valid_airport_id(char *id);
 
 int exists_airport_id(manager *system, char *id);
 
-void print_airport(airport airport);
+void print_airport(airport *a);
 
 
 /* flights.c functions */
 int add_flight(manager *system, char *id, char *origin, char *destination,
-		date departure_date, time departure_time , time duration, int nr_passengers);
+		date *d, time *t, time *dur, int nr_passengers);
 
 void list_flights(manager *system);
 
@@ -183,7 +181,7 @@ void list_airport_flights_by_arrival(manager *system, char *airport);
 
  /* auxiliary functions */
 void create_flight(manager *system, char *id, char *origin, char *destination,
-		date departure_date, time departure_time, time duration, int nr_passengers);
+		date *d, time *t, time *dur, int nr_passengers);
 
 int is_valid_flight_id(char *id);
 
@@ -195,7 +193,7 @@ void print_departing_flight(manager *system, int index);
 
 void print_arriving_flight(manager *system, int index);
 
-flight *get_flight_by_id_and_date(manager *system, char *id, date date);
+flight *get_flight_by_id_and_date(manager *system, char *id, date *d);
 
 /* compare functions used by sorting insertion algorithm */
 int compare_flight_departure(manager *system, int a, int b);
@@ -204,23 +202,23 @@ int compare_flight_arrival(manager *system, int a, int b);
 
 
 /* schedule.c functions */
-int convert_time_to_int(time t);
+int convert_time_to_int(const time *);
 
-int convert_date_to_int(date d);
+int convert_date_to_int(const date *);
 
-int convert_date_time_to_int(date d, time t);
+int convert_date_time_to_int(const date *, const time *);
 
-int is_valid_date(date current_date, date d);
+int is_valid_date(const date *current, const date *date);
 
-int is_valid_duration(time t);
+int is_valid_duration(const time *);
 
 date convert_int_to_date(int n);
 
 time convert_int_to_time(int n);
 
-void print_date(date d);
+void print_date(const date *);
 
-void print_time(time t);
+void print_time(const time *);
 
 /* reservation.c functions */
 void add_reservation(manager *system, flight *f, char *reservation_id, int nr_passengers); 

@@ -131,37 +131,29 @@ void handle_add_flight(manager *system)
 	char id[FLIGHT_LENGTH_ID];
 	char origin[AIRPORT_LENGTH_ID], destination[AIRPORT_LENGTH_ID];
 	int capacity;
-	short day, month, year, hour, minute;
-	date departure_date;
-	time departure_time;
-	time duration;
+	date d;
+	time t;
+	time dur;
 	int result_value;
 
 	/* parse flight id, origin and destionation airports ids*/
 	scanf(FLIGHT_MEMBERS_PARSE, id, origin, destination); 
 
 	/* parse flight date and time departure members */
-	scanf(DATE_MEMBERS_PARSE, &day, &month, &year);
-	departure_date.day = day;
-	departure_date.month = month;
-	departure_date.year = year;
+	scanf(DATE_MEMBERS_PARSE, &d.day, &d.month, &d.year);
 
-	scanf(TIME_MEMBERS_PARSE, &hour, &minute);
+	scanf(TIME_MEMBERS_PARSE, &t.hour, &t.minute);
 	/* initialize departure component */
-	departure_time.hour = hour;
-	departure_time.minute = minute;
 
 	/* parse flight duration time members */
-	scanf(TIME_MEMBERS_PARSE, &hour, &minute);
+	scanf(TIME_MEMBERS_PARSE, &dur.hour, &dur.minute);
 	/* initialize duration component */
-	duration.hour = hour;
-	duration.minute = minute;
 
 	/* parse flight capacity */
 	scanf("%d", &capacity);
 
 	result_value = add_flight(system, id, origin, destination,
-			departure_date, departure_time, duration, capacity);
+			&d, &t, &dur, capacity);
 
 	if(result_value == -1) {
 		printf(ADD_FLIGHT_ERR_1);
@@ -206,16 +198,12 @@ void handle_list_flight_by_airport(manager *system, char command)
  */
 void handle_forward_date(manager *system)
 {
-	date new_date;
-	short day, month, year;
+	date d;
 	int result_value;
 
-	scanf(DATE_MEMBERS_PARSE, &day, &month, &year);
-	new_date.day = day;
-	new_date.month = month;
-	new_date.year = year;
+	scanf(DATE_MEMBERS_PARSE, &d.day, &d.month, &d.year);
 
-	result_value = forward_date(system, new_date);
+	result_value = forward_date(system, &d);
 
 	if(result_value == -1)
 		printf(FORWARD_DATE_ERR);
@@ -309,14 +297,14 @@ void initialize(manager *system)
 /*
  * Forwards system's date if given date is valid
  */
-int forward_date(manager *system, date new_date)
+int forward_date(manager *system, date *d)
 {
-	if(!is_valid_date(system->date, new_date))
+	if(!is_valid_date(&system->date, d))
 		return -1;
 
-	system->date = new_date;
+	system->date = *d;
 
-	print_date(new_date);
+	print_date(d);
 	printf("\n");
 
 	return 0;

@@ -13,14 +13,14 @@
  * If invalid arguments are given, returns an error value to handle function
  */
 int add_flight(manager *system, char *id, char *origin, char *destination,
-		date departure_date, time departure_time, time duration, int capacity)
+		date *d, time *t, time *dur, int capacity)
 {
 	/* check if flight id is valid */
 	if(!is_valid_flight_id(id))
 		return -1;
 
 	/* check if flight id is taken for the day */
-	if(get_flight_by_id_and_date(system, id, departure_date) != NULL)
+	if(get_flight_by_id_and_date(system, id, d) != NULL)
 		return -2;
 	
 	/* check if airports ids exist */
@@ -34,11 +34,11 @@ int add_flight(manager *system, char *id, char *origin, char *destination,
 		return -5;
 
 	/* check if flight date is a year or less into the future */
-	if(!is_valid_date(system->date, departure_date))
+	if(!is_valid_date(&system->date, d))
 		return -6;
 
 	/* check if duration is valid */
-	if(!is_valid_duration(duration))
+	if(!is_valid_duration(dur))
 		return -7;
 
 	/* check if flight capacity is met in range [10,100] */
@@ -47,7 +47,7 @@ int add_flight(manager *system, char *id, char *origin, char *destination,
 
 	/* create new flight */
 	create_flight(system, id, origin, destination,
-			departure_date, departure_time, duration, capacity);
+			d, t, dur, capacity);
 	
 	/* increment nr of flights in origin airport */
 	++get_airport_by_id(system, origin)->nr_flights;
@@ -128,7 +128,7 @@ void list_airport_flights_by_arrival(manager *system, char *airport_id)
  * Adds a flight to the system with given arguments as members
  */
 void create_flight(manager *system, char *id, char *origin, char *destination,
-		date departure_date, time departure_time, time duration, int capacity)
+		date *d, time *t, time *dur, int capacity)
 {
 	flight new_flight;
 
@@ -136,20 +136,22 @@ void create_flight(manager *system, char *id, char *origin, char *destination,
 	strcpy(new_flight.origin, origin);
 	strcpy(new_flight.destination, destination);
 	new_flight.capacity = capacity;
-	new_flight.date = departure_date;
-	new_flight.time = departure_time;
+	new_flight.date = *d;
+	new_flight.time = *t;
 
 	/* calculate departure's schedule numeric value */ 
 	new_flight.departure_schedule = 
-		convert_date_time_to_int(departure_date, departure_time);
+		convert_date_time_to_int(d, t);
 	/* calculate arrival schedule numeric value */
 	new_flight.arrival_schedule = new_flight.departure_schedule +
-		convert_time_to_int(duration);
+		convert_time_to_int(dur);
 	
 	/* initialize reservations list */
 	new_flight.reservations = (list *)malloc(sizeof(list));
+	/* check for memory limit exceeded */
 	if(new_flight.reservations == NULL)
 		terminate_program(system);
+
 	init_list(new_flight.reservations);
 	
 	new_flight.nr_passengers = 0;
@@ -200,15 +202,15 @@ int is_valid_flight_id(char *id)
  * Returns pointer to flight with given ID for given date
  * Returns NULL pointer if flight doesn't exist
  */
-flight *get_flight_by_id_and_date(manager *system, char *id, date date)
+flight *get_flight_by_id_and_date(manager *system, char *id, date *d)
 {
 	int i;
-	int n_date = convert_date_to_int(date);
+	int n_date = convert_date_to_int(d);
 
 	/* check if any flight has the same id and, if so, check if they have the same date */
 	for(i = 0; i < system->nr_flights; ++i)
 		if(!strcmp(system->flights[i].id, id) &&
-				convert_date_to_int(system->flights[i].date) == n_date)
+				convert_date_to_int(&system->flights[i].date) == n_date)
 			return &system->flights[i];
 
 	return NULL;
@@ -233,10 +235,10 @@ void print_departing_flight(manager *system, int index)
 	printf("%s %s ", system->flights[index].id, system->flights[index].destination);
 
 	/* print arrival date */
-	print_date(system->flights[index].date);
+	print_date(&system->flights[index].date);
 	printf(" ");
 	/* print arrival time */
-	print_time(system->flights[index].time);
+	print_time(&system->flights[index].time);
 	printf("\n");
 }
 /*
@@ -245,14 +247,15 @@ void print_departing_flight(manager *system, int index)
 void print_arriving_flight(manager *system, int index)
 {
 	time t = convert_int_to_time(system->flights[index].arrival_schedule);
+	date d = convert_int_to_date(system->flights[index].arrival_schedule);
 	
 	/* print flight's id and origin airport's id */
 	printf("%s %s ", system->flights[index].id, system->flights[index].origin);
 
 	/* print departure date */
-	print_date(convert_int_to_date(system->flights[index].arrival_schedule));
+	print_date(&d);
 	printf(" ");
 	/* print departure time */
-	print_time(t);
+	print_time(&t);
 	printf("\n");
 }

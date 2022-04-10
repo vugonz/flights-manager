@@ -14,7 +14,7 @@
 int validate_reservation(manager *system, char *reservation_id, char *flight_id, date *d, int nr_passengers)
 {
 	/* check if given flight id exists for given date */
-	flight *f = get_flight_by_id_and_date(system, flight_id, *d);	
+	flight *f = get_flight_by_id_and_date(system, flight_id, d);	
 
 	if(f == NULL)
 		return -2;
@@ -25,7 +25,7 @@ int validate_reservation(manager *system, char *reservation_id, char *flight_id,
 	if(f->nr_passengers + nr_passengers > f->capacity)
 		return -4;
 	/* check if date is valid */
-	if(!is_valid_date(system->date, *d))
+	if(!is_valid_date(&system->date, d))
 		return -5;
 	/* check if reservation capacity is valid */
 	if(nr_passengers <= 0)
@@ -64,14 +64,14 @@ void add_reservation(manager *system, flight *f, char *reservation_id, int nr_pa
  */
 void list_reservations(manager *system, char *flight_id, date *d)
 {
-	flight *f = get_flight_by_id_and_date(system, flight_id, *d);
+	flight *f = get_flight_by_id_and_date(system, flight_id, d);
 	reservation *node;
 
 	if(f == NULL) {
 		printf("flight doesn't exit");
 		return;
 	}
-	if(!is_valid_date(system->date, *d)) {
+	if(!is_valid_date(&system->date, d)) {
 		printf("invalid date\n");
 		return;
 	}

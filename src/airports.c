@@ -87,7 +87,7 @@ void list_airports(manager *system)
 
 	/* print all airports in the system */
 	for(i = 0; i < system->nr_airports; ++i)
-		print_airport(system->airports[index_airports[i]]);
+		print_airport(&system->airports[index_airports[i]]);
 }
 
 /*
@@ -106,7 +106,7 @@ void list_airports_by_id(manager *system)
 		if(!exists_airport_id(system, id)) {
 			printf(LIST_AIRPORTS_ERR, id);
 		} else
-			print_airport(*get_airport_by_id(system, id));
+			print_airport(get_airport_by_id(system, id));
 	} while(res == 2 && c != '\n');
 }
 
@@ -143,7 +143,7 @@ airport *get_airport_by_id(manager *system, char *id)
 /*
  * Formatted print of given airport structure
  */
-void print_airport(airport airport)
+void print_airport(airport *a)
 {
-	printf(AIRPORT_PRINT_STR, airport.id, airport.city, airport.country, airport.nr_flights);
+	printf(AIRPORT_PRINT_STR, a->id, a->city, a->country, a->nr_flights);
 }
