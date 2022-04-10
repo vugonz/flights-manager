@@ -123,6 +123,46 @@ void list_airport_flights_by_arrival(manager *system, char *airport_id)
 		print_arriving_flight(system, indexes[i]);
 }
 
+/*
+ * Removes flights with given id from system
+ * Returns nr of removed flights minus 1 (-1 is returned if no flight was found)
+ */
+int remove_flight(manager *system, char *id)
+{
+	int i;
+	int j = 0;
+
+	for(i = 0; i < system->nr_flights; ++i) {
+		if(!strcmp(system->flights[i].id, id)) {
+			destroy_list(system->flights[i].reservations);
+			++j;
+			continue;
+		}
+		if(j)
+			system->flights[i - j] = system->flights[i];
+	}
+	system->nr_flights -= j;
+
+	return j - 1;
+}
+
+/*
+ * Returns pointer to flight with given ID for given date
+ * Returns NULL pointer if flight doesn't exist
+ */
+flight *get_flight_by_id_and_date(manager *system, char *id, date *d)
+{
+	int i;
+	int n_date = convert_date_to_int(d);
+
+	/* check if any flight has the same id and, if so, check if they have the same date */
+	for(i = 0; i < system->nr_flights; ++i)
+		if(!strcmp(system->flights[i].id, id) &&
+				convert_date_to_int(&system->flights[i].date) == n_date)
+			return &system->flights[i];
+
+	return NULL;
+}
 
 /*
  * Adds a flight to the system with given arguments as members
@@ -156,7 +196,6 @@ void create_flight(manager *system, char *id, char *origin, char *destination,
 	
 	new_flight.nr_passengers = 0;
 	new_flight.nr_reservations = 0;
-	
 
 	system->flights[system->nr_flights] = new_flight;
 	system->nr_flights++;
@@ -198,23 +237,6 @@ int is_valid_flight_id(char *id)
 	return 0;
 }
 
-/*
- * Returns pointer to flight with given ID for given date
- * Returns NULL pointer if flight doesn't exist
- */
-flight *get_flight_by_id_and_date(manager *system, char *id, date *d)
-{
-	int i;
-	int n_date = convert_date_to_int(d);
-
-	/* check if any flight has the same id and, if so, check if they have the same date */
-	for(i = 0; i < system->nr_flights; ++i)
-		if(!strcmp(system->flights[i].id, id) &&
-				convert_date_to_int(&system->flights[i].date) == n_date)
-			return &system->flights[i];
-
-	return NULL;
-}
 
 /*
  * Formatted print of flight structure to be used in 'v' command

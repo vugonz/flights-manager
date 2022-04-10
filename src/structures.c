@@ -14,7 +14,7 @@ void init_list(list *l)
 	l->head = NULL;
 }
 
-void add_reservation_to_list(list *l, reservation *new_node)
+void add_node(list *l, reservation *new_node)
 {
 	/* add to end of list */
 	new_node->next = NULL;
@@ -29,8 +29,9 @@ void add_reservation_to_list(list *l, reservation *new_node)
 		l->head = new_node;
 }
 
-int remove_reservation(list *l, char *id)
+int remove_node(list *l, char *id)
 {
+	int n;
 	reservation *node = l->head;
 	reservation *aux = NULL;
 	
@@ -57,9 +58,11 @@ int remove_reservation(list *l, char *id)
 		aux->next = node->next;
 	}
 
+	n = node->nr_passengers;
+	free(node->id);
 	free(node);
 
-	return 0;
+	return n;
 }
 
 void destroy_list(list *l)

@@ -188,7 +188,7 @@ void list_airport_flights_by_departure(manager *system, char *airport);
 
 void list_airport_flights_by_arrival(manager *system, char *airport);  
 
-int eliminate_flight(manager *system, char *id);
+int remove_flight(manager *system, char *id);
 
  /* auxiliary functions */
 void create_flight(manager *system, char *id, char *origin, char *destination,
@@ -237,7 +237,7 @@ void add_reservation(manager *system, flight *f, char *reservation_id, int nr_pa
 
 void list_reservations(manager *system, char *flight_id, date *d);
 
-int eliminate_reservation(manager *system, char *id);
+int remove_reservation(manager *system, char *id);
 
 reservation *get_reservation_by_id(manager *system, char *reservation_id);
 

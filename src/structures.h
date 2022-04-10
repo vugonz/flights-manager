@@ -26,9 +26,9 @@ typedef struct list list;
 
 void init_list(list *l);
 
-void add_reservation_to_list(list *l, reservation *new_node);
+void add_node(list *l, reservation *new_node);
 
-int remove_reservation(list *l, char *id);
+int remove_node(list *l, char *id);
 
 void destroy_list(list *l);
 

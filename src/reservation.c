@@ -52,7 +52,7 @@ void add_reservation(manager *system, flight *f, char *reservation_id, int nr_pa
 	new_reservation->nr_passengers = nr_passengers;
 	new_reservation->id = reservation_id;
 
-	add_reservation_to_list(f->reservations, new_reservation); 
+	add_node(f->reservations, new_reservation); 
 
 	system->nr_reservations++;
 	f->nr_passengers += nr_passengers;
@@ -85,7 +85,30 @@ void list_reservations(manager *system, char *flight_id, date *d)
 	}
 }
 
-/* 
+/*
+ * Returns 0 if reservation with given id was sucessfully removed from the system
+ * Removes -1 if reservation with given id doesn't exist
+ */
+int remove_reservation(manager *system, char *id)
+{
+	int i = 0;
+	int res;
+
+	/* traverse all reservations until reservation with given id is removed */
+	while(i < system->nr_flights &&
+			(res = remove_node(system->flights[i].reservations, id)) == -1)
+		++i;
+
+	if(res != 0) {
+		--system->nr_reservations;
+		system->flights[i].nr_passengers -= res; 
+		--system->flights[i].nr_reservations;
+	}
+
+	return res;
+}
+
+/*
  * Returns pointer to reservation with given id
  * If reservation with given id doesn't exist, returns NULL pointer
  */

@@ -285,7 +285,7 @@ void handle_eliminate(manager *system)
 	int size;
 	int result_value;
 
-	scanf("%s\n", id);
+	scanf("%s", id);
 
 	/* evaluate id in buffer and allocate memory */
 	size = strlen(id);
@@ -298,53 +298,10 @@ void handle_eliminate(manager *system)
 
 int eliminate(manager *system, char *id, int size)
 {
-	return (size >= 10) ? eliminate_reservation(system, id) :
-		eliminate_flight(system, id);
+	return (size >= 10) ? remove_reservation(system, id) :
+		remove_flight(system, id);
 }
 
-/*
- * Returns 0 if reservation with given id was sucessfully removed from the system
- * Removes -1 if reservation with given id doesn't exist
- */
-int eliminate_reservation(manager *system, char *id)
-{
-	int i = 0;
-	int res;
-
-	while(i < system->nr_flights &&
-			(res = remove_reservation(system->flights[i].reservations, id)) != 0)
-		++i;
-	return res;
-}
-
-/*
- * Removes flights with given id from system
- * Returns nr of removed flights
- */
-int eliminate_flight(manager *system, char *id)
-{
-	int i;
-	int res = 0;
-
-	for(i = 0; i < system->nr_flights; ++i)
-		if(!strcmp(system->flights[i].id, id)) {
-			remove_flight(system->flights, i, &system->nr_flights);
-			res++;
-		}
-
-	return res;
-}
-
-void remove_flight(flights *l, int index, int *size)
-{
-	flight aux;
-
-	destroy_list(l[index].reservations);
-	
-	aux = l[i];
-	l[i] = l[size - 1];
-	l[size] = l[i]
-}
 
 /*
  * Returns pointer to newly initialized global structure
