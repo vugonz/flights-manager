@@ -67,6 +67,15 @@ void list_reservations(manager *system, char *flight_id, date *d)
 	flight *f = get_flight_by_id_and_date(system, flight_id, *d);
 	reservation *node;
 
+	if(f == NULL) {
+		printf("flight doesn't exit");
+		return;
+	}
+	if(!is_valid_date(system->date, *d)) {
+		printf("invalid date\n");
+		return;
+	}
+
 	f->reservations->head = sort_list(f->reservations->head, f->nr_reservations);
 
 	node = f->reservations->head;

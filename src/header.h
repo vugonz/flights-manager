@@ -64,10 +64,10 @@
 /* reservation output messages */
 #define ADD_RESERVATION_ERR1 "invalid reservation code\n"
 #define ADD_RESERVATION_ERR2 "%s: flight does not exist\n"
-#define ADD_RESERVATION_ERR3 "%s: flight reservation already exists\n"
+#define ADD_RESERVATION_ERR3 "%s: flight reservation already used\n"
 #define ADD_RESERVATION_ERR4 "too many reservations\n"
 #define ADD_RESERVATION_ERR5 "invalid date\n"
-#define ADD_RESERVATION_ERR6 "invalid passenger number\n"
+#define ADD_RESERVATION_ERR6 "invalid passager number\n"
 #define ADD_RESERVATION_SUCCESS "%s %d\n"
 
 /* structures */
