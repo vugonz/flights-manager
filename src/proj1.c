@@ -17,7 +17,7 @@ int main()
 	while(command_handler(&system))
 		;
 
-	terminate_program(&system);
+	free_all_memory(&system);
 
 	return 0;
 }
@@ -40,7 +40,7 @@ int command_handler(manager *system)
 			handle_list_airports(system);
 			break;
 		case 'v':
-			handle_v_command(system);
+			handle_flights(system);
 			break;
 		case 'p':
 			handle_list_flight_by_airport(system, command);
@@ -55,7 +55,9 @@ int command_handler(manager *system)
 			handle_reservations(system);
 			break;
 		case 'e':
-		/* ignore unknown commands */
+			handle_eliminate(system);
+			break;
+		/* ignore unknown commands and unhandled '\n' from stdin */
 		default:
 			break;
 	}
@@ -110,7 +112,7 @@ void handle_list_airports(manager *system)
  * If optional arguments are specified, go to handle_add_flight function
  * If no optional arguments are specified, lists all flights sorted by creation
  */
-void handle_v_command(manager *system)
+void handle_flights(manager *system)
 {
 	char c = getchar();
 
@@ -250,7 +252,7 @@ void handle_add_reservation(manager *system, char *buffer, char *flight_id, date
 
 	/* allocate memory for reservation's id */
 	reservation_id = (char *)malloc((result_value + 1) * sizeof(char));
-	/* if no memory for reservation's id, terminate*/
+	/* if no memory, terminate*/
 	if(reservation_id == NULL)
 		terminate_program(system);
 	
@@ -275,6 +277,73 @@ void handle_add_reservation(manager *system, char *buffer, char *flight_id, date
 	/* if reservation was not added, free the memory of id */
 	if(result_value != 0)
 		free(reservation_id);
+}
+
+void handle_eliminate(manager *system)
+{
+	char id[MAX_COMMAND_SIZE];
+	int size;
+	int result_value;
+
+	scanf("%s\n", id);
+
+	/* evaluate id in buffer and allocate memory */
+	size = strlen(id);
+
+	result_value = eliminate(system, id, size);
+
+	if(result_value == -1)
+		printf(ELIMINATE_ERR);
+}
+
+int eliminate(manager *system, char *id, int size)
+{
+	return (size >= 10) ? eliminate_reservation(system, id) :
+		eliminate_flight(system, id);
+}
+
+/*
+ * Returns 0 if reservation with given id was sucessfully removed from the system
+ * Removes -1 if reservation with given id doesn't exist
+ */
+int eliminate_reservation(manager *system, char *id)
+{
+	int i = 0;
+	int res;
+
+	while(i < system->nr_flights &&
+			(res = remove_reservation(system->flights[i].reservations, id)) != 0)
+		++i;
+	return res;
+}
+
+/*
+ * Removes flights with given id from system
+ * Returns nr of removed flights
+ */
+int eliminate_flight(manager *system, char *id)
+{
+	int i;
+	int res = 0;
+
+	for(i = 0; i < system->nr_flights; ++i)
+		if(!strcmp(system->flights[i].id, id)) {
+			remove_flight(system->flights, i, &system->nr_flights);
+			res++;
+		}
+
+	return res;
+}
+
+void remove_flight(flights *l, int index, int *size)
+{
+	flight aux;
+
+	destroy_list(l[index].reservations);
+	
+	aux = l[i];
+	l[i] = l[size - 1];
+	l[size] = l[i]
 }
 
 /*
@@ -321,19 +390,25 @@ void bubblesort(manager *system, int indexes[], int size, int (*cmp_func) (manag
 	}
 }
 
-void terminate_program(manager *system)
+void free_all_memory(manager *system)
 {
-	int i, j = 0;
+	int i;
 	
 	/* destroy all reservation's lists and nodes */
-	for(i = 0; i < system->nr_flights && j != system->nr_reservations; ++i) {
+	for(i = 0; i < system->nr_flights; ++i) {
 		if(system->flights[i].nr_reservations > 0) {
 			destroy_list(system->flights[i].reservations);
-			j += system->flights[i].nr_reservations;
 		} else {
 			free(system->flights[i].reservations);
 		}
 	}	
-		
+}
+
+void terminate_program(manager *system)
+{
+	printf("No memory\n");
+
+	free_all_memory(system);
+
 	exit(EXIT_SUCCESS);
 }

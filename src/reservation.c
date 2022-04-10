@@ -124,7 +124,7 @@ int evaluate_reservation_id(char *buffer)
 	
 	/* if reservation id is less than 10 characters long */
 	if(i < 10)
-		return -1;
+		return -2;
 
 	/* return size of reservation id if valid */
 	return i;

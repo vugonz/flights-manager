@@ -28,27 +28,39 @@ void add_reservation_to_list(list *l, reservation *new_node)
 	if(l->head == NULL)
 		l->head = new_node;
 }
-/*
-void remove_reservation(list *l, reservation *node)
+
+int remove_reservation(list *l, char *id)
 {
-	if(node->prev == NULL) 
-		l->head = node->next;
-	else
-		node->prev->next = node->next;
+	reservation *node = l->head;
+	reservation *aux = NULL;
+	
+	while(node != NULL && strcmp(node->id, id)) {
+		aux = node;
+		node = node->next;
+	}
 
-	node->next->prev = node->prev;
+	/* no node with given id */
+	if(node == NULL)
+		return -1;
 
-	if(node->next == NULL)
-		l->tail = node->prev;
-	else 
-		node->next->prev = node->prev;
+	/* single element list */
+	if(l->head == l->tail) {
+		l->head = l->tail = NULL;
+	} else {
+		/* if first element is to be removed */
+		if (aux == NULL) 
+			l->head = node->next;
+		/* if last element is to be removed */
+		else if (node->next == NULL)
+			l->tail = aux;
 
-	node->prev->next = node->next;
+		aux->next = node->next;
+	}
 
-	free(&(node->id));
 	free(node);
+
+	return 0;
 }
-*/
 
 void destroy_list(list *l)
 {

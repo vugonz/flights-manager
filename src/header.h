@@ -13,7 +13,7 @@
 
 /* global structure output messages */
 #define FORWARD_DATE_ERR "invalid date\n"
-#define MAX_COMMAND_SIZE 65000
+#define MAX_COMMAND_SIZE 65535
 
 /* airport constants & parse strings */
 #define MAX_AIRPORTS 40
@@ -70,6 +70,9 @@
 #define ADD_RESERVATION_ERR6 "invalid passager number\n"
 #define ADD_RESERVATION_SUCCESS "%s %d\n"
 
+/* eliminate command error messages */
+#define ELIMINATE_ERR "not found\n"
+
 /* structures */
 typedef struct {
 	short hour;
@@ -124,7 +127,7 @@ void handle_add_airport(manager *system);
 
 void handle_list_airports(manager *system);
 
-void handle_v_command(manager *system);
+void handle_flights(manager *system);
 
 void handle_add_flight(manager *system);
 
@@ -136,12 +139,18 @@ void handle_reservations(manager *system);
 
 void handle_add_reservation(manager *system, char *buffer, char *flight_id, date *d);
 
+void handle_eliminate(manager *system);
+
 /* initializes global structure that stores all of current session's useful information */
 void initialize(manager *system);
+
+void free_all_memory(manager *system);
 
 void terminate_program(manager *system);
 
 int forward_date(manager *system, date *d);
+
+int eliminate(manager *system, char *id, int size);
 
 void bubblesort(manager *system, int *index_list, int size, int(*cmp_func)(manager *system, int a, int b));
 
@@ -178,6 +187,8 @@ int list_flights_by_airport(manager *system, char *ariport, char command);
 void list_airport_flights_by_departure(manager *system, char *airport);
 
 void list_airport_flights_by_arrival(manager *system, char *airport);  
+
+int eliminate_flight(manager *system, char *id);
 
  /* auxiliary functions */
 void create_flight(manager *system, char *id, char *origin, char *destination,
@@ -220,10 +231,13 @@ void print_date(const date *);
 
 void print_time(const time *);
 
+
 /* reservation.c functions */
 void add_reservation(manager *system, flight *f, char *reservation_id, int nr_passengers); 
 
 void list_reservations(manager *system, char *flight_id, date *d);
+
+int eliminate_reservation(manager *system, char *id);
 
 reservation *get_reservation_by_id(manager *system, char *reservation_id);
 
@@ -237,5 +251,9 @@ void read_date_and_flight_id(char **buffer, char *flight_id, date *d);
 int read_reservation(char *buffer, char **reservation_id, int *nr_passengers);
 
 void ignore_whitespaces(char **buffer);
+
+
+/* utils */
+int evaluate_string(char *buffer);
 
 #endif

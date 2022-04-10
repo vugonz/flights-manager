@@ -28,7 +28,7 @@ void init_list(list *l);
 
 void add_reservation_to_list(list *l, reservation *new_node);
 
-void remove_reservation(list *l, reservation *node);
+int remove_reservation(list *l, char *id);
 
 void destroy_list(list *l);
 

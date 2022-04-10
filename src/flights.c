@@ -41,8 +41,8 @@ int add_flight(manager *system, char *id, char *origin, char *destination,
 	if(!is_valid_duration(dur))
 		return -7;
 
-	/* check if flight capacity is met in range [10,100] */
-	if(capacity < MIN_FLIGHT_CAPACITY || capacity > MAX_FLIGHT_CAPACITY)
+	/* check if flight capacity is smaller than 10 */
+	if(capacity < MIN_FLIGHT_CAPACITY)
 		return -8;
 
 	/* create new flight */
