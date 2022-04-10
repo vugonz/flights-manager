@@ -234,6 +234,8 @@ int evaluate_reservation_id(char *buffer);
 
 void read_date_and_flight_id(char **buffer, char *flight_id, date *d);
 
+int read_reservation(char *buffer, char **reservation_id, int *nr_passengers);
+
 void ignore_whitespaces(char **buffer);
 
 #endif

@@ -249,23 +249,18 @@ void handle_add_reservation(manager *system, char *buffer, char *flight_id, date
 	}
 
 	/* allocate memory for reservation's id */
-	reservation_id = (char*)malloc((result_value + 1) * sizeof(char));
+	reservation_id = (char *)malloc((result_value + 1) * sizeof(char));
 	/* if no memory for reservation's id, terminate*/
-	if(reservation_id == NULL) {
+	if(reservation_id == NULL)
 		terminate_program(system);
-	}
 	
-	/* get reservation id from buffer */
-	sscanf(buffer, "%s", reservation_id);
-	buffer += result_value;
-	/* read nr_passengers from buffer */
-	sscanf(buffer, "%d", &nr_passengers);
+	/* get reservation id and nr_passengers from buffer */
+	sscanf(buffer, "%s %d", reservation_id, &nr_passengers);
 
 	/* adds reservation */
 	result_value = validate_reservation(system, reservation_id, flight_id, d, nr_passengers);
 
-
-	if(result_value == -2){
+	if(result_value == -2) {
 		printf(ADD_RESERVATION_ERR2, flight_id);
 	} else if(result_value == -3) {
 		printf(ADD_RESERVATION_ERR3, reservation_id);
@@ -277,11 +272,10 @@ void handle_add_reservation(manager *system, char *buffer, char *flight_id, date
 		printf(ADD_RESERVATION_ERR6);
 	}
 
-	/* if reservation is invalid, free the memory of id */
+	/* if reservation was not added, free the memory of id */
 	if(result_value != 0)
 		free(reservation_id);
 }
-
 
 /*
  * Returns pointer to newly initialized global structure
