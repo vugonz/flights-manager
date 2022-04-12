@@ -69,6 +69,9 @@
 #define ADD_RESERVATION_ERR5 "invalid date\n"
 #define ADD_RESERVATION_ERR6 "invalid passager number\n"
 #define ADD_RESERVATION_SUCCESS "%s %d\n"
+#define LIST_RESERVATION_ERR1 "flight does not exist\n"
+#define LIST_RESERVATION_ERR2 "invalid date\n"
+#define PRINT_RESERVATION_STR "%s %d\n"
 
 /* eliminate command error messages */
 #define ELIMINATE_ERR "not found\n"
@@ -138,6 +141,8 @@ void handle_forward_date(manager *system);
 void handle_reservations(manager *system); 
 
 void handle_add_reservation(manager *system, char *buffer, char *flight_id, date *d);
+
+void handle_list_reservations(manager *system, char *flight_id, date *d);
 
 void handle_eliminate(manager *system);
 
@@ -239,7 +244,7 @@ int validate_reservation(manager *system, char *buffer, char **reservation_id, i
 
 void create_reservation(manager *system, flight *f, char *reservation_id, int nr_passengers); 
 
-void list_reservations(manager *system, char *flight_id, date *d);
+int list_reservations(manager *system, char *flight_id, date *d);
 
 int remove_reservation(manager *system, char *id);
 
@@ -247,6 +252,7 @@ reservation *get_reservation_by_id(manager *system, char *reservation_id);
 
 
 /* auxiliary functions */
+void print_reservations_in_flight(flight *f);
 
 int get_reservation_id_size(char *buffer);
 

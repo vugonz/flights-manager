@@ -30,6 +30,8 @@ void add_node(list *l, reservation *new_node);
 
 int remove_node(list *l, char *id);
 
+void print_list(list *l);
+
 void destroy_list(list *l);
 
 reservation *find_node_in_list(list *l, char *id);

@@ -226,9 +226,22 @@ void handle_reservations(manager *system)
 	read_date_and_flight_id(&buffer_aux, flight_id, &d);
 	
 	if(*buffer_aux == '\n') {
-		list_reservations(system, flight_id, &d);
+		handle_list_reservations(system, flight_id, &d);
 	} else {
 		handle_add_reservation(system, buffer_aux, flight_id, &d);
+	}
+}
+
+void handle_list_reservations(manager *system, char *flight_id, date *d)
+{
+	int result_value;
+
+	result_value = list_reservations(system, flight_id, d);
+
+	if(result_value == -1) {
+		printf(LIST_RESERVATION_ERR1);
+	} else if(result_value == -2){
+		printf(LIST_RESERVATION_ERR2);
 	}
 }
 

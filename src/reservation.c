@@ -78,27 +78,28 @@ void create_reservation(manager *system, flight *f, char *reservation_id, int nr
 /* 
  * Lists all reservations in flight with given id in alphabetical order
  */
-void list_reservations(manager *system, char *flight_id, date *d)
+int list_reservations(manager *system, char *flight_id, date *d)
 {
 	flight *f = get_flight_by_id_and_date(system, flight_id, d);
-	reservation *node;
 
-	if(f == NULL) {
-		printf("flight doesn't exit\n");
-		return;
-	}
-	if(!is_valid_date(&system->date, d)) {
-		printf("invalid date\n");
-		return;
-	}
+	/* check if flight exists */
+	if(f == NULL)
+		return -1;
 
+	/* check if date is valid */
+	if(!is_valid_date(&system->date, d))
+		return -2;	
+
+	print_reservations_in_flight(f);
+
+	return 0;
+}
+
+void print_reservations_in_flight(flight *f)
+{
 	f->reservations->head = sort_list(f->reservations->head, f->nr_reservations);
 
-	node = f->reservations->head;
-	while(node != NULL) {
-		printf("%s %d\n", node->id, node->nr_passengers);
-		node = node->next;
-	}
+	print_list(f->reservations);
 }
 
 /*
@@ -144,6 +145,7 @@ reservation *get_reservation_by_id(manager *system, char *id)
 
 	return NULL;
 }
+
 
 /* Reads reservation id from buffer
  * If reservation id is invalid returns -1

@@ -4,6 +4,7 @@
 #include "header.h"
 #include "structures.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -64,32 +65,41 @@ int remove_node(list *l, char *id)
 	return n;
 }
 
+void print_list(list *l)
+{
+	reservation *node = l->head;
+
+	while(node != NULL) {
+		printf(PRINT_RESERVATION_STR, node->id, node->nr_passengers);
+		node = node->next;
+	}
+}
+
 void destroy_list(list *l)
 {
-	reservation *p = l->head;
+	reservation *node = l->head;
 	
-	while(p != NULL) {
-		reservation* aux = p;
-		p = aux->next; 
+	while(node != NULL) {
+		reservation* aux = node;
+		node = aux->next; 
 
 		free(aux->id);
 		free(aux);
 	}
-
 	free(l);
 }
 
 reservation *find_node_in_list(list *l, char *id)
 {
-	reservation *p = l->head; 
+	reservation *node = l->head; 
 
-	while(p != NULL) {
-		if(!strcmp(p->id, id))
+	while(node != NULL) {
+		if(!strcmp(node->id, id))
 			break;
-		p = p->next;
+		node = node->next;
 	}
 	
-	return p;
+	return node;
 }
 
 /*
