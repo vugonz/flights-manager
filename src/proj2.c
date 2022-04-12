@@ -1,5 +1,5 @@
 /*  Author: Gonçalo Azevedo 193075
- *  File: proj1.c
+ *  File: proj2.c
  */
 #include "header.h"
 
@@ -219,7 +219,7 @@ void handle_reservations(manager *system)
 	char buffer[MAX_COMMAND_SIZE];
 	char *buffer_aux = buffer;
 	char flight_id[FLIGHT_LENGTH_ID];
-	date d = {0};
+	date d;
 
 	fgets(buffer, MAX_COMMAND_SIZE, stdin);
 
@@ -237,32 +237,23 @@ void handle_reservations(manager *system)
  */
 void handle_add_reservation(manager *system, char *buffer, char *flight_id, date *d)
 {
-	char *reservation_id = NULL;
+	char *reservation_id;
+	int size_id;
 	int nr_passengers;
 	int result_value;
 
-	/* analyze reservation id from buffer*/
-	result_value = evaluate_reservation_id(buffer);
-
-	/* if reservation id is invalid */
-	if(result_value == -1) {
-		printf(ADD_RESERVATION_ERR1);
-		return;
-	}
-
-	/* allocate memory for reservation's id */
-	reservation_id = (char *)malloc((result_value + 1) * sizeof(char));
-	/* if no memory, terminate*/
-	if(reservation_id == NULL)
-		terminate_program(system);
+	/* analyze reservation id size from buffer */
+	size_id = get_reservation_id_size(buffer);
 	
-	/* get reservation id and nr_passengers from buffer */
-	sscanf(buffer, "%s %d", reservation_id, &nr_passengers);
+	/* get nr_passengers from buffer */
+	sscanf(buffer + size_id, "%d", &nr_passengers);
 
 	/* adds reservation */
-	result_value = validate_reservation(system, reservation_id, flight_id, d, nr_passengers);
+	result_value = validate_reservation(system, buffer, &reservation_id, size_id, flight_id, d, nr_passengers);
 
-	if(result_value == -2) {
+	if(result_value == -1) {
+		printf(ADD_RESERVATION_ERR1);
+	} else if(result_value == -2) {
 		printf(ADD_RESERVATION_ERR2, flight_id);
 	} else if(result_value == -3) {
 		printf(ADD_RESERVATION_ERR3, reservation_id);
@@ -274,8 +265,8 @@ void handle_add_reservation(manager *system, char *buffer, char *flight_id, date
 		printf(ADD_RESERVATION_ERR6);
 	}
 
-	/* if reservation was not added, free the memory of id */
-	if(result_value != 0)
+	/* if reservation was not added, free allocated memory for id */
+	if(result_value != 0 && result_value != -1)
 		free(reservation_id);
 }
 

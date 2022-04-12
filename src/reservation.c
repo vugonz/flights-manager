@@ -1,6 +1,5 @@
-/*
- * Author: Gonçalo Azevedo 93075
- * File: reservations.c
+/*  Author: Gonçalo Azevedo 93075
+ *  File: reservations.c
  */
 #include "header.h"
 
@@ -11,27 +10,44 @@
 /*
  * Adds reservation to the system if all arguments are valid
  */
-int validate_reservation(manager *system, char *reservation_id, char *flight_id, date *d, int nr_passengers)
+int validate_reservation(manager *system, char *buffer, char **reservation_id,
+		int size_id, char *flight_id, date *d, int nr_passengers)
 {
-	/* check if given flight id exists for given date */
-	flight *f = get_flight_by_id_and_date(system, flight_id, d);	
+	flight *f;
 
+	/* check if reservation id is valid */
+	if(size_id < 10 || !is_valid_reservation_id(buffer, size_id))
+		return -1;
+
+	/* read reservation id */
+	*reservation_id = (char *)malloc((size_id + 1) * sizeof(char));
+	sscanf(buffer, "%s", *reservation_id);
+	/* if no memory */
+	if(reservation_id == NULL)
+		terminate_program(system);
+
+	/* check if given flight id exists for given date */
+	f = get_flight_by_id_and_date(system, flight_id, d);	
 	if(f == NULL)
 		return -2;
+
 	/* check if reservation id is already in use */
-	if(get_reservation_by_id(system, reservation_id) != NULL)
+	if(get_reservation_by_id(system, *reservation_id) != NULL)
 		return -3;
+
 	/* check if flight capacity is not exceeded */	
 	if(f->nr_passengers + nr_passengers > f->capacity)
 		return -4;
+
 	/* check if date is valid */
 	if(!is_valid_date(&system->date, d))
 		return -5;
+
 	/* check if reservation capacity is valid */
 	if(nr_passengers <= 0)
 		return -6;
 
-	add_reservation(system, f, reservation_id, nr_passengers);
+	create_reservation(system, f, *reservation_id, nr_passengers);
 	
 	return 0;
 }
@@ -39,7 +55,7 @@ int validate_reservation(manager *system, char *reservation_id, char *flight_id,
 /*
  * Creates a new reservation and adds it to the flight's list
  */
-void add_reservation(manager *system, flight *f, char *reservation_id, int nr_passengers)
+void create_reservation(manager *system, flight *f, char *reservation_id, int nr_passengers)
 {
 	reservation *new_reservation;	
 	
@@ -54,9 +70,9 @@ void add_reservation(manager *system, flight *f, char *reservation_id, int nr_pa
 
 	add_node(f->reservations, new_reservation); 
 
-	system->nr_reservations++;
 	f->nr_passengers += nr_passengers;
 	f->nr_reservations++;
+	system->nr_reservations++;
 }
 
 /* 
@@ -68,7 +84,7 @@ void list_reservations(manager *system, char *flight_id, date *d)
 	reservation *node;
 
 	if(f == NULL) {
-		printf("flight doesn't exit");
+		printf("flight doesn't exit\n");
 		return;
 	}
 	if(!is_valid_date(&system->date, d)) {
@@ -133,23 +149,27 @@ reservation *get_reservation_by_id(manager *system, char *id)
  * If reservation id is invalid returns -1
  * If reservation id is valid returns reservation's length
  */
-int evaluate_reservation_id(char *buffer)
+int is_valid_reservation_id(char *buffer, int size)
 {
 	int i = 0;
 
 	/* check if reservation's id characters are valid */
-	while(buffer[i] != ' ' && buffer[i] != '\t') {
+	for(i = 0; i < size; ++i)
 		if(!((buffer[i] >= '0' && buffer[i] <= '9') ||
 					(buffer[i] >= 'A' && buffer[i] <= 'Z')))
-			return -1;
-		++i;
-	}
-	
-	/* if reservation id is less than 10 characters long */
-	if(i < 10)
-		return -2;
+			return 0;
 
-	/* return size of reservation id if valid */
+	return 1;
+}
+
+/* Scans reservation id from given buffer and returns the length of read id */
+int get_reservation_id_size(char *buffer)
+{
+	int i = 0;
+
+	while(buffer[i] != ' ' && buffer[i++] != '\t')
+		;
+
 	return i;
 }
 

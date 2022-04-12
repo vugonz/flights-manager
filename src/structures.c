@@ -1,5 +1,4 @@
-/*
- *  Author: Gonçalo Azevedo 93075
+/*  Author: Gonçalo Azevedo 93075
  *  File: structures.c
  */
 #include "header.h"

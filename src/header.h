@@ -152,7 +152,8 @@ int forward_date(manager *system, date *d);
 
 int eliminate(manager *system, char *id, int size);
 
-void bubblesort(manager *system, int *index_list, int size, int(*cmp_func)(manager *system, int a, int b));
+void bubblesort(manager *system, int *index_list, int size, 
+		int(*cmp_func)(manager *system, int a, int b));
 
 
 /* airports.c functions */
@@ -233,7 +234,10 @@ void print_time(const time *);
 
 
 /* reservation.c functions */
-void add_reservation(manager *system, flight *f, char *reservation_id, int nr_passengers); 
+int validate_reservation(manager *system, char *buffer, char **reservation_id, int size, 
+		char *flight, date *d, int nr_passengers);
+
+void create_reservation(manager *system, flight *f, char *reservation_id, int nr_passengers); 
 
 void list_reservations(manager *system, char *flight_id, date *d);
 
@@ -241,19 +245,15 @@ int remove_reservation(manager *system, char *id);
 
 reservation *get_reservation_by_id(manager *system, char *reservation_id);
 
-/* auxiliary functions */
-int validate_reservation(manager *system, char *buffer, char *flight, date *d, int nr_passengers);
 
-int evaluate_reservation_id(char *buffer);
+/* auxiliary functions */
+
+int get_reservation_id_size(char *buffer);
+
+int is_valid_reservation_id(char *buffer, int size);
 
 void read_date_and_flight_id(char **buffer, char *flight_id, date *d);
 
-int read_reservation(char *buffer, char **reservation_id, int *nr_passengers);
-
 void ignore_whitespaces(char **buffer);
-
-
-/* utils */
-int evaluate_string(char *buffer);
 
 #endif
