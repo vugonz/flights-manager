@@ -115,12 +115,11 @@ void list_airports_by_id(manager *system)
  */
 void create_airport(manager *system, char *id, char *country, char *city)
 {
-	airport new_airport;
+	airport new_airport = {0};
 
 	strcpy(new_airport.id, id);
 	strcpy(new_airport.country, country);
 	strcpy(new_airport.city, city);
-	new_airport.nr_flights = 0;
 	
 	system->airports[system->nr_airports] = new_airport;
 	system->nr_airports++;

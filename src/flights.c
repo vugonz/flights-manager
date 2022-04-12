@@ -170,7 +170,7 @@ flight *get_flight_by_id_and_date(manager *system, char *id, date *d)
 void create_flight(manager *system, char *id, char *origin, char *destination,
 		date *d, time *t, time *dur, int capacity)
 {
-	flight new_flight;
+	flight new_flight = {0};
 
 	strcpy(new_flight.id, id);
 	strcpy(new_flight.origin, origin);
@@ -188,14 +188,12 @@ void create_flight(manager *system, char *id, char *origin, char *destination,
 	
 	/* initialize reservations list */
 	new_flight.reservations = (list *)malloc(sizeof(list));
+
 	/* check for memory limit exceeded */
 	if(new_flight.reservations == NULL)
 		terminate_program(system);
 
 	init_list(new_flight.reservations);
-	
-	new_flight.nr_passengers = 0;
-	new_flight.nr_reservations = 0;
 
 	system->flights[system->nr_flights] = new_flight;
 	system->nr_flights++;
