@@ -71,7 +71,6 @@
 #define ADD_RESERVATION_SUCCESS "%s %d\n"
 #define LIST_RESERVATION_ERR1 "flight does not exist\n"
 #define LIST_RESERVATION_ERR2 "invalid date\n"
-#define PRINT_RESERVATION_STR "%s %d\n"
 
 /* eliminate command error messages */
 #define ELIMINATE_ERR "not found\n"

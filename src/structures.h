@@ -8,6 +8,8 @@
 #ifndef _STRUCTURES_
 #define _STRUCTURES_
 
+#define PRINT_RESERVATION_STR "%s %d\n"
+
 /* reservation self referenced structure */
 struct reservation {
 	int nr_passengers;

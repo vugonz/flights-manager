@@ -1,19 +1,24 @@
 /*  Author: Gonçalo Azevedo 93075
  *  File: structures.c
  */
-#include "header.h"
 #include "structures.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+/*
+ * Initializes list of reservations
+ */
 void init_list(list *l)
 {
 	l->tail = NULL;
 	l->head = NULL;
 }
 
+/* 
+ * Adds new reservation node given as argument to the end of the list as argument
+ */
 void add_node(list *l, reservation *new_node)
 {
 	/* add to end of list */
@@ -29,6 +34,10 @@ void add_node(list *l, reservation *new_node)
 		l->head = new_node;
 }
 
+/*
+ * Removes node with given id from list and
+ * frees all removed node's associated memory
+ */
 int remove_node(list *l, char *id)
 {
 	int n;
@@ -65,6 +74,9 @@ int remove_node(list *l, char *id)
 	return n;
 }
 
+/*
+ * Prints all reservations in given list
+ */
 void print_list(list *l)
 {
 	reservation *node = l->head;
@@ -75,6 +87,10 @@ void print_list(list *l)
 	}
 }
 
+
+/*
+ * Destroys given list and frees all associated memory
+ */
 void destroy_list(list *l)
 {
 	reservation *node = l->head;
@@ -89,6 +105,10 @@ void destroy_list(list *l)
 	free(l);
 }
 
+/*
+ * Returns pointer to node with given id in list
+ * Returns NULL pointer if node with given id doesn't exist
+ */
 reservation *find_node_in_list(list *l, char *id)
 {
 	reservation *node = l->head; 

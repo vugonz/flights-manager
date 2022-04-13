@@ -53,23 +53,27 @@ int validate_reservation(manager *system, char *buffer, char **reservation_id,
 }
 
 /*
- * Creates a new reservation and adds it to the flight's list
+ * Creates a new reservation and adds it to the corresponding flight
  */
 void create_reservation(manager *system, flight *f, char *reservation_id, int nr_passengers)
 {
 	reservation *new_reservation;	
 	
+	/* allocate memory for new reservation */
 	new_reservation = (reservation*)malloc(sizeof(reservation));
+	/* if no memory, free reservation_id previously allocated memory and terminate */
 	if(new_reservation == NULL) {
 		free(reservation_id);
 		terminate_program(system);
 	}
 
+	/* reservation members */
 	new_reservation->nr_passengers = nr_passengers;
 	new_reservation->id = reservation_id;
-
+	/* add reservation to flight's list */
 	add_node(f->reservations, new_reservation); 
 
+	/* update system's info */
 	f->nr_passengers += nr_passengers;
 	f->nr_reservations++;
 	system->nr_reservations++;
@@ -95,8 +99,12 @@ int list_reservations(manager *system, char *flight_id, date *d)
 	return 0;
 }
 
+/*
+ * Prints all reservations in given flight in lexical order 
+ */
 void print_reservations_in_flight(flight *f)
 {
+	/* sort flights list in lexicographical order */
 	f->reservations->head = sort_list(f->reservations->head, f->nr_reservations);
 
 	print_list(f->reservations);
@@ -164,7 +172,9 @@ int is_valid_reservation_id(char *buffer, int size)
 	return 1;
 }
 
-/* Scans reservation id from given buffer and returns the length of read id */
+/*
+ * Scans reservation id from given buffer and returns the length of read id 
+ */
 int get_reservation_id_size(char *buffer)
 {
 	int i = 0;
