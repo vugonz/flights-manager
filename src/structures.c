@@ -39,6 +39,7 @@ void add_node(list *l, reservation *new_node)
 /*
  * Removes node with given id from list and frees all removed node's associated memory
  * Returns number of passengers of removed node
+ * Returns -1 if node doesn't exist
  */
 int remove_node(list *l, char *id)
 {
