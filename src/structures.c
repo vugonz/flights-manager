@@ -24,19 +24,21 @@ void add_node(list *l, reservation *new_node)
 	/* add to end of list */
 	new_node->next = NULL;
 	
+	/* link last node to newly created node */
 	if(l->tail != NULL)
 		l->tail->next = new_node;
 
+	/* update tail pointer */
 	l->tail = new_node;
 
-	/* if first element */
+	/* if first element, set head pointer */
 	if(l->head == NULL)
 		l->head = new_node;
 }
 
 /*
- * Removes node with given id from list and
- * frees all removed node's associated memory
+ * Removes node with given id from list and frees all removed node's associated memory
+ * Returns number of passengers of removed node
  */
 int remove_node(list *l, char *id)
 {
@@ -44,6 +46,7 @@ int remove_node(list *l, char *id)
 	reservation *node = l->head;
 	reservation *aux = NULL;
 	
+	/* search for node to be removed */
 	while(node != NULL && strcmp(node->id, id)) {
 		aux = node;
 		node = node->next;
@@ -53,7 +56,7 @@ int remove_node(list *l, char *id)
 	if(node == NULL)
 		return -1;
 
-	/* single element list */
+	/* if single element list, list becomes empty */
 	if(l->head == l->tail) {
 		l->head = l->tail = NULL;
 	} else {
@@ -64,10 +67,13 @@ int remove_node(list *l, char *id)
 		else if (node->next == NULL)
 			l->tail = aux;
 
+		/* update previous element pointer */
 		aux->next = node->next;
 	}
 
+	/* get nr_passengers from removed node */
 	n = node->nr_passengers;
+	/* free memory of removed node structure */
 	free(node->id);
 	free(node);
 

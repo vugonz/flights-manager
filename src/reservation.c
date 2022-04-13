@@ -9,6 +9,7 @@
 
 /*
  * Adds reservation to the system if all arguments are valid
+ * Returns error value if arguments are invalid
  */
 int validate_reservation(manager *system, char *buffer, char **reservation_id,
 		int size_id, char *flight_id, date *d, int nr_passengers)
@@ -57,11 +58,9 @@ int validate_reservation(manager *system, char *buffer, char **reservation_id,
  */
 void create_reservation(manager *system, flight *f, char *reservation_id, int nr_passengers)
 {
-	reservation *new_reservation;	
-	
 	/* allocate memory for new reservation */
-	new_reservation = (reservation*)malloc(sizeof(reservation));
-	/* if no memory, free reservation_id previously allocated memory and terminate */
+	reservation *new_reservation = (reservation*)malloc(sizeof(reservation));
+	/* if no memory, free reservation_id memory previously allocated and terminate */
 	if(new_reservation == NULL) {
 		free(reservation_id);
 		terminate_program(system);
@@ -119,15 +118,17 @@ int remove_reservation(manager *system, char *id)
 	int i = 0;
 	int res;
 
-	/* traverse all reservations until reservation with given id is removed */
+	/* traverse all flight's reservations until reservation with given id is removed */
 	while(i < system->nr_flights &&
 			(res = remove_node(system->flights[i].reservations, id)) == -1)
 		++i;
 
+	/* if node was sucessfully removed, update flight and system's information */
 	if(res != 0) {
 		--system->nr_reservations;
-		system->flights[i].nr_passengers -= res; 
 		--system->flights[i].nr_reservations;
+		/* update flights' number of passengers */
+		system->flights[i].nr_passengers -= res; 
 	}
 
 	return res;
@@ -135,14 +136,17 @@ int remove_reservation(manager *system, char *id)
 
 /*
  * Returns pointer to reservation with given id
- * If reservation with given id doesn't exist, returns NULL pointer
+ * Returns NULL poitner if reservation with given id doesn't exist
  */
 reservation *get_reservation_by_id(manager *system, char *id)
 {
-	int i, j = 0;
+	int i;
+	int j = 0;  /* counter of reservations analyzed */
 	reservation *node;
 
-	/* iterate over all flights lists and look for matching node in each list until no more reservations */
+	/* iterate over all flights lists and look for reservation with given id in each list
+	 * until there are no more reservations in the system
+	 */
 	for(i = 0; i < system->nr_flights && j != system->nr_reservations; ++i)
 		if(system->flights[i].nr_reservations > 0) {
 			if((node = find_node_in_list
