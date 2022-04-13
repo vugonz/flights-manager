@@ -127,7 +127,7 @@ int remove_reservation(manager *system, char *id)
 	}
 
 	/* if node was sucessfully removed, update flight and system's information */
-	if(res != 0 && res != -1) {
+	if(res != -1) {
 		--system->nr_reservations;
 		--system->flights[i].nr_reservations;
 		/* update flights' number of passengers */
