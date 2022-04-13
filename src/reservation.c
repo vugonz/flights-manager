@@ -115,16 +115,19 @@ void print_reservations_in_flight(flight *f)
  */
 int remove_reservation(manager *system, char *id)
 {
-	int i = 0;
-	int res;
+	int i = 0; /* nr of flights analyzed */
+	int j = 0; /* nr of reservations analyzed */
+	int res = -1;
 
-	/* traverse all flight's reservations until reservation with given id is removed */
-	while(i < system->nr_flights &&
-			(res = remove_node(system->flights[i].reservations, id)) == -1)
+	/* traverse all system's reservations until reservation with given id is removed */
+	while(i < system->nr_flights && j != system->nr_reservations &&
+			(res = remove_node(system->flights[i].reservations, id)) == -1) {
 		++i;
+		j += system->flights[i].nr_reservations; 
+	}
 
 	/* if node was sucessfully removed, update flight and system's information */
-	if(res != 0) {
+	if(res != 0 && res != -1) {
 		--system->nr_reservations;
 		--system->flights[i].nr_reservations;
 		/* update flights' number of passengers */
@@ -144,9 +147,7 @@ reservation *get_reservation_by_id(manager *system, char *id)
 	int j = 0;  /* counter of reservations analyzed */
 	reservation *node;
 
-	/* iterate over all flights lists and look for reservation with given id in each list
-	 * until there are no more reservations in the system
-	 */
+	/* traverse all flight's reservations until reservation with given id is removed */
 	for(i = 0; i < system->nr_flights && j != system->nr_reservations; ++i)
 		if(system->flights[i].nr_reservations > 0) {
 			if((node = find_node_in_list
