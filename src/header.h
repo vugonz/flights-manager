@@ -156,8 +156,21 @@ int forward_date(manager *system, date *d);
 
 int eliminate(manager *system, char *id, int size);
 
+/* sorting algorithm functions for arrays */
+void sort(manager *system, int *index_list, int size, 
+		int(*cmp_func)(manager *system, int a, int b));
+
 void bubblesort(manager *system, int *index_list, int size, 
 		int(*cmp_func)(manager *system, int a, int b));
+
+void quicksort(manager *system, int *index_list, int left, int right,
+		int(*cmp_func)(manager *system, int a, int b));
+
+void median_of_3(manager *system, int *index_list, int left, int right, 
+		int (*cmp_func)(manager *system, int a, int b));
+
+int partition(manager *system, int *index_list, int left, int right, 
+		int (*cmp_func)(manager *system, int a, int b));
 
 
 /* airports.c functions */

@@ -334,7 +334,20 @@ int forward_date(manager *system, date *d)
 	return 0;
 }
 
-void bubblesort(manager *system, int indexes[], int size, int (*cmp_func) (manager *system, int a, int b)) {
+/*
+ * Sorts array of indexes given as argument using cmp_func as comparison method
+ * Uses quicksort and bubblesort mix to sort array
+ */
+void sort(manager *system, int indexes[], int size, int (*cmp_func) (manager *system, int a, int b))
+{
+	quicksort(system, indexes, 0, size - 1, cmp_func);
+}
+
+/*
+ * Bubble sort with stop condition
+ */
+void bubblesort(manager *system, int indexes[], int size, int (*cmp_func) (manager *system, int a, int b)) 
+{
 	int i, j, done;
   
 	for (i = 0; i < size - 1; ++i){
@@ -349,6 +362,86 @@ void bubblesort(manager *system, int indexes[], int size, int (*cmp_func) (manag
 		if(done)
 			break;
 	}
+}
+
+/*
+ * Quicksort that uses recursive partitioning for big arrays and bubblesort once partitions become small (10 elements)
+ */
+void quicksort(manager *system, int *indexes, int left, int right, int (*cmp_func) (manager *system, int a, int b))
+{
+	int i;
+	/* sort first, middle and last element (median of three quicksort variation) */
+
+	if(right - left < 10) {
+		bubblesort(system, indexes, right - left, cmp_func);
+	}
+	else {
+		median_of_3(system, indexes, left, right, cmp_func);
+		i = partition(system, indexes, left + 1, right, cmp_func);
+		quicksort(system, indexes, left, i - 1, cmp_func);
+		quicksort(system, indexes, i + 1, right, cmp_func);
+	}
+}
+
+/*
+ * Median of 3 quicksort optimization. T
+ * Takes the first, middle and last elements of the array and swap them into their sorted order
+ * The middle element will be a good candidate for pivot, first and last elements will
+ * already be on the right side of the partition
+ */
+void median_of_3(manager *system, int *indexes, int left, int right, 
+		int (*cmp_func) (manager *system, int a, int b))
+{
+	int mid_index = (left+right+1) / 2;
+	int first, last, pivot;
+
+	/* comparing the first, middle and last element without if else statements*/
+	last = cmp_func(system, indexes[left], indexes[mid_index]) && cmp_func(system, indexes[left], indexes[right]) ?
+		indexes[left] : cmp_func(system, indexes[mid_index], indexes[right]) ?
+		indexes[mid_index] : indexes[right]; 
+
+	first = !cmp_func(system, indexes[left], indexes[mid_index]) && !cmp_func(system, indexes[left], indexes[right]) ?
+		indexes[left] : !cmp_func(system, indexes[mid_index], indexes[right]) ?
+		indexes[mid_index] : indexes[right];
+
+	/* pivot */
+	pivot = indexes[left] != last && indexes[left] != first ? indexes[left] :
+		indexes[right] != first && indexes[right] != last ?
+		indexes[right] : indexes[mid_index];
+	
+	/* sorts first and last elements */
+	indexes[left] = first;
+	indexes[right] = last;
+
+	/* swap next to last element with pivot */
+	indexes[mid_index] = indexes[right - 1];
+	indexes[right - 1] = pivot;
+}
+
+/*
+ * Quicksort partition function (No base case because Bubblesort finishes sorting)
+ */
+int partition(manager *system, int indexes[], int left, int right, 
+		int (*cmp_func) (manager *system, int a, int b))
+{
+	int i = left;
+	int j = right;
+	int aux;
+
+	while(i < j) {
+		while(cmp_func(system, indexes[i++], indexes[right]));
+		while(cmp_func(system, indexes[right], indexes[j++]));
+		if(i < j) {
+			int aux = indexes[i];
+			indexes[i] = indexes[j];
+			indexes[j] = aux;
+		}
+	}
+	aux = indexes[i];
+	indexes[i] = indexes[right];
+	indexes[right] = aux;
+
+	return i;
 }
 
 void free_all_memory(manager *system)
