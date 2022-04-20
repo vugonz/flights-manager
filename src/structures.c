@@ -1,3 +1,4 @@
+
 /*  Author: Gonçalo Azevedo 93075
  *  File: structures.c
  */
@@ -12,7 +13,6 @@
  */
 void init_list(list *l)
 {
-	l->tail = NULL;
 	l->head = NULL;
 }
 
@@ -21,19 +21,13 @@ void init_list(list *l)
  */
 void add_node(list *l, reservation *new_node)
 {
-	/* add to end of list */
-	new_node->next = NULL;
-	
-	/* link last node to newly created node */
-	if(l->tail != NULL)
-		l->tail->next = new_node;
-
-	/* update tail pointer */
-	l->tail = new_node;
-
-	/* if first element, set head pointer */
-	if(l->head == NULL)
+	if(l->head == NULL) {
 		l->head = new_node;
+		new_node->next = NULL;
+	} else {
+		new_node->next = l->head;
+		l->head = new_node;
+	}
 }
 
 /*
@@ -58,18 +52,15 @@ int remove_node(list *l, char *id)
 		return -1;
 
 	/* if single element list, list becomes empty */
-	if(l->head == l->tail) {
-		l->head = l->tail = NULL;
+	if(l->head->next == NULL) {
+		l->head = NULL;
 	} else {
 		/* if first element is to be removed */
-		if (aux == NULL) 
-			l->head = node->next;
-		/* if last element is to be removed */
-		else if (node->next == NULL)
-			l->tail = aux;
-
-		/* update previous element pointer */
-		aux->next = node->next;
+		if (aux == NULL) { 
+			l->head = node->next;/* update previous element pointer */
+		} else {
+			aux->next = node->next;
+		}
 	}
 
 	/* get nr_passengers from removed node */

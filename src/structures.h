@@ -8,6 +8,7 @@
 #ifndef _STRUCTURES_
 #define _STRUCTURES_
 
+#define INIT_TABLE_SIZE 10
 #define PRINT_RESERVATION_STR "%s %d\n"
 
 /* reservation self referenced structure */
@@ -20,11 +21,17 @@ struct reservation {
 /* reservation's list structure */
 struct list {
 	struct reservation *head;
-	struct reservation *tail;
+};
+
+struct hashtable {
+	char **table;
+	int size;
+	int count;
 };
 
 typedef struct reservation reservation;
 typedef struct list list;
+typedef struct hashtable hashtable;
 
 void init_list(list *l);
 

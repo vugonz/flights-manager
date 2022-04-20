@@ -62,15 +62,12 @@
 #define DAYS_IN_YEAR 365
 
 /* reservation output messages */
-#define ADD_RESERVATION_ERR1 "invalid reservation code\n"
-#define ADD_RESERVATION_ERR2 "%s: flight does not exist\n"
-#define ADD_RESERVATION_ERR3 "%s: flight reservation already used\n"
-#define ADD_RESERVATION_ERR4 "too many reservations\n"
-#define ADD_RESERVATION_ERR5 "invalid date\n"
-#define ADD_RESERVATION_ERR6 "invalid passager number\n"
-#define ADD_RESERVATION_SUCCESS "%s %d\n"
-#define LIST_RESERVATION_ERR1 "flight does not exist\n"
-#define LIST_RESERVATION_ERR2 "invalid date\n"
+#define RESERVATION_ERR1 "invalid reservation code\n"
+#define RESERVATION_ERR2 "%s: flight does not exist\n"
+#define RESERVATION_ERR3 "%s: flight reservation already used\n"
+#define RESERVATION_ERR4 "too many reservations\n"
+#define RESERVATION_ERR5 "invalid date\n"
+#define RESERVATION_ERR6 "invalid passenger number\n"
 
 /* eliminate command error messages */
 #define ELIMINATE_ERR "not found\n"
@@ -157,20 +154,8 @@ int forward_date(manager *system, date *d);
 int eliminate(manager *system, char *id, int size);
 
 /* sorting algorithm functions for arrays */
-void sort(manager *system, int *index_list, int size, 
-		int(*cmp_func)(manager *system, int a, int b));
-
 void bubblesort(manager *system, int *index_list, int size, 
 		int(*cmp_func)(manager *system, int a, int b));
-
-void quicksort(manager *system, int *index_list, int left, int right,
-		int(*cmp_func)(manager *system, int a, int b));
-
-void median_of_3(manager *system, int *index_list, int left, int right, 
-		int (*cmp_func)(manager *system, int a, int b));
-
-int partition(manager *system, int *index_list, int left, int right, 
-		int (*cmp_func)(manager *system, int a, int b));
 
 
 /* airports.c functions */

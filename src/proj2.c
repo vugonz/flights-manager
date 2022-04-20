@@ -175,6 +175,7 @@ void handle_add_flight(manager *system)
 	}
 }
 
+
 /*
  * Lists flights in given airports.
  * If 'p' command is given as argument, lists flights arriving in airport ID read from stdin
@@ -194,6 +195,7 @@ void handle_list_flight_by_airport(manager *system, char command)
 		printf(LIST_AIRPORTS_ERR, airport_id);
 }
 
+
 /*
  * Reads a date structure from stdin and, if input is valid, forwards system's date to specified date
  * If input is invalid, prints error message
@@ -210,6 +212,7 @@ void handle_forward_date(manager *system)
 	if(result_value == -1)
 		printf(FORWARD_DATE_ERR);
 }
+
 
 /*
  * Handles 'r' command
@@ -232,6 +235,7 @@ void handle_reservations(manager *system)
 	}
 }
 
+
 void handle_list_reservations(manager *system, char *flight_id, date *d)
 {
 	int result_value;
@@ -239,11 +243,12 @@ void handle_list_reservations(manager *system, char *flight_id, date *d)
 	result_value = list_reservations(system, flight_id, d);
 
 	if(result_value == -1) {
-		printf(LIST_RESERVATION_ERR1);
+		printf(RESERVATION_ERR2, flight_id);
 	} else if(result_value == -2){
-		printf(LIST_RESERVATION_ERR2);
+		printf(RESERVATION_ERR5);
 	}
 }
+
 
 /*
  * Handles add reservation
@@ -257,31 +262,33 @@ void handle_add_reservation(manager *system, char *buffer, char *flight_id, date
 
 	/* analyze reservation id size from buffer */
 	size_id = get_reservation_id_size(buffer);
-	
-	/* get nr_passengers from buffer */
+
+	/* get nr of passengers from buffer */
 	sscanf(buffer + size_id, "%d", &nr_passengers);
 
 	/* adds reservation */
 	result_value = validate_reservation(system, buffer, &reservation_id, size_id, flight_id, d, nr_passengers);
 
+
 	if(result_value == -1) {
-		printf(ADD_RESERVATION_ERR1);
+		printf(RESERVATION_ERR1);
 	} else if(result_value == -2) {
-		printf(ADD_RESERVATION_ERR2, flight_id);
+		printf(RESERVATION_ERR2, flight_id);
 	} else if(result_value == -3) {
-		printf(ADD_RESERVATION_ERR3, reservation_id);
+		printf(RESERVATION_ERR3, reservation_id);
 	} else if(result_value == -4) {
-		printf(ADD_RESERVATION_ERR4);
+		printf(RESERVATION_ERR4);
 	} else if(result_value == -5) {
-		printf(ADD_RESERVATION_ERR5);
+		printf(RESERVATION_ERR5);
 	} else if(result_value == -6) {
-		printf(ADD_RESERVATION_ERR6);
+		printf(RESERVATION_ERR6);
 	}
 
 	/* if reservation was not added, free allocated memory for id */
 	if(result_value != 0 && result_value != -1)
 		free(reservation_id);
 }
+
 
 void handle_eliminate(manager *system)
 {
@@ -290,8 +297,9 @@ void handle_eliminate(manager *system)
 	int result_value;
 
 	scanf("%s", id);
+	
 
-	/* evaluate id in buffer and allocate memory */
+	/* evaluate id size */
 	size = strlen(id);
 
 	result_value = eliminate(system, id, size);
@@ -299,6 +307,7 @@ void handle_eliminate(manager *system)
 	if(result_value == -1)
 		printf(ELIMINATE_ERR);
 }
+
 
 int eliminate(manager *system, char *id, int size)
 {
@@ -318,6 +327,7 @@ void initialize(manager *system)
 	system->date.year = YEAR_0;
 }
 
+
 /*
  * Forwards system's date if given date is valid
  */
@@ -332,15 +342,6 @@ int forward_date(manager *system, date *d)
 	printf("\n");
 
 	return 0;
-}
-
-/*
- * Sorts array of indexes given as argument using cmp_func as comparison method
- * Uses quicksort and bubblesort mix to sort array
- */
-void sort(manager *system, int indexes[], int size, int (*cmp_func) (manager *system, int a, int b))
-{
-	quicksort(system, indexes, 0, size - 1, cmp_func);
 }
 
 /*
@@ -364,90 +365,11 @@ void bubblesort(manager *system, int indexes[], int size, int (*cmp_func) (manag
 	}
 }
 
-/*
- * Quicksort that uses recursive partitioning for big arrays and bubblesort once partitions become small (10 elements)
- */
-void quicksort(manager *system, int *indexes, int left, int right, int (*cmp_func) (manager *system, int a, int b))
-{
-	int i;
-	/* sort first, middle and last element (median of three quicksort variation) */
-
-	if(right - left < 10) {
-		bubblesort(system, indexes, right - left, cmp_func);
-	}
-	else {
-		median_of_3(system, indexes, left, right, cmp_func);
-		i = partition(system, indexes, left + 1, right, cmp_func);
-		quicksort(system, indexes, left, i - 1, cmp_func);
-		quicksort(system, indexes, i + 1, right, cmp_func);
-	}
-}
-
-/*
- * Median of 3 quicksort optimization. T
- * Takes the first, middle and last elements of the array and swap them into their sorted order
- * The middle element will be a good candidate for pivot, first and last elements will
- * already be on the right side of the partition
- */
-void median_of_3(manager *system, int *indexes, int left, int right, 
-		int (*cmp_func) (manager *system, int a, int b))
-{
-	int mid_index = (left+right+1) / 2;
-	int first, last, pivot;
-
-	/* comparing the first, middle and last element without if else statements*/
-	last = cmp_func(system, indexes[left], indexes[mid_index]) && cmp_func(system, indexes[left], indexes[right]) ?
-		indexes[left] : cmp_func(system, indexes[mid_index], indexes[right]) ?
-		indexes[mid_index] : indexes[right]; 
-
-	first = !cmp_func(system, indexes[left], indexes[mid_index]) && !cmp_func(system, indexes[left], indexes[right]) ?
-		indexes[left] : !cmp_func(system, indexes[mid_index], indexes[right]) ?
-		indexes[mid_index] : indexes[right];
-
-	/* pivot */
-	pivot = indexes[left] != last && indexes[left] != first ? indexes[left] :
-		indexes[right] != first && indexes[right] != last ?
-		indexes[right] : indexes[mid_index];
-	
-	/* sorts first and last elements */
-	indexes[left] = first;
-	indexes[right] = last;
-
-	/* swap next to last element with pivot */
-	indexes[mid_index] = indexes[right - 1];
-	indexes[right - 1] = pivot;
-}
-
-/*
- * Quicksort partition function (No base case because Bubblesort finishes sorting)
- */
-int partition(manager *system, int indexes[], int left, int right, 
-		int (*cmp_func) (manager *system, int a, int b))
-{
-	int i = left;
-	int j = right;
-	int aux;
-
-	while(i < j) {
-		while(cmp_func(system, indexes[i++], indexes[right]));
-		while(cmp_func(system, indexes[right], indexes[j++]));
-		if(i < j) {
-			int aux = indexes[i];
-			indexes[i] = indexes[j];
-			indexes[j] = aux;
-		}
-	}
-	aux = indexes[i];
-	indexes[i] = indexes[right];
-	indexes[right] = aux;
-
-	return i;
-}
 
 void free_all_memory(manager *system)
 {
 	int i;
-	
+
 	/* destroy all reservation's lists and nodes */
 	for(i = 0; i < system->nr_flights; ++i) {
 		if(system->flights[i].nr_reservations > 0) {
@@ -458,9 +380,10 @@ void free_all_memory(manager *system)
 	}	
 }
 
+
 void terminate_program(manager *system)
 {
-	printf("No memory\n");
+	printf("No memory.\n");
 
 	free_all_memory(system);
 

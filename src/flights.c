@@ -178,6 +178,7 @@ void create_flight(manager *system, char *id, char *origin, char *destination,
 	new_flight.capacity = capacity;
 	new_flight.date = *d;
 	new_flight.time = *t;
+	new_flight.nr_reservations = 0; 
 
 	/* calculate departure's schedule numeric value */ 
 	new_flight.departure_schedule = 

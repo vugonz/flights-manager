@@ -22,10 +22,10 @@ int validate_reservation(manager *system, char *buffer, char **reservation_id,
 
 	/* read reservation id */
 	*reservation_id = (char *)malloc((size_id + 1) * sizeof(char));
-	sscanf(buffer, "%s", *reservation_id);
-	/* if no memory */
 	if(reservation_id == NULL)
 		terminate_program(system);
+	sscanf(buffer, "%s", *reservation_id);
+	/* if no memory */
 
 	/* check if given flight id exists for given date */
 	f = get_flight_by_id_and_date(system, flight_id, d);	
@@ -36,7 +36,6 @@ int validate_reservation(manager *system, char *buffer, char **reservation_id,
 	if(get_reservation_by_id(system, *reservation_id) != NULL)
 		return -3;
 
-	/* check if flight capacity is not exceeded */	
 	if(f->nr_passengers + nr_passengers > f->capacity)
 		return -4;
 
@@ -52,6 +51,7 @@ int validate_reservation(manager *system, char *buffer, char **reservation_id,
 	
 	return 0;
 }
+
 
 /*
  * Creates a new reservation and adds it to the corresponding flight
@@ -122,8 +122,8 @@ int remove_reservation(manager *system, char *id)
 	/* traverse all system's reservations until reservation with given id is removed */
 	while(i < system->nr_flights && j != system->nr_reservations &&
 			(res = remove_node(system->flights[i].reservations, id)) == -1) {
-		++i;
 		j += system->flights[i].nr_reservations; 
+		++i;
 	}
 
 	/* if node was sucessfully removed, update flight and system's information */
