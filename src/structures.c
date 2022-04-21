@@ -18,17 +18,12 @@ void init_list(list *l)
 
 
 /* 
- * Adds new reservation node given as argument to the end of the list as argument
+ * Adds new reservation node given as argument to the top of the list given as argument
  */
 void add_node(list *l, reservation *new_node)
 {
-	if(l->head == NULL) {
-		l->head = new_node;
-		new_node->next = NULL;
-	} else {
-		new_node->next = l->head;
-		l->head = new_node;
-	}
+	new_node->next = l->head;
+	l->head = new_node;
 }
 
 

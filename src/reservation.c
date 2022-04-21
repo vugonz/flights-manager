@@ -106,11 +106,11 @@ int list_reservations(manager *system, char *flight_id, date *d)
 
 
 /*
- * Prints all reservations in given flight in lexical order 
+ * Prints all reservations in given flight in lexicographical order 
  */
 void print_reservations_in_flight(flight *f)
 {
-	/* sort flights list in lexicographical order */
+	/* sort flight's list in lexicographical order */
 	f->reservations->head = sort_list(f->reservations->head, f->nr_reservations);
 
 	print_list(f->reservations);

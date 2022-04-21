@@ -315,8 +315,9 @@ void handle_eliminate(manager *system)
 
 	if(size >= 10) {
 		result_value = remove_reservation(system, id);
-	} else
+	} else {
 		result_value = remove_flight(system, id);
+	}
 
 	if(result_value == -1)
 		printf(ELIMINATE_ERR);
