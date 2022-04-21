@@ -3,12 +3,11 @@
  * File: structures.h
  *
  * This header contains the essential new features added to the second part of the project.
- * It facilitates the evaluation of the second part since the base wasn't too altered.
+ * It facilitates the evaluation of the project since the base wasn't too altered (aside from reservation's related code).
  */
 #ifndef _STRUCTURES_
 #define _STRUCTURES_
 
-#define INIT_TABLE_SIZE 10
 #define PRINT_RESERVATION_STR "%s %d\n"
 
 /* reservation self referenced structure */
@@ -23,15 +22,8 @@ struct list {
 	struct reservation *head;
 };
 
-struct hashtable {
-	char **table;
-	int size;
-	int count;
-};
-
 typedef struct reservation reservation;
 typedef struct list list;
-typedef struct hashtable hashtable;
 
 void init_list(list *l);
 

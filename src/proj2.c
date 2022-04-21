@@ -386,7 +386,7 @@ void free_all_memory(manager *system)
 /*
  * Bubble sort with stop condition
  */
-void bubblesort(manager *system, int indexes[], int size, int (*cmp_func) (manager *system, int a, int b)) 
+void bubblesort(manager *system, int *indexes, int size, int (*cmp_func) (manager *system, int a, int b)) 
 {
 	int i, j, done;
   

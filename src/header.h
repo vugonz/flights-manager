@@ -142,7 +142,7 @@ void handle_list_reservations(manager *system, char *flight_id, date *d);
 
 void handle_eliminate(manager *system);
 
-/* initializes global structure that stores all of current session's useful information */
+/* system's structure control functions */
 void initialize(manager *system);
 
 void free_all_memory(manager *system);
@@ -151,9 +151,7 @@ void terminate_program(manager *system);
 
 int forward_date(manager *system, date *d);
 
-int eliminate(manager *system, char *id, int size);
-
-/* sorting algorithm functions for arrays */
+/* bubble sort for indexes arrays */
 void bubblesort(manager *system, int *index_list, int size, 
 		int(*cmp_func)(manager *system, int a, int b));
 
@@ -209,7 +207,7 @@ void print_arriving_flight(manager *system, int index);
 
 flight *get_flight_by_id_and_date(manager *system, char *id, date *d);
 
-/* compare functions used by sorting insertion algorithm */
+/* compare functions used in sorting algorithm */
 int compare_flight_departure(manager *system, int a, int b);
 
 int compare_flight_arrival(manager *system, int a, int b);

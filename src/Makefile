@@ -10,5 +10,9 @@ proj2: $(OBJECTS)
 
 %(OBJECTS): %.c header.h
 
+zip:
+	zip proj2 *.c *.h 
+
 clean:
 	rm proj2 *.o
+
