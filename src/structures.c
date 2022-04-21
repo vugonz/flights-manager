@@ -1,4 +1,3 @@
-
 /*  Author: Gonçalo Azevedo 93075
  *  File: structures.c
  */
@@ -8,6 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+
 /*
  * Initializes list of reservations
  */
@@ -15,6 +15,7 @@ void init_list(list *l)
 {
 	l->head = NULL;
 }
+
 
 /* 
  * Adds new reservation node given as argument to the end of the list as argument
@@ -29,6 +30,7 @@ void add_node(list *l, reservation *new_node)
 		l->head = new_node;
 	}
 }
+
 
 /*
  * Removes node with given id from list and frees all removed node's associated memory
@@ -57,7 +59,7 @@ int remove_node(list *l, char *id)
 	} else {
 		/* if first element is to be removed */
 		if (aux == NULL) { 
-			l->head = node->next;/* update previous element pointer */
+			l->head = node->next;
 		} else {
 			aux->next = node->next;
 		}
@@ -71,6 +73,7 @@ int remove_node(list *l, char *id)
 
 	return n;
 }
+
 
 /*
  * Prints all reservations in given list
@@ -87,7 +90,7 @@ void print_list(list *l)
 
 
 /*
- * Destroys given list and frees all associated memory
+ * Destroys given list by freeing all associated memory
  */
 void destroy_list(list *l)
 {
@@ -103,8 +106,9 @@ void destroy_list(list *l)
 	free(l);
 }
 
+
 /*
- * Returns pointer to node with given id in list
+ * Returns pointer to node with given id in given list
  * Returns NULL pointer if node with given id doesn't exist
  */
 reservation *find_node_in_list(list *l, char *id)
@@ -120,6 +124,7 @@ reservation *find_node_in_list(list *l, char *id)
 	return node;
 }
 
+
 /*
  * Sorts given list of reservations in alphabetical order of reservation's id using mergesort
  */
@@ -134,7 +139,7 @@ reservation *sort_list(reservation *head, int size)
 	if(size == 0 || size == 1)
 		return head;
 
-	/* get right pointing to middle list's element */
+	/* get right pointer pointing to the middle element of given list */
 	for(i = 0; i < size - size/2 - 1; ++i)
 		right = right->next;
 	/* divide list */
@@ -149,12 +154,16 @@ reservation *sort_list(reservation *head, int size)
 	return merge(left, right);
 }
 
+
+/* 
+ * Merges two lists with head pointers given as arguments and returns head pointer to merged list
+ */
 reservation *merge(reservation *h1, reservation *h2)
 {
 	reservation *aux;  /* auxiliary pointer to traverse */
 	reservation *head; /* head of sorted list */
 	
-	/* get first element in auxiliary pointer */
+	/* determine head element from given sub lists */
 	aux = strcmp(h1->id, h2->id) < 0 ? h1 : h2;
 	if(aux == h1)
 		h1 = h1->next;

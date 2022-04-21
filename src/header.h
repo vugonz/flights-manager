@@ -247,7 +247,6 @@ int remove_reservation(manager *system, char *id);
 
 reservation *get_reservation_by_id(manager *system, char *reservation_id);
 
-
 /* auxiliary functions */
 void print_reservations_in_flight(flight *f);
 

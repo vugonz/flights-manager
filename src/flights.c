@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 
+
 /*
  * Adds new flight to global structure if all given arguments are valid
  * If invalid arguments are given, returns an error value to handle function
@@ -55,6 +56,7 @@ int add_flight(manager *system, char *id, char *origin, char *destination,
 	return 0;
 }
 
+
 /*
  * Lists flights in system sorted by creation 
  */
@@ -65,6 +67,7 @@ void list_flights(manager *system)
 	for(i = 0; i < system->nr_flights; ++i)
 		print_flight(system->flights[i]);
 }
+
 
 /*
  * If 'p' command is given, lists departing flights in airport with given ID
@@ -85,6 +88,7 @@ int list_flights_by_airport(manager *system, char *airport_id, char command)
 	return 0;
 }
 
+
 /*
  * Lists flights sorted by departure schedule with origin in airport with given ID
  */
@@ -104,6 +108,7 @@ void list_airport_flights_by_departure(manager *system, char *airport_id)
 		print_departing_flight(system, indexes[i]);
 }
 
+
 /*
  * Lists flights sorted by arrival schedule with destination in airport with given ID
  */
@@ -111,7 +116,6 @@ void list_airport_flights_by_arrival(manager *system, char *airport_id)
 {
 	int i, n = 0;
 	int indexes[MAX_FLIGHTS];
-
 
 	for(i = 0; i < system->nr_flights; ++i)
 		if(!strcmp(system->flights[i].destination, airport_id))
@@ -123,28 +127,33 @@ void list_airport_flights_by_arrival(manager *system, char *airport_id)
 		print_arriving_flight(system, indexes[i]);
 }
 
+
 /*
  * Removes flights with given id from system
- * Returns nr of removed flights minus 1 (-1 is returned if no flight was found)
+ * Returns nr of removed flights minus 1 (-1 if no flights are removed)
  */
 int remove_flight(manager *system, char *id)
 {
 	int i;
 	int j = 0;
 
+	/* find flight with given id and free its allocated memory, shift following elements accordingly */
 	for(i = 0; i < system->nr_flights; ++i) {
 		if(!strcmp(system->flights[i].id, id)) {
 			destroy_list(system->flights[i].reservations);
 			++j;
 			continue;
 		}
+		/* shift following elements */
 		if(j)
 			system->flights[i - j] = system->flights[i];
 	}
+	/* update system's flights counter */
 	system->nr_flights -= j;
 
 	return j - 1;
 }
+
 
 /*
  * Returns pointer to flight with given ID for given date
@@ -164,6 +173,7 @@ flight *get_flight_by_id_and_date(manager *system, char *id, date *d)
 	return NULL;
 }
 
+
 /*
  * Adds a flight to the system with given arguments as members
  */
@@ -178,7 +188,6 @@ void create_flight(manager *system, char *id, char *origin, char *destination,
 	new_flight.capacity = capacity;
 	new_flight.date = *d;
 	new_flight.time = *t;
-	new_flight.nr_reservations = 0; 
 
 	/* calculate departure's schedule numeric value */ 
 	new_flight.departure_schedule = 
@@ -200,6 +209,7 @@ void create_flight(manager *system, char *id, char *origin, char *destination,
 	system->nr_flights++;
 }
 
+
 /*
  * Returns negative if f1 departs before f2,
  * Returns 0 if f1 and f2 depart at the same schedule
@@ -210,6 +220,7 @@ int compare_flight_departure(manager *system, int a, int b)
 	return system->flights[a].departure_schedule > system->flights[b].departure_schedule;
 }
 
+
 /*
  * Returns negative if f1 arrives before f2,
  * Returns 0 if flights arrive at the same schedule
@@ -219,6 +230,7 @@ int compare_flight_arrival(manager *system, int a, int b)
 {
 	return system->flights[a].arrival_schedule > system->flights[b].arrival_schedule;
 }
+
 
 /*
  * Returns 1 if given ID is a valid flight ID
@@ -247,6 +259,7 @@ void print_flight(flight flight)
 			flight.time.hour, flight.time.minute);
 }
 
+
 /*
  * Formatted print of flight structure to be used in 'p' commands
  */
@@ -262,6 +275,8 @@ void print_departing_flight(manager *system, int index)
 	print_time(&system->flights[index].time);
 	printf("\n");
 }
+
+
 /*
  * Formatted print of flight structure to be used in 'c' commands
  */
