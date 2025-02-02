@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="pt_PT"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Language" content="pt">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="Description" content="FenixEdu™ is an open-source academic information platform.">
+    <meta name="Keywords" content="FenixEdu, open-source, academic, information, platform, academic administration, higher education, e-learning">
+    <meta name="Language" content="pt_PT">
+    <meta name="Author" content="FenixEdu">
+    <meta name="Email" content="hello@fenixedu.org">
+    <meta name="Copyright" content="Técnico Lisboa - Instituto Superior Técnico">
+    <meta name="Distribution" content="Global">
+    <meta name="Rating" content="General">
+
+    <!-- OpenGraph Specific Metas -->
+    <meta property="og:title" content="FenixEdu™">
+    <meta property="og:type" content="application">
+    <meta property="og:url" content="http://www.fenixedu.org">
+    <meta property="og:site_name" content="FenixEdu">
+    <meta property="og:description" content="FenixEdu Learning is an open-source academic information platform.">
+    <meta property="fb:profile_id" content="379238245509413">
+
+    <!-- Mobile Specific Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.5">
+
+            <title>2º Projecto · Introdução aos Algoritmos e Estruturas de Dados</title>
+    
+    <link href="2%C2%BA%20Projecto%20%C2%B7%20Introdu%C3%A7%C3%A3o%20aos%20Algoritmos%20e%20Estruturas%20de%20Dados_files/bootstrap.min.css" rel="stylesheet">
+    <link href="2%C2%BA%20Projecto%20%C2%B7%20Introdu%C3%A7%C3%A3o%20aos%20Algoritmos%20e%20Estruturas%20de%20Dados_files/publicPages.css" rel="stylesheet">
+    <script src="2%C2%BA%20Projecto%20%C2%B7%20Introdu%C3%A7%C3%A3o%20aos%20Algoritmos%20e%20Estruturas%20de%20Dados_files/jquery-2.1.1.min.js" type="text/javascript"></script>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://fenix.tecnico.ulisboa.pt/cms/assets/fenixedu-learning-theme/117a7569aa22b88e/js/html5shiv.js"></script>
+      <script src="https://fenix.tecnico.ulisboa.pt/cms/assets/fenixedu-learning-theme/117a7569aa22b88e/js/respond.min.js"></script>
+    <![endif]-->
+
+    
+    <!-- Header -->
+        <!-- End Header -->
+    
+    <link rel="shortcut icon" type="image/x-icon" href="https://fenix.tecnico.ulisboa.pt/api/bennu-portal/configuration/favicon">
+  </head>
+
+  <body>
+
+        	<div id="headcounter">
+		<div class="container">
+			
+
+		<div class="row" style="padding-top:50px; padding-bottom:25px;">
+			<div class="col-sm-9">
+        <div>
+				  <a href="http://tecnico.ulisboa.pt/" target="_blank"><img class="logo" src="2%C2%BA%20Projecto%20%C2%B7%20Introdu%C3%A7%C3%A3o%20aos%20Algoritmos%20e%20Estruturas%20de%20Dados_files/logo.svg"></a>
+        </div>
+			</div>
+			<div class="col-sm-3 ">
+        <div>
+	           
+        </div>
+			</div>
+		</div>
+		</div>
+	</div>
+	
+		<div class="container">
+      <div class="row">
+        <div class="col-sm-9">
+          <h2 style="font-weight:300;" class="site-header"><a href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre">Introdução aos Algoritmos e Estruturas de Dados</a>  </h2>
+          
+            <div style="font-size:15px; color:#888; margin-top:5px; margin-bottom:15px;"><small>
+              &nbsp;</small></div>          
+        </div>
+        <div class="col-sm-3 hidden-xs">
+              <div style="margin-top: 25px;">
+                <img src="2%C2%BA%20Projecto%20%C2%B7%20Introdu%C3%A7%C3%A3o%20aos%20Algoritmos%20e%20Estruturas%20de%20Dados_files/icon_global.svg" width="13" height="13" style="margin-bottom:2px;margin-right:10px">
+                                        <a class="locale-changer active" title="português (Portugal)" onclick="setLang('pt_PT')">pt</a>
+                                        <a class="locale-changer " title="inglês (Reino Unido)" onclick="setLang('en_GB')">en</a>
+                                </div>
+        </div>
+      </div>
+	  		</div>
+	
+    <div class="container">
+
+      <main class="row">
+
+        <div class="col-sm-9 main-content" id="content-block">
+          <h3 style="font-weight:300; margin-bottom: 22px; margin-top:0px;">
+                
+            
+          </h3>
+              	    
+    <div>
+        
+            
+            <p></p><h1>Enunciado do Projecto 2 - IAED 2021/2022</h1>
+<h2>Data de entrega: 20 de Abril de 2022, às 19h59m</h2>
+<h2>LOG alterações</h2>
+<ul><li>4-abr-22 - Publicação do enunciado.</li><li>7-abr-22 - Clarificação do código de reserva e do comando <strong>e</strong>.</li></ul>
+<h2>1. Introdução</h2>
+<p>O objectivo deste projeto é o desenvolvimento, em linguagem C, de
+funcionalidades adicionais às criadas no primeiro projeto.
+A interacção com o programa deverá ocorrer através de um conjunto de
+linhas compostas por uma letra (comando) e um número de argumentos
+dependente do comando a executar.
+Pode assumir que todo o <em>input</em> fornecido respeitará os tipos indicados,
+por exemplo onde é esperado um valor inteiro decimal nunca será
+introduzida uma letra.
+Os comandos do primeiro projeto são listados na tabela seguinte e
+mantêm as operações a executar e obedecem aos limites impostos,
+exceto o limite superior de passageiros por voo que é eliminado.</p>
+<table><thead><tr><th>Comando</th><th>Acção</th></tr></thead><tbody><tr><td><strong>q</strong></td><td>termina o programa</td></tr><tr><td><strong>a</strong></td><td>adiciona um novo aeroporto ao sistema</td></tr><tr><td><strong>l</strong></td><td>lista os aeroportos</td></tr><tr><td><strong>v</strong></td><td>adiciona um voo ou lista todos os voos</td></tr><tr><td><strong>p</strong></td><td>lista os voos com partida de um aeroporto</td></tr><tr><td><strong>c</strong></td><td>lista os voos com chegada a um aeroporto</td></tr><tr><td><strong>t</strong></td><td>avança a data do sistema</td></tr></tbody></table>
+<p>Além dos comandos do primeiro projeto, são adicionados os
+comandos listados na tabela seguinte, bem como as operações a executar.</p>
+<table><thead><tr><th>Comando</th><th>Acção</th></tr></thead><tbody><tr><td><strong>r</strong></td><td>adiciona uma reserva ou lista as reservas de um voo</td></tr><tr><td><strong>e</strong></td><td>elimina voos ou reserva</td></tr></tbody></table>
+<h2>2. Especificação do problema</h2>
+<p>Não existem limites no número de reservas,
+nem na dimensão dos códigos das reservas,
+logo deve procurar utilizar a memória estritamente necessária.
+Para facilitar a introdução dos dados, pode assumir que cada instrução não
+excede 65535 carateres.
+Se a memória se esgotar, o programa deve terminar de forma controlada,
+imprimindo a mensagem <code>No memory.</code>
+Antes de terminar, o programa deve libertar toda a memória reservada.</p>
+<h2>3. Dados de Entrada</h2>
+<p>Durante a execução do programa as instruções devem ser lidas do standard input
+na forma de um conjunto de linhas iniciadas por uma palavra, que se passa a
+designar por <em>comando</em>, seguido de um número de informações dependente do
+comando a executar.
+Os comandos e os argumentos são separados por espaços ou tabuladores.</p>
+<p>Cada comando indica uma determinada ação que se passa a caracterizar em
+termos de formato de entrada, formato de saída, e erros.
+No caso de múltiplos erros para o mesmo comando deverá retornar apenas o
+primeiro desses erros.
+Os comandos adicionais são:</p>
+<ul><li>
+<p><strong>r</strong> - adiciona uma reserva ou lista as reserva de um voo:</p>
+<ul><li>Formato de entrada: <code>r &lt;códigoVoo&gt; &lt;data&gt; [&lt;códigoReserva&gt; &lt;númeroPassageiros&gt;]</code></li><li>Formato de saída: <code>&lt;códigoReserva&gt; &lt;númeroPassageiros&gt;</code> para cada reserva no voo com o código <code>&lt;códigoVoo&gt;</code> na data <code>&lt;data&gt;</code>. Uma reserva por linha por ordem lexicográfica do código de reserva.</li><li>Erros:<ul><li><code>invalid reservation code</code>
+ no caso do código da reserva não ser uma string composta apenas por 
+maíusculas e digitos ou se for composto por menos de 10 caracteres.</li><li><code>&lt;códigoVoo&gt;: flight does not exist</code> no caso de não existir um voo com o código na data indicada.</li><li><code>&lt;códigoReserva&gt;: flight reservation already used</code> no caso de já existir uma reserva com o <code>&lt;códigoReserva&gt;</code> indicado.</li><li><code>too many reservations</code> no caso da reserva, a ser criada, exceda a capacidade do voo.</li><li><code>invalid date</code> no caso de ser uma data no passado ou mais de um ano no futuro.</li><li><code>invalid passenger number</code> no caso do número de passageiros não seja um inteiro superior a 0.</li></ul>
+</li></ul>
+</li><li>
+<p><strong>e</strong> - elimina voos ou reserva:</p>
+<ul><li>Formato de entrada: <code>e &lt;código&gt;</code></li><li>Formato de saída: Apaga todos os voos ou a reserva com o <code>&lt;código&gt;</code> indicado. Caso se trate de um código de voo também devem ser eliminadas todas as reservas associadas aos voos removidos.</li><li>Erros:<ul><li><code>not found</code> no caso de não existir o <code>&lt;código&gt;</code>.</li></ul>
+</li></ul>
+</li></ul>
+<h2>4. Dados de Saída</h2>
+<p>O programa deverá escrever no standard output as respostas aos 
+comandos apresentados no standard input. As respostas são igualmente 
+linhas de texto formatadas conforme definido anteriormente neste 
+enunciado. Tenha em atenção o número de espaços entre elementos do seu 
+output, assim como os espaços no final de cada linha. Procure respeitar 
+escrupulosamente as indicações dadas.</p>
+<p>O compilador a utilizar é o <code>gcc</code> com as seguintes opções de compilação: <code>-Wall -Wextra -Werror -ansi -pedantic</code>. Para compilar o programa deve executar o seguinte comando:</p>
+<pre><code>    $ gcc -Wall -Wextra -Werror -ansi -pedantic -o proj2 *.c
+</code></pre>
+<p>Este comando deve ter como resultado a geração do ficheiro executável <code>proj2</code>, caso não haja erros de compilação. <strong>A
+ execução deste comando não deverá escrever qualquer resultado no 
+terminal. Caso a execução deste comando escreva algum resultado no 
+terminal, considera-se que o programa não compilou com sucesso</strong>. Por exemplo, durante a compilação do programa, o compilador não deverá escrever mensagens de aviso (warnings).</p>
+<p><strong>Só poderá usar as funções de biblioteca definidas em <code>stdio.h</code>, <code>stdlib.h</code> e <code>string.h</code></strong></p>
+<h2>5. Execução do Programa</h2>
+<p>O programa deve ser executado da forma seguinte:</p>
+<pre><code>    $ ./proj2 &lt; test.in &gt; test.myout
+</code></pre>
+<p>Posteriormente poderá comparar o seu output (<code>*.myout</code>) com o output previsto (<code>*.out</code>) usando o comando <code>diff</code>,</p>
+<pre><code>    $ diff test.out test.myout
+</code></pre>
+<p>Para testar o seu programa poderá executar os passos indicados acima ou usar o comando <code>make</code> na pasta <code>tests/</code>. na pasta <code>tests/</code>.
+Para executar todos os testes com o <em>valgrind</em> poderá executar <code>make valgrind</code> na pasta <code>tests/</code>.</p>
+<h2>6. Entrega do Projecto</h2>
+<p>A entrega do projecto deverá respeitar o procedimento seguinte:</p>
+<ul><li>
+<p>Na página da disciplina aceda ao sistema para entrega de projectos. O
+ sistema será activado uma semana antes da data limite de entrega. 
+Instruções acerca da forma de acesso ao sistema serão oportunamente 
+fornecidas.</p>
+</li><li>
+<p>Efectue o upload de um ficheiro arquivo com extensão <code>.zip</code> que inclua todos os ficheiros fonte que constituem o programa.</p>
+</li><li>Se o seu código tiver apenas um ficheiro o zip conterá apenas esse ficheiro.</li><li>
+<p>Se o seu código estiver estruturado em vários ficheiros (<code>.c</code> e <code>.h</code>) não se esqueça de os juntar também ao pacote.</p>
+</li><li>
+<p>Para criar um ficheiro arquivo com a extensão <code>.zip</code> deve executar o seguinte comando <strong>na directoria onde se encontram os ficheiros</strong> com extensão <code>.c</code> e <code>.h</code> (se for o caso), criados durante o desenvolvimento do projecto:</p>
+<pre><code>$ zip proj2.zip *.c *.h
+</code></pre>
+</li><li>
+<p>Como resultado do processo de upload será informado se a resolução 
+entregue apresenta a resposta esperada num conjunto de casos de teste.</p>
+</li><li>
+<p>O sistema não permite submissões com menos de 10 minutos de intervalo
+ para o mesmo aluno. Tenha especial atenção a este facto na altura da 
+submissão final.</p>
+</li><li>
+<p>Data limite de entrega do projecto: <strong>20 de Abril de 2022, às 19h59m</strong>.
+ Até à data limite poderá efectuar o número de submissões que desejar, 
+sendo utilizada para efeitos de avaliação a última submissão efectuada. 
+Deverá portanto verificar cuidadosamente que a última submissão 
+corresponde à versão do projecto que pretende que seja avaliada. Não 
+existirão excepções a esta regra.</p>
+</li></ul>
+<h2>7. Avaliação do Projecto</h2>
+<p>Na avaliação do projecto serão consideradas as seguintes componentes:</p>
+<ol><li>
+<p>A primeira componente será feita automaticamente e avalia o 
+desempenho da funcionalidade do programa realizado. Esta componente é 
+avaliada entre 0 e 16 valores.</p>
+</li><li>
+<p>A segunda componente avalia a qualidade do código entregue, 
+nomeadamente os seguintes aspectos: comentários, indentação, alocação 
+dinâmica de memória, estruturação, modularidade e divisão em ficheiros, 
+abstracção de dados, entre outros. Esta componente poderá variar entre 
+-4 valores e +4 valores relativamente à classificação calculada no item 
+anterior e será atribuída posteriormente.
+Algumas guidelines sobre este tópico podem ser encontradas <a href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/guidelines.md">aqui</a>.</p>
+</li><li>
+<p>Na segunda componente serão utilizadas as ferramentas <em>lizard</em>, <em>valgrind</em>, e a opção <em>fsanitize</em>
+ por forma a detectar a complexidade de código, fugas de memória 
+(?memory leaks?) ou outras incorrecções no código, que serão 
+penalizadas.
+Aconselha-se que utilizem estas ferramentas para fazer debugging do 
+código e corrigir eventuais incorrecções, antes da submissão do 
+projecto.
+Algumas dicas para degugging podem ser encontradas <a href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/debugging.md">aqui</a>.</p>
+</li><li>
+<p>A classificação da primeira componente da avaliação do projecto é 
+obtida através da execução automática de um conjunto de testes num 
+computador com o sistema operativo GNU/Linux. Torna-se portanto 
+essencial que o código compile correctamente e que respeite o formato de
+ entrada e saída dos dados descritos anteriormente. Projectos que não 
+obedeçam ao formato indicado no enunciado serão penalizados na avaliação
+ automática, podendo, no limite, ter 0 (zero) valores se falharem todos 
+os testes. Os testes considerados para efeitos de avaliação poderão 
+incluir (ou não) os disponibilizados na página da disciplina, além de um
+ conjunto de testes adicionais. A execução de cada programa em cada 
+teste é limitada na quantidade de memória que pode utilizar, e no tempo 
+total disponível para execução, sendo o tempo limite distinto para cada 
+teste.</p>
+</li><li>
+<p>Note-se que o facto de um projecto passar com sucesso o conjunto de 
+testes disponibilizado na página da disciplina não implica que esse 
+projecto esteja totalmente correcto. Apenas indica que passou alguns 
+testes com sucesso, mas este conjunto de testes não é exaustivo. É da 
+responsabilidade dos alunos garantir que o código produzido está 
+correcto.</p>
+</li></ol>
+<p></p>
+
+                            <p>
+                </p><h4>Attachments</h4>
+                <ul>
+                                            <li><a href="https://fenix.tecnico.ulisboa.pt/downloadFile/563568428852498/tests-public-p2.zip">tests-public-p2.zip</a></li>
+                                            <li><a href="https://fenix.tecnico.ulisboa.pt/downloadFile/845043405579638/tests-mooshak-proj2.zip">tests-mooshak-proj2.zip</a></li>
+                                    </ul>
+                <p></p>
+            
+        
+    </div><!-- /.blog-post -->
+
+
+	        </div>
+        
+
+
+<nav class="col-sm-3" style="padding-left:0px; padding-top:60px;z-index:999; margin-left:-1px;">
+  <!-- REGULAR MENU -->
+            <div class="sidebar-module">
+            
+                  <ul class="nav nav-pills nav-stacked list-unstyled children">
+                              <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/pagina-inicial">
+      Página Inicial              </a><a class="rsslink" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/rss/announcement"><i style="float:right;">&nbsp;</i></a>
+          
+        </li>
+                                        <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/grupos">
+      Grupos          </a>
+        </li>
+                                        <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/avaliacao">
+      Avaliação          </a>
+        </li>
+                                        <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/bibliografia">
+      Bibliografia          </a>
+        </li>
+                                        <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/horario">
+      Horário          </a>
+        </li>
+                                        <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/metodos-de-avaliacao">
+      Métodos de Avaliação          </a>
+        </li>
+                                        <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/objectivos">
+      Objectivos          </a>
+        </li>
+                                        <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/planeamento">
+      Planeamento          </a>
+        </li>
+                                        <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/programa">
+      Programa          </a>
+        </li>
+                                        <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/turnos">
+      Turnos          </a>
+        </li>
+                                        <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/anuncios">
+      Anúncios              </a><a class="rsslink" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/rss/announcement"><i style="float:right;">&nbsp;</i></a>
+          
+        </li>
+                                        <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/sumarios">
+      Sumários              </a><a class="rsslink" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/rss/summary"><i style="float:right;">&nbsp;</i></a>
+          
+        </li>
+                                        <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/pre-requisitos">
+      Pré-requisitos          </a>
+        </li>
+                                        <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/componente-laboratorial">
+      Componente Laboratorial          </a>
+        </li>
+                                        <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/componente-de-programacao-e-computacao">
+      Componente de Programação e Computação          </a>
+        </li>
+                                        <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/competencias-transversais">
+      Competências Transversais          </a>
+        </li>
+                                        <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/principios-eticos">
+      Princípios Éticos          </a>
+        </li>
+                                        <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/notas">
+      Notas          </a>
+        </li>
+                                        <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/resultado-dos-quc">
+      Resultado dos QUC          </a>
+        </li>
+                    </ul>
+          </div>
+            <div class="sidebar-module">
+            
+                  <ul class="nav nav-pills nav-stacked list-unstyled children">
+                              <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/horario-duvidas">
+      Horário Dúvidas          </a>
+        </li>
+                                        <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/faq">
+      FAQ          </a>
+        </li>
+                                        <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/laboratorios">
+      Laboratórios          </a>
+          <ul class="nav nav-pills nav-stacked list-unstyled children">
+                              <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/lab-01">
+      Lab 01          </a>
+        </li>
+                                        <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/lab-02">
+      Lab 02          </a>
+        </li>
+                                        <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/lab-03">
+      Lab 03          </a>
+        </li>
+                                        <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/lab-04">
+      Lab 04          </a>
+        </li>
+                                        <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/lab-05">
+      Lab 05          </a>
+        </li>
+                                        <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/lab-06">
+      Lab 06          </a>
+        </li>
+                                        <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/lab-07">
+      Lab 07          </a>
+        </li>
+                                        <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/lab-08">
+      Lab 08          </a>
+        </li>
+                                        <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/lab-09">
+      Lab 09          </a>
+        </li>
+                                        <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/lab-10">
+      Lab 10          </a>
+        </li>
+                                        <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/lab-11">
+      Lab 11          </a>
+        </li>
+                                        <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/lab-12">
+      Lab 12          </a>
+        </li>
+                                        <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/lab-13">
+      Lab 13          </a>
+        </li>
+                    </ul>
+    </li>
+                                        <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/material-de-apoio">
+      Material de Apoio          </a>
+          <ul class="nav nav-pills nav-stacked list-unstyled children">
+                              <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/slides">
+      Slides          </a>
+        </li>
+                                        <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/fichas">
+      Fichas          </a>
+        </li>
+                                        <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/exames">
+      Exames          </a>
+        </li>
+                    </ul>
+    </li>
+                                        <li class="menuItem open ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/projectos">
+      Projectos          </a>
+          <ul class="nav nav-pills nav-stacked list-unstyled children">
+                              <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/1-projecto">
+      1º Projecto          </a>
+        </li>
+                                        <li class="menuItem open active">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/2-projecto">
+      2º Projecto          </a>
+        </li>
+                    </ul>
+    </li>
+                                        <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/pautas">
+      Pautas          </a>
+        </li>
+                                        <li class="menuItem  ">
+    <a class="item" href="https://fenix.tecnico.ulisboa.pt/disciplinas/IAED2/2021-2022/2-semestre/teste-pratico">
+      Teste Prático          </a>
+        </li>
+                    </ul>
+          </div>
+    
+    <div class="sidebar-module">
+    </div>
+</nav>
+
+<script type="text/javascript">
+(function() {
+  $('.menuFolder:not(.open)>.children').hide();
+  $('.menuFolder>p').click(function(event){
+    $(this).parent().toggleClass('open');
+    $(this).parent().children('.children').slideToggle();
+    event.preventDefault();
+  });
+  setLang=function(l){$.post('/api/bennu-core/profile/locale/'+l.replace('_', '-')).always(function(){location.reload();})}
+})();
+</script>
+
+      </main><!-- /.row -->
+
+    </div><!-- /.container -->
+
+    <footer class="container" style="border-top:1px solid #ddd; margin-top:30px">
+      <div class="col-sm-9">
+        <a class="brand" href="http://fenixedu.org/"><img width="150" height="34" src="2%C2%BA%20Projecto%20%C2%B7%20Introdu%C3%A7%C3%A3o%20aos%20Algoritmos%20e%20Estruturas%20de%20Dados_files/logo_fenixedu_footer.svg" alt="Powered by FenixEdu"></a>
+      </div>
+
+      <div class="col-sm-3" style="color:#888">
+        <span style="padding-left:15px;">© Instituto Superior Técnico</span>
+      </div>
+      
+    </footer>
+
+    <script src="2%C2%BA%20Projecto%20%C2%B7%20Introdu%C3%A7%C3%A3o%20aos%20Algoritmos%20e%20Estruturas%20de%20Dados_files/bootstrap.min.js" type="text/javascript" async=""></script>
+  
+</body></html>
